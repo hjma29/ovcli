@@ -1,0 +1,79 @@
+{
+    "type": "SasLogicalInterconnectListV1",
+    "members": [
+        {
+            "type": "sas-logical-interconnect",
+            "enclosureType": "SY12000",
+            "enclosureUris": [
+                "/rest/enclosures/000000CN75150484"
+            ],
+            "consistencyStatus": "CONSISTENT",
+            "interconnectMap": {
+                "interconnectMapEntries": [
+                    {
+                        "interconnectUri": "/rest/sas-interconnects/TWT551W02K",
+                        "permittedInterconnectTypeUri": "/rest/sas-interconnect-types/Synergy12GbSASConnectionModule",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "/rest/enclosures/000000CN75150484",
+                                    "type": "Enclosure"
+                                },
+                                {
+                                    "value": "4",
+                                    "type": "Bay"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "interconnectUri": "/rest/sas-interconnects/TWT551W00W",
+                        "permittedInterconnectTypeUri": "/rest/sas-interconnect-types/Synergy12GbSASConnectionModule",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "/rest/enclosures/000000CN75150484",
+                                    "type": "Enclosure"
+                                },
+                                {
+                                    "value": "1",
+                                    "type": "Bay"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "interconnectBaySet": 1,
+            "driveEnclosureUris": [
+                "/rest/drive-enclosures/CN762005X0"
+            ],
+            "sasLogicalInterconnectGroupUri": "/rest/sas-logical-interconnect-groups/09f73900-f67e-414a-ac92-d812ababdd32",
+            "sasInterconnectUris": [
+                "/rest/sas-interconnects/TWT551W02K",
+                "/rest/sas-interconnects/TWT551W00W"
+            ],
+            "stateReason": null,
+            "refreshState": "NotRefreshing",
+            "description": null,
+            "status": "OK",
+            "name": "SSA LE1-SAS Fabric-2",
+            "state": "Redundant",
+            "created": "2017-03-22T20:16:50.603Z",
+            "eTag": "2017-03-30T13:18:32.863Z",
+            "modified": "2017-03-30T13:18:32.863Z",
+            "category": "sas-logical-interconnects",
+            "uri": "/rest/sas-logical-interconnects/d2b15114-b6cf-4f77-a725-e77e554136fb"
+        }
+    ],
+    "nextPageUri": null,
+    "start": 0,
+    "prevPageUri": null,
+    "count": 1,
+    "total": 1,
+    "created": null,
+    "eTag": null,
+    "modified": null,
+    "category": "sas-logical-interconnects",
+    "uri": "/rest/sas-logical-interconnects/?start=0&count=1"
+}

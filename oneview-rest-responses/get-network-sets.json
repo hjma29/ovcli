@@ -1,0 +1,127 @@
+{
+    "type": "NetworkSetCollectionV300",
+    "members": [
+        {
+            "type": "network-setV300",
+            "networkUris": [
+                "/rest/ethernet-networks/3212ff45-d85a-4b78-a2ee-50143f848475",
+                "/rest/ethernet-networks/4f8ce984-7cd8-4471-a233-9f63deed3645",
+                "/rest/ethernet-networks/994ed7c2-924f-4f1e-88b0-90f0af1c6c97",
+                "/rest/ethernet-networks/a1505fd6-f996-4604-b827-5807dd63e913",
+                "/rest/ethernet-networks/cb9a2cb6-8130-416f-896c-6dd465ae177b",
+                "/rest/ethernet-networks/2441d771-5a7b-4d7a-9beb-05b5b6371876",
+                "/rest/ethernet-networks/7e5b40c3-5aaa-4c67-a53b-9b3939aa8269",
+                "/rest/ethernet-networks/bb9524fc-cd87-4235-b155-b51766cedfa6",
+                "/rest/ethernet-networks/268a72af-b725-4647-98fb-938510907cdc",
+                "/rest/ethernet-networks/62e6446c-102b-4317-bff5-68dde84c676e",
+                "/rest/ethernet-networks/dccdf1da-e109-4525-867d-c20f852eac14",
+                "/rest/ethernet-networks/70e2cc00-ee47-49fd-8978-4c4cb966e29f",
+                "/rest/ethernet-networks/3b31a7bc-7e6a-4f94-9af4-df666b2675f7"
+            ],
+            "nativeNetworkUri": null,
+            "connectionTemplateUri": "/rest/connection-templates/d0264f5d-c1a9-45cc-b025-6b5f7ca23115",
+            "scopeUris": [],
+            "description": null,
+            "status": "OK",
+            "name": "DCA-ACI-VMM",
+            "state": "Active",
+            "created": "2017-03-21T19:28:22.870Z",
+            "eTag": "17ba40f2-291b-4f71-b281-620f4ba262fd",
+            "modified": "2017-03-21T19:28:22.871Z",
+            "category": "network-sets",
+            "uri": "/rest/network-sets/16741d69-a6d8-4ae6-acb7-3469643a04a2"
+        },
+        {
+            "type": "network-setV300",
+            "networkUris": [
+                "/rest/ethernet-networks/41f7d44d-e3ef-4427-a53b-12e7fac83ffe",
+                "/rest/ethernet-networks/de10a34f-e255-4ab3-bc47-1988a0ec55e1",
+                "/rest/ethernet-networks/dcfd125a-38f2-4b36-8da9-8f206f98a652",
+                "/rest/ethernet-networks/e09c1cfa-7917-4845-b736-09029bda9ae4",
+                "/rest/ethernet-networks/c7d67710-6c42-4091-8720-e1fe45b0d9aa"
+            ],
+            "nativeNetworkUri": null,
+            "connectionTemplateUri": "/rest/connection-templates/41d2c4a8-c038-4adf-bcd9-6451826596bc",
+            "scopeUris": [],
+            "description": null,
+            "status": "OK",
+            "name": "DCA-ToR-NetSet",
+            "state": "Active",
+            "created": "2017-04-05T18:11:17.858Z",
+            "eTag": "a1ef845d-1053-4dea-a6d4-58c6a92b2830",
+            "modified": "2017-04-05T18:11:17.859Z",
+            "category": "network-sets",
+            "uri": "/rest/network-sets/2f1412e4-0257-4424-b430-2e8d9b181fe9"
+        },
+        {
+            "type": "network-setV300",
+            "networkUris": [
+                "/rest/ethernet-networks/fdc059ab-e4a7-432e-a772-a35166424854",
+                "/rest/ethernet-networks/fb45e0d2-c010-4c66-b460-9ca10c8d4974",
+                "/rest/ethernet-networks/de336316-7171-4d67-a948-f51e5a84c111",
+                "/rest/ethernet-networks/18ba5d72-22f5-4c16-8cbb-5cd73b6415f8"
+            ],
+            "nativeNetworkUri": null,
+            "connectionTemplateUri": "/rest/connection-templates/00783341-73ae-4247-b266-c3f1ee1b0547",
+            "scopeUris": [],
+            "description": null,
+            "status": "OK",
+            "name": "VLAN301-304",
+            "state": "Active",
+            "created": "2017-03-21T19:26:16.261Z",
+            "eTag": "ee25f98d-1c0e-47cd-ad2b-4aa164a917f8",
+            "modified": "2017-03-21T19:26:16.262Z",
+            "category": "network-sets",
+            "uri": "/rest/network-sets/a3b35e75-1fde-4abb-aa20-efbd87b29504"
+        },
+        {
+            "type": "network-setV300",
+            "networkUris": [
+                "/rest/ethernet-networks/03021164-0670-42f1-924e-28a2d88b1286",
+                "/rest/ethernet-networks/3b31a7bc-7e6a-4f94-9af4-df666b2675f7",
+                "/rest/ethernet-networks/7360528c-14b2-4396-89f4-080bdca0196c"
+            ],
+            "nativeNetworkUri": "/rest/ethernet-networks/03021164-0670-42f1-924e-28a2d88b1286",
+            "connectionTemplateUri": "/rest/connection-templates/98ea3cbe-50ee-403f-976a-b308740e48c2",
+            "scopeUris": [],
+            "description": null,
+            "status": "OK",
+            "name": "Deployment-Mgmt-vMotion",
+            "state": "Active",
+            "created": "2017-03-21T19:27:18.172Z",
+            "eTag": "899831f5-0d2d-47aa-b920-0cb49afad4be",
+            "modified": "2017-03-21T19:27:18.173Z",
+            "category": "network-sets",
+            "uri": "/rest/network-sets/a77faf82-8c17-4587-ac03-fb6b86f4b0aa"
+        },
+        {
+            "type": "network-setV300",
+            "networkUris": [
+                "/rest/ethernet-networks/62e6446c-102b-4317-bff5-68dde84c676e",
+                "/rest/ethernet-networks/3b31a7bc-7e6a-4f94-9af4-df666b2675f7"
+            ],
+            "nativeNetworkUri": null,
+            "connectionTemplateUri": "/rest/connection-templates/4c6f0d05-691e-4ae1-b484-e664c228ec06",
+            "scopeUris": [],
+            "description": null,
+            "status": "OK",
+            "name": "test",
+            "state": "Active",
+            "created": "2017-03-21T19:25:13.647Z",
+            "eTag": "5ea37676-ca38-46e1-933e-573c2c3fed33",
+            "modified": "2017-03-21T19:25:13.649Z",
+            "category": "network-sets",
+            "uri": "/rest/network-sets/b101a9f5-1bcb-4ad6-80cf-3e909325846c"
+        }
+    ],
+    "nextPageUri": null,
+    "start": 0,
+    "prevPageUri": null,
+    "count": 5,
+    "total": 5,
+    "created": null,
+    "eTag": null,
+    "modified": null,
+    "category": "network-sets",
+    "uri": "/rest/network-sets?start=0&count=5"
+}

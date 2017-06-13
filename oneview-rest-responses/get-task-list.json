@@ -1,0 +1,2692 @@
+{
+    "type": "TaskResourcePaginatedCollectionV2",
+    "members": [
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "mesosphere",
+                "resourceUri": "/rest/users/mesosphere",
+                "resourceCategory": "users"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Successful",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Successfully added user.",
+                    "timestamp": "2017-04-03T11:40:05.362Z",
+                    "id": 1834
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Add",
+            "owner": "Administrator",
+            "eTag": "0",
+            "created": "2017-04-03T11:40:05.362Z",
+            "modified": "2017-04-03T11:40:05.362Z",
+            "uri": "/rest/tasks/36A0DC72-2908-4F22-ADD8-2F1F1894DA58"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 OS Volume create profile",
+                "resourceUri": "/rest/server-profiles/535e32bb-76dd-49f4-8d1e-9c1ffc669f28",
+                "resourceCategory": "server-profiles"
+            },
+            "hidden": true,
+            "stateReason": "Completed",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Successfully deleted server profile: ESXi6 OS Volume create profile.",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate configuration.",
+                    "timestamp": "2017-04-03T11:43:03.360Z",
+                    "id": 1835
+                },
+                {
+                    "statusUpdate": "Set administrative power lock for {\"name\":\"CN75150484, bay 8\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-31373033594A\"}.",
+                    "timestamp": "2017-04-03T11:43:03.740Z",
+                    "id": 1836
+                },
+                {
+                    "statusUpdate": "Delete Image Streamer OS volume.",
+                    "timestamp": "2017-04-03T11:43:04.488Z",
+                    "id": 1837
+                },
+                {
+                    "statusUpdate": "Delete connections.",
+                    "timestamp": "2017-04-03T11:43:07.697Z",
+                    "id": 1842
+                },
+                {
+                    "statusUpdate": "Clear settings for {\"name\":\"CN75150484, bay 8\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-31373033594A\"}.",
+                    "timestamp": "2017-04-03T11:44:37.764Z",
+                    "id": 1845
+                },
+                {
+                    "statusUpdate": "Clear {\"name\":\"CN75150484, bay 8\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-31373033594A\"} reservation.",
+                    "timestamp": "2017-04-03T11:45:10.198Z",
+                    "id": 1847
+                },
+                {
+                    "statusUpdate": "Successfully removed server settings for profile : ESXi6 OS Volume create profile.",
+                    "timestamp": "2017-04-03T11:45:14.217Z",
+                    "id": 1848
+                },
+                {
+                    "statusUpdate": "Release administrative power lock for {\"name\":\"CN75150484, bay 8\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-31373033594A\"}.",
+                    "timestamp": "2017-04-03T11:45:14.348Z",
+                    "id": 1849
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Delete",
+            "owner": "mesosphere",
+            "eTag": "15",
+            "created": "2017-04-03T11:43:03.295Z",
+            "modified": "2017-04-03T11:45:14.484Z",
+            "uri": "/rest/tasks/06A8C896-D42E-48D4-A84F-1DA1FD390692"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 OS Volume create profile",
+                "resourceUri": "/rest/deployed-targets/17bfc1d0-afea-4417-bd77-34b38b25feca",
+                "resourceCategory": "deployed-targets"
+            },
+            "hidden": true,
+            "stateReason": "Delete OS volume ",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/06A8C896-D42E-48D4-A84F-1DA1FD390692",
+            "associatedTaskUri": null,
+            "completedSteps": 2,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T11:43:05.067Z",
+                    "id": 1838
+                },
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T11:43:05.176Z",
+                    "id": 1839
+                },
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T11:43:07.468Z",
+                    "id": 1840
+                },
+                {
+                    "statusUpdate": null,
+                    "timestamp": "2017-04-03T11:43:07.503Z",
+                    "id": 1841
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Delete",
+            "owner": "Administrator",
+            "eTag": "4",
+            "created": "2017-04-03T11:43:05.051Z",
+            "modified": "2017-04-03T11:43:07.503Z",
+            "uri": "/rest/tasks/B38D5C5A-20F4-4929-8CA1-EAFB58E015A2"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, interconnect 3",
+                "resourceUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/193262f4-0de2-4f58-b768-ae286a64b818"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/68276EE8-86B0-4587-898C-476DEC8822EE associated with connection 193262f4-0de2-4f58-b768-ae286a64b818",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/06A8C896-D42E-48D4-A84F-1DA1FD390692",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Deleting connection on downlink port 20, subport 1",
+                    "timestamp": "2017-04-03T11:43:07.782Z",
+                    "id": 1843
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T11:43:07.782Z",
+            "modified": "2017-04-03T11:44:26.981Z",
+            "uri": "/rest/tasks/68276EE8-86B0-4587-898C-476DEC8822EE"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, interconnect 6",
+                "resourceUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/8d634dfb-4689-49cc-b5b8-cf60d1f7f66a"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/DB7B2D6B-F12D-4B6B-9B47-C7ECDC437804 associated with connection 8d634dfb-4689-49cc-b5b8-cf60d1f7f66a",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/06A8C896-D42E-48D4-A84F-1DA1FD390692",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Deleting connection on downlink port 8, subport 1",
+                    "timestamp": "2017-04-03T11:43:08.225Z",
+                    "id": 1844
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T11:43:08.225Z",
+            "modified": "2017-04-03T11:44:37.651Z",
+            "uri": "/rest/tasks/DB7B2D6B-F12D-4B6B-9B47-C7ECDC437804"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 8",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-31373033594A",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": "Limiting concurrent operations.",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Successfully removed server settings for profile : ESXi6 OS Volume create profile.",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/06A8C896-D42E-48D4-A84F-1DA1FD390692",
+            "associatedTaskUri": null,
+            "completedSteps": 14,
+            "computedPercentComplete": 100,
+            "expectedDuration": 395,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Remove server personality and connections.",
+                    "timestamp": "2017-04-03T11:44:41.450Z",
+                    "id": 1846
+                }
+            ],
+            "totalSteps": 14,
+            "userInitiated": true,
+            "name": "Remove profile : ESXi6 OS Volume create profile",
+            "owner": "mesosphere",
+            "eTag": "4",
+            "created": "2017-04-03T11:44:37.924Z",
+            "modified": "2017-04-03T11:45:10.071Z",
+            "uri": "/rest/tasks/5794AE93-D4BE-4AEB-BAE4-6948FFE0B116"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "EncUri": "/rest/enclosures/000000CN75150484"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Add server: CN75150484, bay 2.",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 20,
+            "computedPercentComplete": 100,
+            "expectedDuration": 480,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Create OneView account on the management processor.",
+                    "timestamp": "2017-04-03T17:00:01.796Z",
+                    "id": 1850
+                },
+                {
+                    "statusUpdate": "Create OneView account on the management processor.",
+                    "timestamp": "2017-04-03T17:00:01.829Z",
+                    "id": 1851
+                },
+                {
+                    "statusUpdate": "Discover server hardware components.",
+                    "timestamp": "2017-04-03T17:00:08.511Z",
+                    "id": 1852
+                },
+                {
+                    "statusUpdate": "Discover power state.",
+                    "timestamp": "2017-04-03T17:00:35.821Z",
+                    "id": 1853
+                },
+                {
+                    "statusUpdate": "Associate server hardware type.",
+                    "timestamp": "2017-04-03T17:01:00.698Z",
+                    "id": 1854
+                },
+                {
+                    "statusUpdate": "Claim server hardware.",
+                    "timestamp": "2017-04-03T17:01:02.903Z",
+                    "id": 1855
+                },
+                {
+                    "statusUpdate": "Claim server hardware.",
+                    "timestamp": "2017-04-03T17:02:06.556Z",
+                    "id": 1856
+                },
+                {
+                    "statusUpdate": "Configure event settings.",
+                    "timestamp": "2017-04-03T17:02:08.199Z",
+                    "id": 1857
+                },
+                {
+                    "statusUpdate": "Configure NTP (Network Time Protocol) settings.",
+                    "timestamp": "2017-04-03T17:02:24.244Z",
+                    "id": 1858
+                },
+                {
+                    "statusUpdate": "Configure single sign-on (SSO) settings.",
+                    "timestamp": "2017-04-03T17:02:26.221Z",
+                    "id": 1859
+                },
+                {
+                    "statusUpdate": "Update environmental configuration.",
+                    "timestamp": "2017-04-03T17:02:28.064Z",
+                    "id": 1860
+                },
+                {
+                    "statusUpdate": "Discover BIOS settings.",
+                    "timestamp": "2017-04-03T17:02:34.078Z",
+                    "id": 1861
+                },
+                {
+                    "statusUpdate": "Write port map to management processor.",
+                    "timestamp": "2017-04-03T17:02:47.053Z",
+                    "id": 1862
+                },
+                {
+                    "statusUpdate": "Write blade location to management processor for use by HPE Insight Control server provisioning.",
+                    "timestamp": "2017-04-03T17:03:15.840Z",
+                    "id": 1863
+                },
+                {
+                    "statusUpdate": "Write virtual identifiers to management processor for use by HPE Insight Control server provisioning.",
+                    "timestamp": "2017-04-03T17:03:17.871Z",
+                    "id": 1864
+                },
+                {
+                    "statusUpdate": "Discover firmware settings.",
+                    "timestamp": "2017-04-03T17:03:19.846Z",
+                    "id": 1865
+                },
+                {
+                    "statusUpdate": "Retrieve server firmware inventory.",
+                    "timestamp": "2017-04-03T17:03:22.872Z",
+                    "id": 1866
+                }
+            ],
+            "totalSteps": 20,
+            "userInitiated": true,
+            "name": "Add",
+            "owner": "System",
+            "eTag": "19",
+            "created": "2017-04-03T16:59:59.442Z",
+            "modified": "2017-04-03T17:03:36.427Z",
+            "uri": "/rest/tasks/73917EB2-4C56-46E0-8732-B141AAB3F512"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Reset management processor complete.",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 1,
+            "computedPercentComplete": 100,
+            "expectedDuration": 120,
+            "progressUpdates": [],
+            "totalSteps": 1,
+            "userInitiated": true,
+            "name": "Reset iLO",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:15:43.580Z",
+            "modified": "2017-04-03T17:16:36.184Z",
+            "uri": "/rest/tasks/5D5078A0-E941-4669-A19E-A1D917879DF1"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "TE-Testing-300",
+                "resourceUri": "/rest/ethernet-networks/966cbe18-c6f1-4f26-aa00-82fa581a6ed4",
+                "resourceCategory": "ethernet-networks"
+            },
+            "hidden": true,
+            "stateReason": "Configuring interconnects",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": null,
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "Administrator",
+            "eTag": "1",
+            "created": "2017-04-03T17:18:41.025Z",
+            "modified": "2017-04-03T17:18:41.089Z",
+            "uri": "/rest/tasks/C1705F50-2E79-443B-851C-70F5D415A8C6"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6",
+                "resourceUri": "/rest/server-profiles/ced261f5-2f16-4288-88a4-5837f6f1a4da",
+                "resourceCategory": "server-profiles"
+            },
+            "hidden": true,
+            "stateReason": "Error",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to create server profile: ESXi6.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [],
+                    "data": {},
+                    "errorCode": null,
+                    "message": "Deploy Image Streamer OS volume failed."
+                },
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Verify that the specified deployment plan is valid. Check subtask details for more information."
+                    ],
+                    "data": {},
+                    "errorCode": "OSDeployFailed",
+                    "message": "Unable to deploy the OS using Image Streamer."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate configuration.",
+                    "timestamp": "2017-04-03T17:22:28.146Z",
+                    "id": 1882
+                },
+                {
+                    "statusUpdate": "Set administrative power lock for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T17:22:29.824Z",
+                    "id": 1883
+                },
+                {
+                    "statusUpdate": "Reserve {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T17:22:30.337Z",
+                    "id": 1884
+                },
+                {
+                    "statusUpdate": "Save server profile definition.",
+                    "timestamp": "2017-04-03T17:22:30.865Z",
+                    "id": 1885
+                },
+                {
+                    "statusUpdate": "Reserve connections.",
+                    "timestamp": "2017-04-03T17:22:31.158Z",
+                    "id": 1886
+                },
+                {
+                    "statusUpdate": "Deploy Image Streamer OS volume.",
+                    "timestamp": "2017-04-03T17:22:31.835Z",
+                    "id": 1887
+                },
+                {
+                    "statusUpdate": "Release administrative power lock for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T17:22:33.540Z",
+                    "id": 1893
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Create",
+            "owner": "mesosphere",
+            "eTag": "12",
+            "created": "2017-04-03T17:22:28.077Z",
+            "modified": "2017-04-03T17:22:33.632Z",
+            "uri": "/rest/tasks/B5D62BCB-323D-46C8-82F3-306569B7D20F"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6",
+                "resourceUri": "/rest/deployed-targets/6490bdea-fd59-4f64-825d-e9334c5143a4",
+                "resourceCategory": "deployed-targets"
+            },
+            "hidden": true,
+            "stateReason": "Fix the OS deployment plan by performing one of the following changes. Add golden image in the deployment plan, or, to create an empty OS volume, add a \"VolumeSize\" attribute and assign a value to indicate the size of the empty OS volume to be created.",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Error",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "Either the golden image is missing from the deployment plan or the attribute \"VolumeSize\" is not valid.",
+                    "recommendedActions": [
+                        "Fix the OS deployment plan by performing one of the following changes. Add golden image in the deployment plan, or, to create an empty OS volume, add a \"VolumeSize\" attribute and assign a value to indicate the size of the empty OS volume to be created."
+                    ],
+                    "data": {},
+                    "errorCode": "OEVOL_SIZE_NOT_SPECIFIED_ERROR",
+                    "message": ""
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/B5D62BCB-323D-46C8-82F3-306569B7D20F",
+            "associatedTaskUri": null,
+            "completedSteps": 1,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T17:22:31.906Z",
+                    "id": 1888
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T17:22:31.942Z",
+                    "id": 1889
+                },
+                {
+                    "statusUpdate": "Either the golden image is missing from the deployment plan or the attribute \"VolumeSize\" is not valid.",
+                    "timestamp": "2017-04-03T17:22:33.286Z",
+                    "id": 1890
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Create",
+            "owner": "Administrator",
+            "eTag": "3",
+            "created": "2017-04-03T17:22:31.892Z",
+            "modified": "2017-04-03T17:22:33.286Z",
+            "uri": "/rest/tasks/81A6F99B-B219-4B38-BF43-9DF6701B78FC"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6",
+                "resourceUri": "/rest/server-profiles/ced261f5-2f16-4288-88a4-5837f6f1a4da",
+                "resourceCategory": "server-profiles"
+            },
+            "hidden": true,
+            "stateReason": "Completed",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Successfully deleted server profile: ESXi6.",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate configuration.",
+                    "timestamp": "2017-04-03T17:23:13.169Z",
+                    "id": 1895
+                },
+                {
+                    "statusUpdate": "Set administrative power lock for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T17:23:13.356Z",
+                    "id": 1896
+                },
+                {
+                    "statusUpdate": "Delete Image Streamer OS volume.",
+                    "timestamp": "2017-04-03T17:23:14.091Z",
+                    "id": 1897
+                },
+                {
+                    "statusUpdate": "Delete connections.",
+                    "timestamp": "2017-04-03T17:23:15.783Z",
+                    "id": 1902
+                },
+                {
+                    "statusUpdate": "Clear settings for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T17:23:16.417Z",
+                    "id": 1903
+                },
+                {
+                    "statusUpdate": "Clear {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"} reservation.",
+                    "timestamp": "2017-04-03T17:24:03.695Z",
+                    "id": 1905
+                },
+                {
+                    "statusUpdate": "Successfully removed server settings for profile : ESXi6.",
+                    "timestamp": "2017-04-03T17:24:07.322Z",
+                    "id": 1906
+                },
+                {
+                    "statusUpdate": "Release administrative power lock for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T17:24:07.425Z",
+                    "id": 1907
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Delete",
+            "owner": "mesosphere",
+            "eTag": "15",
+            "created": "2017-04-03T17:23:13.112Z",
+            "modified": "2017-04-03T17:24:07.519Z",
+            "uri": "/rest/tasks/FCB7F846-39CB-4243-9EC4-5107B29A4103"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6",
+                "resourceUri": "/rest/deployed-targets/6490bdea-fd59-4f64-825d-e9334c5143a4",
+                "resourceCategory": "deployed-targets"
+            },
+            "hidden": true,
+            "stateReason": "Delete OS volume ",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/FCB7F846-39CB-4243-9EC4-5107B29A4103",
+            "associatedTaskUri": null,
+            "completedSteps": 2,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T17:23:14.135Z",
+                    "id": 1898
+                },
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T17:23:14.286Z",
+                    "id": 1899
+                },
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T17:23:15.519Z",
+                    "id": 1900
+                },
+                {
+                    "statusUpdate": null,
+                    "timestamp": "2017-04-03T17:23:15.540Z",
+                    "id": 1901
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Delete",
+            "owner": "Administrator",
+            "eTag": "4",
+            "created": "2017-04-03T17:23:14.120Z",
+            "modified": "2017-04-03T17:23:15.540Z",
+            "uri": "/rest/tasks/E0DF3E1E-AB30-4651-BF9B-0379CC0BE91F"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": null,
+                "resourceUri": null,
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/2c5fb56d-0e1f-464f-81a9-5cd05af66151"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": null,
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/FCB7F846-39CB-4243-9EC4-5107B29A4103",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:23:15.852Z",
+            "modified": "2017-04-03T17:23:15.939Z",
+            "uri": "/rest/tasks/4779209F-F560-4A6D-8044-6D0FD423962D"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": null,
+                "resourceUri": null,
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/2d31ffc5-cfbc-4d21-998d-6c802d5b6559"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": null,
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/FCB7F846-39CB-4243-9EC4-5107B29A4103",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:23:15.985Z",
+            "modified": "2017-04-03T17:23:16.061Z",
+            "uri": "/rest/tasks/A18FC450-41B8-45B9-9413-BB51ED9AED56"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": null,
+                "resourceUri": null,
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/5a37dd12-d481-499d-9c0b-ccb895a7f7c4"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": null,
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/FCB7F846-39CB-4243-9EC4-5107B29A4103",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:23:16.108Z",
+            "modified": "2017-04-03T17:23:16.181Z",
+            "uri": "/rest/tasks/F5D6E28E-BBA9-455B-8245-E4E72FBFA991"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": null,
+                "resourceUri": null,
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/f12999af-fa62-497a-9f46-68b205d16d9a"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": null,
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/FCB7F846-39CB-4243-9EC4-5107B29A4103",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:23:16.226Z",
+            "modified": "2017-04-03T17:23:16.302Z",
+            "uri": "/rest/tasks/6FD2F302-2AA1-448C-9DB8-70645AF2C31B"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, bay 3",
+                "resourceUri": "/rest/server-hardware/35316377-3132-6E63-3735-313830303573",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": "Limiting concurrent operations.",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Successfully removed server settings for profile : ESXi6.",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/FCB7F846-39CB-4243-9EC4-5107B29A4103",
+            "associatedTaskUri": null,
+            "completedSteps": 14,
+            "computedPercentComplete": 100,
+            "expectedDuration": 395,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Remove server personality and connections.",
+                    "timestamp": "2017-04-03T17:23:31.549Z",
+                    "id": 1904
+                }
+            ],
+            "totalSteps": 14,
+            "userInitiated": true,
+            "name": "Remove profile : ESXi6",
+            "owner": "mesosphere",
+            "eTag": "4",
+            "created": "2017-04-03T17:23:16.551Z",
+            "modified": "2017-04-03T17:24:03.568Z",
+            "uri": "/rest/tasks/028B1E48-4B4D-42C3-9FFE-1C7AB3F277C2"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 target I3s",
+                "resourceUri": "/rest/server-profile-templates/5c184420-b463-4c9f-b960-df73822cb1f8",
+                "resourceCategory": "server-profile-templates"
+            },
+            "hidden": true,
+            "stateReason": "Completed",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Updated server profile template: ESXi6 target I3s",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Update",
+            "owner": "mesosphere",
+            "eTag": "3",
+            "created": "2017-04-03T17:39:57.420Z",
+            "modified": "2017-04-03T17:39:57.862Z",
+            "uri": "/rest/tasks/F1634251-EF60-4E05-A662-56FDFDC6336E"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 Golden Image",
+                "resourceUri": "/rest/server-profiles/afb6495b-48ce-4e52-b616-6bb5b07b6df2",
+                "resourceCategory": "server-profiles"
+            },
+            "hidden": true,
+            "stateReason": "Error",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to create server profile: ESXi6 Golden Image.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Refresh the server hardware. If the problem continues to occur, power-cycle the server hardware (allowing it to complete its power on self test) and then refresh again."
+                    ],
+                    "data": {},
+                    "errorCode": "GET_BLADE_SIGNATURE_ERROR_TBIRD",
+                    "message": "Unable to read server adapter configuration data."
+                },
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Ensure the server is operational and try the operation again."
+                    ],
+                    "data": {},
+                    "errorCode": "TIMED_OUT_WAITING_FOR_POWER_OPERATION",
+                    "message": "The power operation did not complete in the expected amount of time."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate configuration.",
+                    "timestamp": "2017-04-03T17:41:16.236Z",
+                    "id": 1910
+                },
+                {
+                    "statusUpdate": "Set administrative power lock for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T17:41:17.832Z",
+                    "id": 1911
+                },
+                {
+                    "statusUpdate": "Reserve {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T17:41:18.286Z",
+                    "id": 1912
+                },
+                {
+                    "statusUpdate": "Save server profile definition.",
+                    "timestamp": "2017-04-03T17:41:18.817Z",
+                    "id": 1913
+                },
+                {
+                    "statusUpdate": "Reserve connections.",
+                    "timestamp": "2017-04-03T17:41:19.181Z",
+                    "id": 1914
+                },
+                {
+                    "statusUpdate": "Deploy Image Streamer OS volume.",
+                    "timestamp": "2017-04-03T17:41:19.798Z",
+                    "id": 1915
+                },
+                {
+                    "statusUpdate": "Configure downlink subports for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T17:41:29.721Z",
+                    "id": 1922
+                },
+                {
+                    "statusUpdate": "Apply settings to {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T17:43:18.812Z",
+                    "id": 1927
+                },
+                {
+                    "statusUpdate": "Release administrative power lock for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T18:00:55.468Z",
+                    "id": 1943
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Create",
+            "owner": "mesosphere",
+            "eTag": "17",
+            "created": "2017-04-03T17:41:16.167Z",
+            "modified": "2017-04-03T18:00:55.468Z",
+            "uri": "/rest/tasks/CC208F6A-90DA-4B31-B583-34FEC3D0274D"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 Golden Image",
+                "resourceUri": "/rest/deployed-targets/12229cc5-f620-4a51-8a87-14ff4f3da2f6",
+                "resourceCategory": "deployed-targets"
+            },
+            "hidden": true,
+            "stateReason": "Creating OS volume ",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/CC208F6A-90DA-4B31-B583-34FEC3D0274D",
+            "associatedTaskUri": null,
+            "completedSteps": 2,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T17:41:19.859Z",
+                    "id": 1916
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T17:41:19.889Z",
+                    "id": 1917
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T17:41:28.594Z",
+                    "id": 1918
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T17:41:28.702Z",
+                    "id": 1919
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T17:41:29.169Z",
+                    "id": 1920
+                },
+                {
+                    "statusUpdate": null,
+                    "timestamp": "2017-04-03T17:41:29.198Z",
+                    "id": 1921
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Create",
+            "owner": "Administrator",
+            "eTag": "6",
+            "created": "2017-04-03T17:41:19.845Z",
+            "modified": "2017-04-03T17:41:29.198Z",
+            "uri": "/rest/tasks/C711CC2C-3361-44E3-AD23-69E41895529F"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, interconnect 3",
+                "resourceUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/3f32ea94-ee87-4bc3-9638-270cc34cbc9d"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/398D06ED-A338-4718-9E77-855E93B3250E associated with connection 3f32ea94-ee87-4bc3-9638-270cc34cbc9d",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/CC208F6A-90DA-4B31-B583-34FEC3D0274D",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Configuring connection on downlink port 14, subport 2",
+                    "timestamp": "2017-04-03T17:41:29.844Z",
+                    "id": 1923
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:41:29.844Z",
+            "modified": "2017-04-03T17:42:20.125Z",
+            "uri": "/rest/tasks/398D06ED-A338-4718-9E77-855E93B3250E"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, interconnect 6",
+                "resourceUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/ce57a16a-b6d2-42f1-8561-ff776fbf7e00"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/7DA266FF-8A2B-4043-9BDC-12788B69ACF1 associated with connection ce57a16a-b6d2-42f1-8561-ff776fbf7e00",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/CC208F6A-90DA-4B31-B583-34FEC3D0274D",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Configuring connection on downlink port 2, subport 2",
+                    "timestamp": "2017-04-03T17:41:30.026Z",
+                    "id": 1924
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:41:30.026Z",
+            "modified": "2017-04-03T17:42:46.606Z",
+            "uri": "/rest/tasks/7DA266FF-8A2B-4043-9BDC-12788B69ACF1"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, interconnect 3",
+                "resourceUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/727c38ee-d153-4d2b-90c4-deef8e5e4a1f"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/9162176B-6158-446B-9D5D-3363A220965B associated with connection 727c38ee-d153-4d2b-90c4-deef8e5e4a1f",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/CC208F6A-90DA-4B31-B583-34FEC3D0274D",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Configuring connection on downlink port 14, subport 1",
+                    "timestamp": "2017-04-03T17:41:30.239Z",
+                    "id": 1925
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:41:30.239Z",
+            "modified": "2017-04-03T17:43:02.488Z",
+            "uri": "/rest/tasks/9162176B-6158-446B-9D5D-3363A220965B"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, interconnect 6",
+                "resourceUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/e43d0792-458b-4f1a-93ab-ee0dfe385de2"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/72BA0D22-4D18-45C9-9527-35F2FC648E6D associated with connection e43d0792-458b-4f1a-93ab-ee0dfe385de2",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/CC208F6A-90DA-4B31-B583-34FEC3D0274D",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Configuring connection on downlink port 2, subport 1",
+                    "timestamp": "2017-04-03T17:41:30.454Z",
+                    "id": 1926
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T17:41:30.454Z",
+            "modified": "2017-04-03T17:43:18.380Z",
+            "uri": "/rest/tasks/72BA0D22-4D18-45C9-9527-35F2FC648E6D"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": "Limiting concurrent operations.",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to apply server settings for profile : ESXi6 Golden Image.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Refresh the server hardware. If the problem continues to occur, power-cycle the server hardware (allowing it to complete its power on self test) and then refresh again."
+                    ],
+                    "data": {},
+                    "errorCode": "GET_BLADE_SIGNATURE_ERROR_TBIRD",
+                    "message": "Unable to read server adapter configuration data."
+                },
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Ensure the server is operational and try the operation again."
+                    ],
+                    "data": {},
+                    "errorCode": "TIMED_OUT_WAITING_FOR_POWER_OPERATION",
+                    "message": "The power operation did not complete in the expected amount of time."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/CC208F6A-90DA-4B31-B583-34FEC3D0274D",
+            "associatedTaskUri": null,
+            "completedSteps": 2,
+            "computedPercentComplete": 100,
+            "expectedDuration": 1235,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Apply boot mode settings.",
+                    "timestamp": "2017-04-03T17:43:40.046Z",
+                    "id": 1928
+                },
+                {
+                    "statusUpdate": "Apply server settings.",
+                    "timestamp": "2017-04-03T18:00:29.406Z",
+                    "id": 1938
+                }
+            ],
+            "totalSteps": 14,
+            "userInitiated": true,
+            "name": "Apply profile : ESXi6 Golden Image",
+            "owner": "mesosphere",
+            "eTag": "7",
+            "created": "2017-04-03T17:43:18.992Z",
+            "modified": "2017-04-03T18:00:54.786Z",
+            "uri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:44:23.324Z",
+            "modified": "2017-04-03T17:45:55.359Z",
+            "uri": "/rest/tasks/5BE4A2B0-3B6D-468D-B0BD-93DEB1E4E079"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:46:05.416Z",
+            "modified": "2017-04-03T17:47:37.301Z",
+            "uri": "/rest/tasks/9D085B95-ACA9-4E37-8C64-4C9792EC0191"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:47:47.370Z",
+            "modified": "2017-04-03T17:49:19.277Z",
+            "uri": "/rest/tasks/7F9A988D-70AD-4EDB-8228-F80EDF4B5806"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:49:23.556Z",
+            "modified": "2017-04-03T17:50:55.498Z",
+            "uri": "/rest/tasks/4F53B528-0620-4374-B06B-7C4EBA53694D"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:51:05.550Z",
+            "modified": "2017-04-03T17:52:37.475Z",
+            "uri": "/rest/tasks/4262A054-38BF-4349-BD2C-82B5FF307015"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:52:47.522Z",
+            "modified": "2017-04-03T17:54:19.428Z",
+            "uri": "/rest/tasks/EA56539A-F86F-473E-A2D9-6CAF57711F0D"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:54:23.955Z",
+            "modified": "2017-04-03T17:55:55.890Z",
+            "uri": "/rest/tasks/71754467-9EE9-4786-BF23-AE4DD4A671C1"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:56:05.933Z",
+            "modified": "2017-04-03T17:57:37.996Z",
+            "uri": "/rest/tasks/0C5E63FB-D59D-4928-BD50-3F3C45501E7E"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to power on server: CN75150484, bay 2.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": null,
+                    "recommendedActions": [
+                        "Ensure sufficient power is available and try the operation again if the current server power state is not the desired state."
+                    ],
+                    "data": {
+                        "mpIpAddress": "fe80:0:0:0:3a63:bbff:fe39:6b34"
+                    },
+                    "errorCode": "SERVER_POWER_ON_TIMEOUT",
+                    "message": "The power operation request did not succeed."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/749F4F30-0F49-49C7-BB89-8C315A28E252",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 300,
+            "progressUpdates": [],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Power on",
+            "owner": "mesosphere",
+            "eTag": "2",
+            "created": "2017-04-03T17:57:48.035Z",
+            "modified": "2017-04-03T17:59:19.965Z",
+            "uri": "/rest/tasks/5652326F-6DE3-446C-AEA0-1836ABA1668D"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "operation": "refreshServer",
+                "serverAction": "REFRESH_BLADE"
+            },
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to refresh server.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Refresh the server hardware. If the problem continues to occur, power-cycle the server hardware (allowing it to complete its power on self test) and then refresh again."
+                    ],
+                    "data": {},
+                    "errorCode": "GET_BLADE_SIGNATURE_ERROR_TBIRD",
+                    "message": "Unable to read server adapter configuration data."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 19,
+            "computedPercentComplete": 100,
+            "expectedDuration": 480,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate server information.",
+                    "timestamp": "2017-04-03T18:07:27.035Z",
+                    "id": 1945
+                },
+                {
+                    "statusUpdate": "Validate OneView account on the management processor.",
+                    "timestamp": "2017-04-03T18:07:37.030Z",
+                    "id": 1946
+                },
+                {
+                    "statusUpdate": "Refresh server attributes.",
+                    "timestamp": "2017-04-03T18:07:47.857Z",
+                    "id": 1947
+                },
+                {
+                    "statusUpdate": "Configure NTP (Network Time Protocol) settings.",
+                    "timestamp": "2017-04-03T18:08:27.008Z",
+                    "id": 1949
+                },
+                {
+                    "statusUpdate": "Configure single sign-on (SSO) settings.",
+                    "timestamp": "2017-04-03T18:08:28.442Z",
+                    "id": 1950
+                },
+                {
+                    "statusUpdate": "Update environmental configuration.",
+                    "timestamp": "2017-04-03T18:08:30.065Z",
+                    "id": 1951
+                },
+                {
+                    "statusUpdate": "Discover BIOS settings.",
+                    "timestamp": "2017-04-03T18:08:34.714Z",
+                    "id": 1952
+                },
+                {
+                    "statusUpdate": "Write port map to management processor.",
+                    "timestamp": "2017-04-03T18:08:36.953Z",
+                    "id": 1953
+                },
+                {
+                    "statusUpdate": "Write blade location to management processor for use by HPE Insight Control server provisioning.",
+                    "timestamp": "2017-04-03T18:08:38.433Z",
+                    "id": 1954
+                },
+                {
+                    "statusUpdate": "Write virtual identifiers to management processor for use by HPE Insight Control server provisioning.",
+                    "timestamp": "2017-04-03T18:08:39.950Z",
+                    "id": 1955
+                },
+                {
+                    "statusUpdate": "Discover firmware settings.",
+                    "timestamp": "2017-04-03T18:08:54.521Z",
+                    "id": 1956
+                },
+                {
+                    "statusUpdate": "Retrieve server firmware inventory.",
+                    "timestamp": "2017-04-03T18:09:00.247Z",
+                    "id": 1957
+                }
+            ],
+            "totalSteps": 19,
+            "userInitiated": true,
+            "name": "Refresh",
+            "owner": "mesosphere",
+            "eTag": "15",
+            "created": "2017-04-03T18:07:26.828Z",
+            "modified": "2017-04-03T18:09:07.262Z",
+            "uri": "/rest/tasks/DE09F5EA-B5A8-4428-B56C-2EB9C45CF58A"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 Golden Image",
+                "resourceUri": "/rest/server-profiles/afb6495b-48ce-4e52-b616-6bb5b07b6df2",
+                "resourceCategory": "server-profiles"
+            },
+            "hidden": true,
+            "stateReason": "Error",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to delete server profile: ESXi6 Golden Image.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Ensure network connectivity to the server is available. Try removing the profile again."
+                    ],
+                    "data": {},
+                    "errorCode": "PROFILE_CLEAR_EXCEPTION",
+                    "message": "Unable to remove a profile from the server hardware.\nUnable to complete the operation.\nThere was a problem communicating with the IO adapter in Mezzanine Slot 3."
+                },
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Refresh the server hardware. If the problem continues to occur, power-cycle the server hardware (allowing it to complete its power on self test) and then refresh again."
+                    ],
+                    "data": {},
+                    "errorCode": "GET_BLADE_SIGNATURE_ERROR_TBIRD",
+                    "message": "Unable to read server adapter configuration data."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate configuration.",
+                    "timestamp": "2017-04-03T18:09:42.001Z",
+                    "id": 1958
+                },
+                {
+                    "statusUpdate": "Set administrative power lock for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T18:09:42.217Z",
+                    "id": 1959
+                },
+                {
+                    "statusUpdate": "Delete Image Streamer OS volume.",
+                    "timestamp": "2017-04-03T18:09:42.911Z",
+                    "id": 1960
+                },
+                {
+                    "statusUpdate": "Delete connections.",
+                    "timestamp": "2017-04-03T18:09:44.885Z",
+                    "id": 1965
+                },
+                {
+                    "statusUpdate": "Clear settings for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T18:11:46.064Z",
+                    "id": 1970
+                },
+                {
+                    "statusUpdate": "Release administrative power lock for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T18:12:26.182Z",
+                    "id": 1974
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Delete",
+            "owner": "mesosphere",
+            "eTag": "13",
+            "created": "2017-04-03T18:09:41.941Z",
+            "modified": "2017-04-03T18:12:26.225Z",
+            "uri": "/rest/tasks/576B2EC5-5198-44F7-8FB3-0445CE6902FD"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 Golden Image",
+                "resourceUri": "/rest/deployed-targets/12229cc5-f620-4a51-8a87-14ff4f3da2f6",
+                "resourceCategory": "deployed-targets"
+            },
+            "hidden": true,
+            "stateReason": "Delete OS volume ",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/576B2EC5-5198-44F7-8FB3-0445CE6902FD",
+            "associatedTaskUri": null,
+            "completedSteps": 2,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T18:09:43.418Z",
+                    "id": 1961
+                },
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T18:09:43.517Z",
+                    "id": 1962
+                },
+                {
+                    "statusUpdate": "Delete OS volume ",
+                    "timestamp": "2017-04-03T18:09:44.712Z",
+                    "id": 1963
+                },
+                {
+                    "statusUpdate": null,
+                    "timestamp": "2017-04-03T18:09:44.730Z",
+                    "id": 1964
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Delete",
+            "owner": "Administrator",
+            "eTag": "4",
+            "created": "2017-04-03T18:09:43.398Z",
+            "modified": "2017-04-03T18:09:44.730Z",
+            "uri": "/rest/tasks/A65277F7-D680-416F-87FD-C9F0BC093E29"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, interconnect 3",
+                "resourceUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/3f32ea94-ee87-4bc3-9638-270cc34cbc9d"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/7707AF53-35E0-49A2-8B4E-AD2933E171C8 associated with connection 3f32ea94-ee87-4bc3-9638-270cc34cbc9d",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/576B2EC5-5198-44F7-8FB3-0445CE6902FD",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Deleting connection on downlink port 14, subport 2",
+                    "timestamp": "2017-04-03T18:09:44.973Z",
+                    "id": 1966
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T18:09:44.973Z",
+            "modified": "2017-04-03T18:11:13.998Z",
+            "uri": "/rest/tasks/7707AF53-35E0-49A2-8B4E-AD2933E171C8"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, interconnect 6",
+                "resourceUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/ce57a16a-b6d2-42f1-8561-ff776fbf7e00"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/F6F60F3F-43BF-4C47-B232-C5AF66CB24B9 associated with connection ce57a16a-b6d2-42f1-8561-ff776fbf7e00",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/576B2EC5-5198-44F7-8FB3-0445CE6902FD",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Deleting connection on downlink port 2, subport 2",
+                    "timestamp": "2017-04-03T18:09:45.379Z",
+                    "id": 1967
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T18:09:45.379Z",
+            "modified": "2017-04-03T18:11:24.636Z",
+            "uri": "/rest/tasks/F6F60F3F-43BF-4C47-B232-C5AF66CB24B9"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, interconnect 3",
+                "resourceUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/727c38ee-d153-4d2b-90c4-deef8e5e4a1f"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/C70E4238-8253-4852-8D39-608DDC840F07 associated with connection 727c38ee-d153-4d2b-90c4-deef8e5e4a1f",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/576B2EC5-5198-44F7-8FB3-0445CE6902FD",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Deleting connection on downlink port 14, subport 1",
+                    "timestamp": "2017-04-03T18:09:45.757Z",
+                    "id": 1968
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T18:09:45.757Z",
+            "modified": "2017-04-03T18:11:35.308Z",
+            "uri": "/rest/tasks/C70E4238-8253-4852-8D39-608DDC840F07"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, interconnect 6",
+                "resourceUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/e43d0792-458b-4f1a-93ab-ee0dfe385de2"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/96A48EA3-D0DB-46E3-9AB9-9159E1D8622C associated with connection e43d0792-458b-4f1a-93ab-ee0dfe385de2",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/576B2EC5-5198-44F7-8FB3-0445CE6902FD",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Deleting connection on downlink port 2, subport 1",
+                    "timestamp": "2017-04-03T18:09:46.127Z",
+                    "id": 1969
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Delete",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T18:09:46.127Z",
+            "modified": "2017-04-03T18:11:45.921Z",
+            "uri": "/rest/tasks/96A48EA3-D0DB-46E3-9AB9-9159E1D8622C"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": "Limiting concurrent operations.",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Error",
+            "taskStatus": "Unable to remove server settings for profile : ESXi6 Golden Image.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Refresh the server hardware. If the problem continues to occur, power-cycle the server hardware (allowing it to complete its power on self test) and then refresh again."
+                    ],
+                    "data": {},
+                    "errorCode": "GET_BLADE_SIGNATURE_ERROR_TBIRD",
+                    "message": "Unable to read server adapter configuration data."
+                },
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Ensure network connectivity to the server is available. Try removing the profile again."
+                    ],
+                    "data": {},
+                    "errorCode": "PROFILE_CLEAR_EXCEPTION",
+                    "message": "Unable to remove a profile from the server hardware.\nUnable to complete the operation.\nThere was a problem communicating with the IO adapter in Mezzanine Slot 3."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/576B2EC5-5198-44F7-8FB3-0445CE6902FD",
+            "associatedTaskUri": null,
+            "completedSteps": 1,
+            "computedPercentComplete": 100,
+            "expectedDuration": 395,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Remove server personality and connections.",
+                    "timestamp": "2017-04-03T18:11:58.531Z",
+                    "id": 1971
+                }
+            ],
+            "totalSteps": 14,
+            "userInitiated": true,
+            "name": "Remove profile : ESXi6 Golden Image",
+            "owner": "mesosphere",
+            "eTag": "5",
+            "created": "2017-04-03T18:11:46.262Z",
+            "modified": "2017-04-03T18:12:26.002Z",
+            "uri": "/rest/tasks/E4306F79-6A1B-4B7D-BF34-91916CE17D61"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi6 Golden Image",
+                "resourceUri": "/rest/server-profiles/afb6495b-48ce-4e52-b616-6bb5b07b6df2",
+                "resourceCategory": "server-profiles"
+            },
+            "hidden": true,
+            "stateReason": "Completed",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Successfully deleted server profile: ESXi6 Golden Image.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Refresh the server hardware. If the problem continues to occur, power-cycle the server hardware (allowing it to complete its power on self test) and then refresh again."
+                    ],
+                    "data": {},
+                    "errorCode": "GET_BLADE_SIGNATURE_ERROR_TBIRD",
+                    "message": "Unable to read server adapter configuration data."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate configuration.",
+                    "timestamp": "2017-04-03T18:15:17.047Z",
+                    "id": 1978
+                },
+                {
+                    "statusUpdate": "Set administrative power lock for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T18:15:17.290Z",
+                    "id": 1979
+                },
+                {
+                    "statusUpdate": "Delete connections.",
+                    "timestamp": "2017-04-03T18:15:17.978Z",
+                    "id": 1980
+                },
+                {
+                    "statusUpdate": "Clear settings for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T18:15:18.187Z",
+                    "id": 1981
+                },
+                {
+                    "statusUpdate": "Clear {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"} reservation.",
+                    "timestamp": "2017-04-03T18:16:08.483Z",
+                    "id": 1986
+                },
+                {
+                    "statusUpdate": "Successfully removed server settings for profile : ESXi6 Golden Image.",
+                    "timestamp": "2017-04-03T18:16:12.159Z",
+                    "id": 1988
+                },
+                {
+                    "statusUpdate": "Release administrative power lock for {\"name\":\"CN75150484, bay 2\", \"uri\":\"/rest/server-hardware/36343537-3338-4E43-3735-313830303630\"}.",
+                    "timestamp": "2017-04-03T18:16:12.273Z",
+                    "id": 1990
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Delete",
+            "owner": "Administrator",
+            "eTag": "14",
+            "created": "2017-04-03T18:15:16.955Z",
+            "modified": "2017-04-03T18:16:12.492Z",
+            "uri": "/rest/tasks/3828937A-78D6-4249-B6C0-F63CB8C44CE7"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, bay 2",
+                "resourceUri": "/rest/server-hardware/36343537-3338-4E43-3735-313830303630",
+                "resourceCategory": "server-hardware"
+            },
+            "hidden": true,
+            "stateReason": "Limiting concurrent operations.",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Successfully removed server settings for profile : ESXi6 Golden Image.",
+            "taskErrors": [
+                {
+                    "errorSource": null,
+                    "nestedErrors": [],
+                    "details": "",
+                    "recommendedActions": [
+                        "Refresh the server hardware. If the problem continues to occur, power-cycle the server hardware (allowing it to complete its power on self test) and then refresh again."
+                    ],
+                    "data": {},
+                    "errorCode": "GET_BLADE_SIGNATURE_ERROR_TBIRD",
+                    "message": "Unable to read server adapter configuration data."
+                }
+            ],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/3828937A-78D6-4249-B6C0-F63CB8C44CE7",
+            "associatedTaskUri": null,
+            "completedSteps": 14,
+            "computedPercentComplete": 100,
+            "expectedDuration": 395,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Remove server personality and connections.",
+                    "timestamp": "2017-04-03T18:15:29.118Z",
+                    "id": 1982
+                }
+            ],
+            "totalSteps": 14,
+            "userInitiated": true,
+            "name": "Remove profile : ESXi6 Golden Image",
+            "owner": "Administrator",
+            "eTag": "5",
+            "created": "2017-04-03T18:15:18.321Z",
+            "modified": "2017-04-03T18:16:08.356Z",
+            "uri": "/rest/tasks/E9D94983-BD7E-4909-A84F-90F535809B87"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi Golden Image Capture",
+                "resourceUri": "/rest/server-profiles/d4cb186b-8be3-4b12-9081-27b958392ebe",
+                "resourceCategory": "server-profiles"
+            },
+            "hidden": true,
+            "stateReason": "Completed",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Created server profile: ESXi Golden Image Capture.",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": null,
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Validate configuration.",
+                    "timestamp": "2017-04-03T18:19:14.717Z",
+                    "id": 1993
+                },
+                {
+                    "statusUpdate": "Set administrative power lock for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T18:19:16.111Z",
+                    "id": 1994
+                },
+                {
+                    "statusUpdate": "Reserve {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T18:19:16.605Z",
+                    "id": 1995
+                },
+                {
+                    "statusUpdate": "Save server profile definition.",
+                    "timestamp": "2017-04-03T18:19:17.229Z",
+                    "id": 1996
+                },
+                {
+                    "statusUpdate": "Reserve connections.",
+                    "timestamp": "2017-04-03T18:19:17.479Z",
+                    "id": 1997
+                },
+                {
+                    "statusUpdate": "Deploy Image Streamer OS volume.",
+                    "timestamp": "2017-04-03T18:19:18.153Z",
+                    "id": 1998
+                },
+                {
+                    "statusUpdate": "Configure downlink subports for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T18:19:28.077Z",
+                    "id": 2005
+                },
+                {
+                    "statusUpdate": "Apply settings to {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T18:21:25.735Z",
+                    "id": 2010
+                },
+                {
+                    "statusUpdate": "Release administrative power lock for {\"name\":\"CN7515010J, bay 3\", \"uri\":\"/rest/server-hardware/35316377-3132-6E63-3735-313830303573\"}.",
+                    "timestamp": "2017-04-03T18:23:54.086Z",
+                    "id": 2013
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Create",
+            "owner": "Administrator",
+            "eTag": "17",
+            "created": "2017-04-03T18:19:14.647Z",
+            "modified": "2017-04-03T18:23:54.086Z",
+            "uri": "/rest/tasks/7F2D7365-E7AB-476C-B9D7-D3B0140168C1"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "ESXi Golden Image Capture",
+                "resourceUri": "/rest/deployed-targets/9640f12d-9596-4f01-bffb-1336e4ac62de",
+                "resourceCategory": "deployed-targets"
+            },
+            "hidden": true,
+            "stateReason": "Creating OS volume ",
+            "category": "tasks",
+            "data": null,
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/7F2D7365-E7AB-476C-B9D7-D3B0140168C1",
+            "associatedTaskUri": null,
+            "completedSteps": 2,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T18:19:18.221Z",
+                    "id": 1999
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T18:19:18.255Z",
+                    "id": 2000
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T18:19:26.964Z",
+                    "id": 2001
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T18:19:27.066Z",
+                    "id": 2002
+                },
+                {
+                    "statusUpdate": "Creating OS volume ",
+                    "timestamp": "2017-04-03T18:19:27.543Z",
+                    "id": 2003
+                },
+                {
+                    "statusUpdate": null,
+                    "timestamp": "2017-04-03T18:19:27.559Z",
+                    "id": 2004
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": false,
+            "name": "Create",
+            "owner": "Administrator",
+            "eTag": "6",
+            "created": "2017-04-03T18:19:18.207Z",
+            "modified": "2017-04-03T18:19:27.559Z",
+            "uri": "/rest/tasks/B37DD5F0-5774-4150-BA66-150C8DE1E5CF"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, interconnect 3",
+                "resourceUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/d2566e2b-34ea-445c-9547-971e59cd668c"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/ED977532-B300-464F-9AF7-3AAB4331BE6C associated with connection d2566e2b-34ea-445c-9547-971e59cd668c",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/7F2D7365-E7AB-476C-B9D7-D3B0140168C1",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Configuring connection on downlink port 3, subport 2",
+                    "timestamp": "2017-04-03T18:19:28.184Z",
+                    "id": 2006
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T18:19:28.184Z",
+            "modified": "2017-04-03T18:20:27.150Z",
+            "uri": "/rest/tasks/ED977532-B300-464F-9AF7-3AAB4331BE6C"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN75150484, interconnect 6",
+                "resourceUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/27f3fe5f-2da1-42dc-bf35-3eac1eddb05c"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/8F3F7D43-7CA9-4E39-A231-E4BBCBF3F534 associated with connection 27f3fe5f-2da1-42dc-bf35-3eac1eddb05c",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/7F2D7365-E7AB-476C-B9D7-D3B0140168C1",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Configuring connection on downlink port 15, subport 2",
+                    "timestamp": "2017-04-03T18:19:28.347Z",
+                    "id": 2007
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T18:19:28.347Z",
+            "modified": "2017-04-03T18:20:53.610Z",
+            "uri": "/rest/tasks/8F3F7D43-7CA9-4E39-A231-E4BBCBF3F534"
+        },
+        {
+            "type": "TaskResourceV2",
+            "taskType": "User",
+            "associatedResource": {
+                "associationType": "MANAGED_BY",
+                "resourceName": "CN7515010J, interconnect 3",
+                "resourceUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                "resourceCategory": "interconnects"
+            },
+            "hidden": true,
+            "stateReason": null,
+            "category": "tasks",
+            "data": {
+                "task-category": "ConnectionDeployment",
+                "ConnectionInstanceUri": "/rest/connections/a83daa24-f02c-4b46-bdc0-da3e990c493c"
+            },
+            "percentComplete": 100,
+            "taskState": "Completed",
+            "taskStatus": "Completed task /rest/tasks/DE30C2BA-C72C-4822-91A7-4556FFDEF225 associated with connection a83daa24-f02c-4b46-bdc0-da3e990c493c",
+            "taskErrors": [],
+            "taskOutput": [],
+            "parentTaskUri": "/rest/tasks/7F2D7365-E7AB-476C-B9D7-D3B0140168C1",
+            "associatedTaskUri": null,
+            "completedSteps": 0,
+            "computedPercentComplete": 100,
+            "expectedDuration": 0,
+            "progressUpdates": [
+                {
+                    "statusUpdate": "Configuring connection on downlink port 3, subport 1",
+                    "timestamp": "2017-04-03T18:19:28.561Z",
+                    "id": 2008
+                }
+            ],
+            "totalSteps": 0,
+            "userInitiated": true,
+            "name": "Update",
+            "owner": "System",
+            "eTag": "1",
+            "created": "2017-04-03T18:19:28.561Z",
+            "modified": "2017-04-03T18:21:09.549Z",
+            "uri": "/rest/tasks/DE30C2BA-C72C-4822-91A7-4556FFDEF225"
+        }
+    ],
+    "nextPageUri": "/rest/tasks?count=50&start=50",
+    "start": 0,
+    "prevPageUri": null,
+    "count": 50,
+    "total": 6299,
+    "eTag": "535693139",
+    "created": null,
+    "modified": null,
+    "category": "tasks",
+    "uri": "/rest/tasks?count=50&start=0"
+}

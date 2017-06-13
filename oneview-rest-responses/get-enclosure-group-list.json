@@ -1,0 +1,102 @@
+{
+    "type": "EnclosureGroupListV300",
+    "members": [
+        {
+            "type": "EnclosureGroupV300",
+            "uri": "/rest/enclosure-groups/189af60e-31ec-4ee9-8886-4830221fb026",
+            "category": "enclosure-groups",
+            "name": "DCA-SolCenter-EG",
+            "created": "2017-03-22T11:06:51.727Z",
+            "modified": "2017-03-22T11:06:51.727Z",
+            "eTag": "2017-03-22T11:06:51.727Z",
+            "status": "OK",
+            "state": "Normal",
+            "enclosureTypeUri": "/rest/enclosure-types/SY12000",
+            "stackingMode": "Enclosure",
+            "portMappingCount": 8,
+            "portMappings": [
+                {
+                    "midplanePort": 1,
+                    "interconnectBay": 1
+                },
+                {
+                    "midplanePort": 2,
+                    "interconnectBay": 2
+                },
+                {
+                    "midplanePort": 3,
+                    "interconnectBay": 3
+                },
+                {
+                    "midplanePort": 4,
+                    "interconnectBay": 4
+                },
+                {
+                    "midplanePort": 5,
+                    "interconnectBay": 5
+                },
+                {
+                    "midplanePort": 6,
+                    "interconnectBay": 6
+                },
+                {
+                    "midplanePort": 7,
+                    "interconnectBay": 7
+                },
+                {
+                    "midplanePort": 8,
+                    "interconnectBay": 8
+                }
+            ],
+            "interconnectBayMappingCount": 4,
+            "interconnectBayMappings": [
+                {
+                    "enclosureIndex": 2,
+                    "interconnectBay": 1,
+                    "logicalInterconnectGroupUri": "/rest/sas-logical-interconnect-groups/09f73900-f67e-414a-ac92-d812ababdd32"
+                },
+                {
+                    "interconnectBay": 3,
+                    "logicalInterconnectGroupUri": "/rest/logical-interconnect-groups/fbd14e2a-b86b-4048-bfdf-1b0e94042d36"
+                },
+                {
+                    "enclosureIndex": 2,
+                    "interconnectBay": 4,
+                    "logicalInterconnectGroupUri": "/rest/sas-logical-interconnect-groups/09f73900-f67e-414a-ac92-d812ababdd32"
+                },
+                {
+                    "interconnectBay": 6,
+                    "logicalInterconnectGroupUri": "/rest/logical-interconnect-groups/fbd14e2a-b86b-4048-bfdf-1b0e94042d36"
+                }
+            ],
+            "ipAddressingMode": "IpPool",
+            "ipRangeUris": [
+                "/rest/id-pools/ipv4/ranges/a6eb1e41-78c8-4f44-bafb-cbef40cf8b49"
+            ],
+            "powerMode": "RedundantPowerFeed",
+            "description": null,
+            "osDeploymentSettings": {
+                "deploymentModeSettings": {
+                    "deploymentMode": "Internal",
+                    "deploymentNetworkUri": null
+                },
+                "manageOSDeployment": true
+            },
+            "enclosureCount": 3,
+            "associatedLogicalInterconnectGroups": [
+                "/rest/logical-interconnect-groups/fbd14e2a-b86b-4048-bfdf-1b0e94042d36",
+                "/rest/sas-logical-interconnect-groups/09f73900-f67e-414a-ac92-d812ababdd32"
+            ]
+        }
+    ],
+    "start": 0,
+    "prevPageUri": null,
+    "nextPageUri": null,
+    "count": 1,
+    "total": 1,
+    "created": "2017-06-01T16:20:10.688Z",
+    "eTag": "2017-06-01T16:20:10.688Z",
+    "modified": "2017-06-01T16:20:10.688Z",
+    "category": "enclosure-groups",
+    "uri": "/rest/enclosure-groups?start=0&count=100"
+}
