@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
+	"github.com/hjma29/ovcli/ovextra"
 	"github.com/spf13/cobra"
 )
 
@@ -116,17 +117,17 @@ func lig(cmd *cobra.Command, args []string) {
 	//
 	// start := time.Now()
 
-	cliOVClientPtr = cliOVClientPtr.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
+	//ovextra.CLIOVClientPtr = ovextra.CLIOVClientPtr.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
 	// elapsed := time.Since(start)
 	// log.Printf("NewOVClient took %s", elapsed)
 
 	// start = time.Now()
-	logicalInterconnectGroupList, _ = cliOVClientPtr.GetLogicalInterconnectGroups("", "")
+	logicalInterconnectGroupList, _ = ovextra.CLIOVClientPtr.GetLogicalInterconnectGroups("", "")
 	// elapsed = time.Since(start)
 	// log.Printf("Get LIG Groups took %s", elapsed)
 
 	// start = time.Now()
-	interconnectTypeList, _ = cliOVClientPtr.GetInterconnectTypes("", "")
+	interconnectTypeList, _ = ovextra.CLIOVClientPtr.GetInterconnectTypes("", "")
 	// elapsed = time.Since(start)
 	// log.Printf("Get InterConnect Types took %s", elapsed)
 
@@ -139,7 +140,7 @@ func lig(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	PrintLIG(cliOVClientPtr, ligNamePtr)
+	PrintLIG(ovextra.CLIOVClientPtr, ligNamePtr)
 }
 
 func PrintAllLIGs() {
@@ -154,7 +155,7 @@ func PrintAllLIGs() {
 	tw.Flush()
 }
 
-func PrintLIG(ptrOVC *ov.OVClient, ptrS *string) {
+func PrintLIG(ptrOVC *ovextra.CLIOVClient, ptrS *string) {
 
 	//defer timeTrack(time.Now(), "PrintLIG")
 
@@ -284,8 +285,8 @@ func NewLIGModule(e ov.InterconnectMapEntryTemplate) LIGModule {
 		}
 	}
 
-	// cliOVClientPtr.SetQueryString(empty_query_string)
-	// interconnectTypeList, _ := cliOVClientPtr.GetInterconnectTypeByUri(e.PermittedInterconnectTypeUri)
+	// ovextra.CLIOVClientPtr.SetQueryString(empty_query_string)
+	// interconnectTypeList, _ := ovextra.CLIOVClientPtr.GetInterconnectTypeByUri(e.PermittedInterconnectTypeUri)
 	for _, i := range interconnectTypeList.Members {
 		if i.URI == e.PermittedInterconnectTypeUri {
 			module.ModelName, module.ModelNumber = string(i.Name), i.PartNumber

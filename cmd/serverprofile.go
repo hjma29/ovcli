@@ -24,6 +24,7 @@ import (
 	"text/template"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
+	"github.com/hjma29/ovcli/ovextra"
 	"github.com/spf13/cobra"
 )
 
@@ -80,10 +81,6 @@ type ProfileConnection struct {
 	CBoot         string
 }
 
-type CLIOVClient struct {
-	ov.OVClient
-}
-
 type queryAttribute struct {
 	attributeName  string
 	attributeValue string
@@ -106,17 +103,12 @@ type serverHardwareTypePrint struct {
 	Model string
 }
 
-//var cliOVClientPtr *ov.OVClient
+//var ovextra.CLIOVClientPtr *ov.OVClient
 
 var serverProfilePrintlist []serverProfilePrint
 var serverHardwarePrintList []serverHardwarePrint
 var serverHardwareTypePrintList []serverHardwareTypePrint
 
-// // new Client
-// func (c *CLIOVClient) NewClIOVClient(ovclientPtr *ov.OVClient) *CLIOVClient {
-// 	return &CLIOVClient{OVClient: *ovclientPtr}
-// }
-//
 // func (c *CLIOVClient) GetProfileTemplateByAttribute(attribute ...queryAttribute) (ov.ServerProfile, error) {
 // 	var (
 // 		profile ov.ServerProfile
@@ -144,21 +136,21 @@ var serverHardwareTypePrintList []serverHardwareTypePrint
 
 func serverprofile(cmd *cobra.Command, args []string) {
 
-	cliOVClientPtr = cliOVClientPtr.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
+	//ovextra.CLIOVClientPtr = ovextra.CLIOVClientPtr.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
 
 	var err error
 
-	serverHardwareTypeList, err = cliOVClientPtr.GetServerHardwareTypes("", "")
+	serverHardwareTypeList, err = ovextra.CLIOVClientPtr.GetServerHardwareTypes("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	serverHardwareList, err = cliOVClientPtr.GetServerHardwareList(make([]string, 0), "")
+	serverHardwareList, err = ovextra.CLIOVClientPtr.GetServerHardwareList(make([]string, 0), "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	profileTemplateList, err = cliOVClientPtr.GetProfileTemplates("", "")
+	profileTemplateList, err = ovextra.CLIOVClientPtr.GetProfileTemplates("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -174,30 +166,30 @@ func serverprofile(cmd *cobra.Command, args []string) {
 
 func PrintProfile(ptrS *string) {
 
-	profile, err := cliOVClientPtr.GetProfileByName(*ptrS)
+	profile, err := ovextra.CLIOVClientPtr.GetProfileByName(*ptrS)
 
 	if err != nil {
 		log.Panic(err)
 	}
 
-	cliOVClientPtr.SetQueryString(empty_query_string)
+	ovextra.CLIOVClientPtr.SetQueryString(empty_query_string)
 
 	profilePrint := serverprofileDetailPrint{
 		ServerProfile:         profile,
 		ProfileConnectionList: make([]ProfileConnection, len(profile.Connections)),
 	}
 
-	enclosureGroupList, err = cliOVClientPtr.GetEnclosureGroups("", "")
+	enclosureGroupList, err = ovextra.CLIOVClientPtr.GetEnclosureGroups("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	ethernetNetworkList, err = cliOVClientPtr.GetEthernetNetworks("", "")
+	ethernetNetworkList, err = ovextra.CLIOVClientPtr.GetEthernetNetworks("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	networkSetList, err = cliOVClientPtr.GetNetworkSets("", "")
+	networkSetList, err = ovextra.CLIOVClientPtr.GetNetworkSets("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -283,7 +275,7 @@ func PrintProfile(ptrS *string) {
 }
 
 func PrintAllProfiles() {
-	serverProfileList, _ = cliOVClientPtr.GetProfiles("", "")
+	serverProfileList, _ = ovextra.CLIOVClientPtr.GetProfiles("", "")
 
 	for _, v := range serverProfileList.Members {
 		serverProfilePrintlist = append(serverProfilePrintlist, newServerProfilePrint(v))

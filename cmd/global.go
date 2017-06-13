@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"os"
-
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/docker/machine/libmachine/log"
 	"github.com/hjma29/ovcli/ovextra"
@@ -22,11 +20,7 @@ var networkSetList ov.NetworkSetList
 
 var empty_query_string = make(map[string]interface{})
 
-var ov_address = os.Getenv("OneView_address")
-var ov_username = os.Getenv("OneView_username")
-var ov_password = os.Getenv("OneView_password")
-
-var cliOVClientPtr *ov.OVClient
+//var cliOVClientPtr *ov.OVClien
 
 var ligModuleList []LIGModule
 
