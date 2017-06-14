@@ -11,12 +11,13 @@ var serverHardwareList ov.ServerHardwareList
 var serverHardwareTypeList ov.ServerHardwareTypeList
 var profileTemplateList ov.ServerProfileList
 var enclosureGroupList ov.EnclosureGroupList
-var interconnectList ovextra.InterconnectList
 
 var logicalInterconnectGroupList ov.LogicalInterconnectGroupList
 var interconnectTypeList ov.InterconnectTypeList
 var ethernetNetworkList ov.EthernetNetworkList
 var networkSetList ov.NetworkSetList
+
+var interconnectList ovextra.InterconnectList
 
 var empty_query_string = make(map[string]interface{})
 

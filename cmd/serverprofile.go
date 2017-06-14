@@ -54,7 +54,7 @@ const (
 		"\nConnections\n" +
 		"ID\tName\tNetwork\tVLAN\tMAC\tPort\tInterconnect\tBoot\n" +
 		"{{range .ProfileConnectionList}}" +
-		"{{.CID}}\t{{.CName}}\t{{.CNetwork}}\t{{.CVLAN}}\t{{.CMAC}}\t{{.CPort}}\n" +
+		"{{.CID}}\t{{.CName}}\t{{.CNetwork}}\t{{.CVLAN}}\t{{.CMAC}}\t{{.CPort}}\t{{.CInterconnect}}\t{{.CBoot}}\n" +
 		"{{end}}"
 )
 
@@ -77,7 +77,7 @@ type ProfileConnection struct {
 	CVLAN         string
 	CMAC          string
 	CPort         string
-	CInterConnect string
+	CInterconnect string
 	CBoot         string
 }
 
@@ -194,6 +194,11 @@ func PrintProfile(ptrS *string) {
 		log.Fatal(err)
 	}
 
+	interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	//loop through global var profileTemplateList and find the one matching this profile and get the template name
 	for _, v := range profileTemplateList.Members {
 		if profilePrint.ServerProfileTemplateURI == v.URI {
@@ -231,6 +236,8 @@ func PrintProfile(ptrS *string) {
 	}
 
 	for i, _ := range profilePrint.Connections {
+
+		// get network name depending on it's network-set or individual network
 		switch strings.Contains(string(profilePrint.Connections[i].NetworkURI), "ethernet-networks") {
 		case true:
 			{
@@ -262,6 +269,18 @@ func PrintProfile(ptrS *string) {
 			}
 
 		}
+
+		//get interconnect bay name
+		for _, v2 := range interconnectList.Members {
+			if string(profilePrint.Connections[i].InterconnectURI) == v2.URI {
+				profilePrint.ProfileConnectionList[i].CInterconnect = strings.Replace(strings.Replace(v2.Name, " ", "", -1), "interconnect", "Bay", -1)
+				//fmt.Println(v2.State)
+				break
+			}
+		}
+
+		//get boot property
+		profilePrint.ProfileConnectionList[i].CBoot = profilePrint.Connections[i].Boot.Priority
 	}
 
 	//fmt.Println(profilePrint.pro)

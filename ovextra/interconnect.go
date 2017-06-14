@@ -1,6 +1,11 @@
 package ovextra
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+
+	"github.com/HewlettPackard/oneview-golang/rest"
+)
 
 // InterconnectList a list of Interconnect objects
 type InterconnectList struct {
@@ -151,7 +156,7 @@ type Port struct {
 	PortMonitorConfigInfo     string      `json:"portMonitorConfigInfo"`
 	PairedPortName            interface{} `json:"pairedPortName"`
 	VendorSpecificPortName    interface{} `json:"vendorSpecificPortName"`
-	Neighbor                  interface{} `json:"neighbor"`
+	Neighbor                  Neighbor    `json:"neighbor"`
 	ConnectorType             interface{} `json:"connectorType"`
 	AssociatedUplinkSetURI    interface{} `json:"associatedUplinkSetUri"`
 	OperationalSpeed          interface{} `json:"operationalSpeed"`
@@ -171,38 +176,54 @@ type Port struct {
 	URI                       string      `json:"uri"`
 }
 
-// func (c *OVClient) GetEthernetNetworks(filter string, sort string) (EthernetNetworkList, error) {
-// 	var (
-// 		uri              = "/rest/ethernet-networks"
-// 		q                map[string]interface{}
-// 		ethernetNetworks EthernetNetworkList
-// 	)
-//
-// 	q = make(map[string]interface{})
-// 	if len(filter) > 0 {
-// 		q["filter"] = filter
-// 	}
-//
-// 	if sort != "" {
-// 		q["sort"] = sort
-// 	}
-//
-// 	// refresh login
-// 	c.RefreshLogin()
-// 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
-// 	// Setup query
-// 	if len(q) > 0 {
-// 		c.SetQueryString(q)
-// 	}
-//
-// 	data, err := c.RestAPICall(rest.GET, uri, nil)
-// 	if err != nil {
-// 		return ethernetNetworks, err
-// 	}
-//
-// 	log.Debugf("GetEthernetNetworks %s", data)
-// 	if err := json.Unmarshal([]byte(data), &ethernetNetworks); err != nil {
-// 		return ethernetNetworks, err
-// 	}
-// 	return ethernetNetworks, nil
-// }
+type Neighbor struct {
+	RemoteMgmtAddress        interface{} `json:"remoteMgmtAddress"`
+	RemotePortID             string      `json:"remotePortId"`
+	RemoteChassisID          string      `json:"remoteChassisId"`
+	RemoteChassisIDType      interface{} `json:"remoteChassisIdType"`
+	RemotePortIDType         interface{} `json:"remotePortIdType"`
+	RemotePortDescription    interface{} `json:"remotePortDescription"`
+	RemoteSystemDescription  interface{} `json:"remoteSystemDescription"`
+	RemoteMgmtAddressType    interface{} `json:"remoteMgmtAddressType"`
+	RemoteSystemCapabilities interface{} `json:"remoteSystemCapabilities"`
+	RemoteSystemName         string      `json:"remoteSystemName"`
+	RemoteType               interface{} `json:"remoteType"`
+	LinkURI                  interface{} `json:"linkUri"`
+	LinkLabel                interface{} `json:"linkLabel"`
+}
+
+func (c *CLIOVClient) GetInterconnect(filter string, sort string) (InterconnectList, error) {
+	var (
+		uri           = "/rest/interconnects"
+		q             map[string]interface{}
+		interconnects InterconnectList
+	)
+
+	q = make(map[string]interface{})
+	if len(filter) > 0 {
+		q["filter"] = filter
+	}
+
+	if sort != "" {
+		q["sort"] = sort
+	}
+
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+	// Setup query
+	if len(q) > 0 {
+		c.SetQueryString(q)
+	}
+
+	data, err := c.RestAPICall(rest.GET, uri, nil)
+	if err != nil {
+		return interconnects, err
+	}
+
+	//log.Debugf("Getinterconnects %s", data)
+	if err := json.Unmarshal([]byte(data), &interconnects); err != nil {
+		return interconnects, err
+	}
+	return interconnects, nil
+}
