@@ -174,6 +174,7 @@ type Port struct {
 	Modified                  interface{} `json:"modified"`
 	Category                  string      `json:"category"`
 	URI                       string      `json:"uri"`
+	TransceiverPN							string
 }
 
 type Neighbor struct {
