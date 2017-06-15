@@ -15,33 +15,26 @@
 package cmd
 
 import (
-	"html/template"
 	"log"
 	"os"
 	"text/tabwriter"
+	"text/template"
 
 	"github.com/hjma29/ovcli/ovextra"
 	"github.com/spf13/cobra"
 )
 
 const (
-	portShowFormat = "\n" +
-		// "Name:\t{{ .Name }}\n" +
-		// "Description:\t{{ .Description }}\n" +
-		// "ProfileTemplate:\t{{ .ServerProfileTemplate }}\n" +
-		// "TemplateCompliance:\t{{ .TemplateCompliance }}\n" +
-		// "ServerHardware:\t{{ .ServerHardware}}\n" +
-		// "ServerPower:\t{{ .ServerPower}}\n" +
-		// "ServerHardwareType:\t{{ .ServerHardwareType}}\n" +
-		// "EnclosureGroup:\t{{ .EnclosureGroup}}\n" +
-		// "\nConnections\n" +
-		// "ID\tName\tNetwork\tVLAN\tMAC\tPort\tInterconnect\tBoot\n" +
+	portShowFormat = "" +
 		"{{range .Members}}" +
+		"-------------\n" +
 		"Interconnect: {{.Name}}\n" +
+		"-------------\n" +
+		"\tPortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\n" +
 		"{{range .Ports}}" +
 		"\t{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\n" +
 		"{{end}}" +
-		//"{{.CID}}\t{{.CName}}\t{{.CNetwork}}\t{{.CVLAN}}\t{{.CMAC}}\t{{.CPort}}\t{{.CInterconnect}}\t{{.CBoot}}\n" +
+		"\n" +
 		"{{end}}"
 )
 
@@ -63,9 +56,21 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 	}
 
-	// for _, v2 := range interconnectList.Members {
+	// //iclPtr := &interconnectList
 	//
+	// for k := range interconnectList.Members {
+	// 	// fmt.Printf("%p\n", &interconnectList.Members[k])
+	// 	// fmt.Printf("%p\n", &(interconnectList.Members[k]))
+	// 	// fmt.Println("")
+	// 	for k2 := range interconnectList.Members[k].Ports {
+	// 		interconnectList.Members[k].Ports[k2].ConnectorType = "QSFP+SR4"
+	// 	}
 	// }
+	//
+	// fmt.Printf("\n\n%p\n", &interconnectList.Members[0])
+	// fmt.Printf("%p\n", &(interconnectList.Members[0]))
+
+	//fmt.Printf("%#v\n", interconnectList.Members[0].Ports[0].ConnectorType)
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()

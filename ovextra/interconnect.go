@@ -157,7 +157,7 @@ type Port struct {
 	PairedPortName            interface{} `json:"pairedPortName"`
 	VendorSpecificPortName    interface{} `json:"vendorSpecificPortName"`
 	Neighbor                  Neighbor    `json:"neighbor"`
-	ConnectorType             interface{} `json:"connectorType"`
+	ConnectorType             string      `json:"connectorType"`
 	AssociatedUplinkSetURI    interface{} `json:"associatedUplinkSetUri"`
 	OperationalSpeed          interface{} `json:"operationalSpeed"`
 	Available                 bool        `json:"available"`
