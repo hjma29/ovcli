@@ -220,7 +220,7 @@ func (c *CLIOVClient) GetInterconnect(filter string, sort string, uri string) (I
 	//fmt.Printf("%#v\n\n", c)
 	//fmt.Println(uri)
 
-	data, err := c.RestAPICall(rest.GET, uri, nil)
+	data, err := c.CLIRestAPICall(rest.GET, uri, nil)
 
 	//fmt.Println(data, err)
 
