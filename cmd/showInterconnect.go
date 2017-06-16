@@ -17,6 +17,7 @@ package cmd
 import (
 	"log"
 	"os"
+	"sort"
 	"text/tabwriter"
 	"text/template"
 
@@ -24,13 +25,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// const (
+// 	interconnectShowFormat = "" +
+// 		"Name\tModel\n" +
+// 		"----\t-----\n" +
+// 		"{{range .}}" +
+// 		"{{.Name}}\t({{.ProductName}})\n" +
+// 		"{{end}}"
+// )
+
 const (
 	interconnectShowFormat = "" +
-		"Name\tModel\n" +
-		"----\t-----\n" +
-		"{{range .}}" +
-		"{{.Name}}\t({{.ProductName}})\n" +
-		"{{end}}"
+		"{{.Name}}\t{{.ProductName}}\n"
 )
 
 const (
@@ -80,7 +86,7 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 
 	interconnectMap := make(map[string]*ovextra.Interconnect)
 	for k := range interconnectList.Members {
-		interconnectMap[interconnectList.Members[k].URI] = &interconnectList.Members[k]
+		interconnectMap[interconnectList.Members[k].Name] = &interconnectList.Members[k]
 	}
 
 	for interconnectList.NextPageURI != "" {
@@ -89,16 +95,42 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 		if err != nil {
 			log.Fatal(err, interconnectList)
 		}
+
 		for k := range interconnectList.Members {
-			interconnectMap[interconnectList.Members[k].URI] = &interconnectList.Members[k]
+			interconnectMap[interconnectList.Members[k].Name] = &interconnectList.Members[k]
 		}
+
 	}
+
+	//fmt.Println(len(interconnectMap))
+
+	var tempS []string
+	for k := range interconnectMap {
+		tempS = append(tempS, k)
+	}
+
+	//fmt.Println(interconnectMap)
+	//fmt.Printf("%#v\n", tempS)
+
+	sort.Strings(tempS)
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
+	type header struct {
+		Name        string
+		ProductName string
+	}
+
+	h := header{"Name", "Model"}
+
 	t := template.Must(template.New("").Parse(interconnectShowFormat))
-	t.Execute(tw, interconnectMap)
+	t.Execute(tw, h)
+	for _, v := range tempS {
+		t.Execute(tw, interconnectMap[v])
+
+	}
+	//t.Execute(tw, interconnectMap)
 }
 
 func showInterconnectPort(cmd *cobra.Command, args []string) {
