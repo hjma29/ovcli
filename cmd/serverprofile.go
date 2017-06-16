@@ -194,7 +194,9 @@ func PrintProfile(ptrS *string) {
 		log.Fatal(err)
 	}
 
-	interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "")
+	uri := "/rest/interconnects"
+
+	interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "", uri)
 	if err != nil {
 		log.Fatal(err)
 	}

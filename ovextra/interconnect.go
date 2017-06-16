@@ -96,7 +96,7 @@ type Interconnect struct {
 	// MaxBandwidth               string `json:"maxBandwidth"`
 	// IgmpIdleTimeoutInterval    int    `json:"igmpIdleTimeoutInterval"`
 	// EnablePauseFloodProtection bool   `json:"enablePauseFloodProtection"`
-	// ProductName                string `json:"productName"`
+	ProductName string `json:"productName"`
 	// IcmLicenses                struct {
 	// 	License []struct {
 	// 		RequiredCount int    `json:"requiredCount"`
@@ -174,7 +174,7 @@ type Port struct {
 	Modified                  interface{} `json:"modified"`
 	Category                  string      `json:"category"`
 	URI                       string      `json:"uri"`
-	TransceiverPN							string
+	TransceiverPN             string
 }
 
 type Neighbor struct {
@@ -193,9 +193,9 @@ type Neighbor struct {
 	LinkLabel                interface{} `json:"linkLabel"`
 }
 
-func (c *CLIOVClient) GetInterconnect(filter string, sort string) (InterconnectList, error) {
+func (c *CLIOVClient) GetInterconnect(filter string, sort string, uri string) (InterconnectList, error) {
 	var (
-		uri           = "/rest/interconnects"
+		//uri           = "/rest/interconnects"
 		q             map[string]interface{}
 		interconnects InterconnectList
 	)
@@ -217,7 +217,13 @@ func (c *CLIOVClient) GetInterconnect(filter string, sort string) (InterconnectL
 		c.SetQueryString(q)
 	}
 
+	//fmt.Printf("%#v\n\n", c)
+	//fmt.Println(uri)
+
 	data, err := c.RestAPICall(rest.GET, uri, nil)
+
+	//fmt.Println(data, err)
+
 	if err != nil {
 		return interconnects, err
 	}

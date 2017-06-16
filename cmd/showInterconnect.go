@@ -25,10 +25,19 @@ import (
 )
 
 const (
+	interconnectShowFormat = "" +
+		"Name\tModel\n" +
+		"----\t-----\n" +
+		"{{range .}}" +
+		"{{.Name}}\t({{.ProductName}})\n" +
+		"{{end}}"
+)
+
+const (
 	portShowFormat = "" +
 		"{{range .Members}}" +
 		"-------------\n" +
-		"Interconnect: {{.Name}}\n" +
+		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
 		"-------------\n" +
 		"\tPortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\n" +
 		"{{range .Ports}}" +
@@ -50,8 +59,51 @@ to quickly create a Cobra application.`,
 	Run: showInterconnect,
 }
 
+var showInterconnectPortCmd = &cobra.Command{
+	Use:   "port",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: showInterconnectPort,
+}
+
 func showInterconnect(cmd *cobra.Command, args []string) {
-	interconnectList, err := ovextra.CLIOVClientPtr.GetInterconnect("", "")
+	uri := "/rest/interconnects"
+	interconnectList, err := ovextra.CLIOVClientPtr.GetInterconnect("", "", uri)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	interconnectMap := make(map[string]*ovextra.Interconnect)
+	for k := range interconnectList.Members {
+		interconnectMap[interconnectList.Members[k].URI] = &interconnectList.Members[k]
+	}
+
+	for interconnectList.NextPageURI != "" {
+		//interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "", interconnectList.NextPageURI)
+		interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "", interconnectList.NextPageURI)
+		if err != nil {
+			log.Fatal(err, interconnectList)
+		}
+		for k := range interconnectList.Members {
+			interconnectMap[interconnectList.Members[k].URI] = &interconnectList.Members[k]
+		}
+	}
+
+	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	defer tw.Flush()
+
+	t := template.Must(template.New("").Parse(interconnectShowFormat))
+	t.Execute(tw, interconnectMap)
+}
+
+func showInterconnectPort(cmd *cobra.Command, args []string) {
+	uri := "/rest/interconnects"
+	interconnectList, err := ovextra.CLIOVClientPtr.GetInterconnect("", "", uri)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,11 +129,10 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 
 	t := template.Must(template.New("").Parse(portShowFormat))
 	t.Execute(tw, interconnectList)
-
 }
-
 func init() {
 	showCmd.AddCommand(showInterconnectCmd)
+	showInterconnectCmd.AddCommand(showInterconnectPortCmd)
 
 	//eateNetworkNamePtr = createNetworkCmd.PersistentFlags().String("name", "", "Network Name")
 	// createNetworkTypePtr = createNetworkCmd.PersistentFlags().String("type", "", "Network Type")
