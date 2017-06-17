@@ -17,7 +17,6 @@ package cmd
 import (
 	"log"
 	"os"
-	"sort"
 	"text/tabwriter"
 	"text/template"
 
@@ -25,19 +24,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// const (
-// 	interconnectShowFormat = "" +
-// 		"Name\tModel\n" +
-// 		"----\t-----\n" +
-// 		"{{range .}}" +
-// 		"{{.Name}}\t({{.ProductName}})\n" +
-// 		"{{end}}"
-// )
-
 const (
 	interconnectShowFormat = "" +
-		"{{.Name}}\t{{.ProductName}}\n"
+		"Name\tModel\tLogical Interconnect\n" +
+		//"----\t-----\n" +
+		"{{range .}}" +
+		"{{.Name}}\t{{.ProductName}}\t{{.LogicalInterconnectName}}\n" +
+		"{{end}}"
 )
+
+// const (
+// 	interconnectShowFormat = "" +
+// 		"{{.Name}}\t{{.ProductName}}\n"
+// )
 
 const (
 	portShowFormat = "" +
@@ -78,67 +77,38 @@ to quickly create a Cobra application.`,
 }
 
 func showInterconnect(cmd *cobra.Command, args []string) {
-	uri := "/rest/interconnects"
-	interconnectList, err := ovextra.CLIOVClientPtr.GetInterconnect("", "", uri)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	interconnectMap := make(map[string]*ovextra.Interconnect)
-	for k := range interconnectList.Members {
-		interconnectMap[interconnectList.Members[k].Name] = &interconnectList.Members[k]
-	}
-
-	for interconnectList.NextPageURI != "" {
-		//interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "", interconnectList.NextPageURI)
-		interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "", interconnectList.NextPageURI)
-		if err != nil {
-			log.Fatal(err, interconnectList)
-		}
-
-		for k := range interconnectList.Members {
-			interconnectMap[interconnectList.Members[k].Name] = &interconnectList.Members[k]
-		}
-
-	}
-
-	//fmt.Println(len(interconnectMap))
+	outputmap := ovextra.GetInterconnectMap()
 
 	var tempS []string
-	for k := range interconnectMap {
+	for k := range outputmap {
 		tempS = append(tempS, k)
 	}
 
-	//fmt.Println(interconnectMap)
-	//fmt.Printf("%#v\n", tempS)
+	//fmt.Println(tempS)
 
-	sort.Strings(tempS)
+	//sort.Strings(tempS)
+
+	// for k := range outputmap {
+	// 	fmt.Println(k)
+	// }
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
-	type header struct {
-		Name        string
-		ProductName string
-	}
-
-	h := header{"Name", "Model"}
-
 	t := template.Must(template.New("").Parse(interconnectShowFormat))
-	t.Execute(tw, h)
-	for _, v := range tempS {
-		t.Execute(tw, interconnectMap[v])
+	t.Execute(tw, outputmap)
 
-	}
-	//t.Execute(tw, interconnectMap)
 }
 
 func showInterconnectPort(cmd *cobra.Command, args []string) {
-	uri := "/rest/interconnects"
-	interconnectList, err := ovextra.CLIOVClientPtr.GetInterconnect("", "", uri)
+	//uri := "/rest/interconnects"
+	tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	interconnectList := tempList.(ovextra.InterconnectCollection)
 
 	// //iclPtr := &interconnectList
 	//

@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/rest"
@@ -50,6 +51,11 @@ var (
 	client = &http.Client{Transport: tr}
 )
 
+const (
+	InterconnectRestURL        = "/rest/interconnects"
+	LogicalInterconnectRestURL = "/rest/logical-interconnects"
+)
+
 // NewCLIOVClient creates new CLIOVCLient
 func NewCLIOVClient() *CLIOVClient {
 	return &CLIOVClient{
@@ -65,6 +71,61 @@ func NewCLIOVClient() *CLIOVClient {
 			},
 		},
 	}
+}
+
+func (c *CLIOVClient) GetURI(filter string, sort string, uri string) (interface{}, error) {
+	var (
+		//uri           = "/rest/interconnects"
+		q             map[string]interface{}
+		interconnects InterconnectCollection
+		lic           LogicalInterconnectCollection
+	)
+
+	q = make(map[string]interface{})
+	if len(filter) > 0 {
+		q["filter"] = filter
+	}
+
+	if sort != "" {
+		q["sort"] = sort
+	}
+
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+	// Setup query
+	if len(q) > 0 {
+		c.SetQueryString(q)
+	}
+
+	//fmt.Printf("%#v\n\n", c)
+	//fmt.Println(uri)
+
+	data, err := c.CLIRestAPICall(rest.GET, uri, nil)
+
+	//fmt.Println(data, err)
+
+	if err != nil {
+		return data, err
+	}
+
+	switch {
+	case strings.Contains(uri, InterconnectRestURL):
+		//log.Debugf("Getinterconnects %s", data)
+		if err := json.Unmarshal([]byte(data), &interconnects); err != nil {
+			return interconnects, err
+		}
+		return interconnects, nil
+	case strings.Contains(uri, LogicalInterconnectRestURL):
+		//log.Debugf("Getinterconnects %s", data)
+		if err := json.Unmarshal([]byte(data), &lic); err != nil {
+			return lic, err
+		}
+		return lic, nil
+	default:
+		return data, err
+	}
+
 }
 
 // RestAPICall - general rest method caller

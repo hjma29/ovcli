@@ -194,12 +194,14 @@ func PrintProfile(ptrS *string) {
 		log.Fatal(err)
 	}
 
-	uri := "/rest/interconnects"
+	//uri := "/rest/interconnects"
 
-	interconnectList, err = ovextra.CLIOVClientPtr.GetInterconnect("", "", uri)
+	tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	interconnectList := tempList.(ovextra.InterconnectCollection)
 
 	//loop through global var profileTemplateList and find the one matching this profile and get the template name
 	for _, v := range profileTemplateList.Members {

@@ -1,14 +1,12 @@
 package ovextra
 
 import (
-	"encoding/json"
+	"log"
 	"time"
-
-	"github.com/HewlettPackard/oneview-golang/rest"
 )
 
-// InterconnectList a list of Interconnect objects
-type InterconnectList struct {
+// InterconnectCollection a list of Interconnect objects
+type InterconnectCollection struct {
 	Type        string         `json:"type"`
 	Total       int            `json:"total,omitempty"`       // "total": 1,
 	Count       int            `json:"count,omitempty"`       // "count": 1,
@@ -133,6 +131,7 @@ type Interconnect struct {
 	Modified                      time.Time     `json:"modified"`
 	Category                      string        `json:"category"`
 	URI                           string        `json:"uri"`
+	LogicalInterconnectName       string
 }
 
 type Port struct {
@@ -193,44 +192,45 @@ type Neighbor struct {
 	LinkLabel                interface{} `json:"linkLabel"`
 }
 
-func (c *CLIOVClient) GetInterconnect(filter string, sort string, uri string) (InterconnectList, error) {
-	var (
-		//uri           = "/rest/interconnects"
-		q             map[string]interface{}
-		interconnects InterconnectList
-	)
+func GetInterconnectMap() InterconnectMap {
 
-	q = make(map[string]interface{})
-	if len(filter) > 0 {
-		q["filter"] = filter
+	icMap := ICMapFromRest()
+
+	// need to return logicalinerconnectmap Here
+	liMap := LIMapFromRest()
+
+	for k := range icMap {
+		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
 	}
 
-	if sort != "" {
-		q["sort"] = sort
-	}
+	return icMap
+}
 
-	// refresh login
-	c.RefreshLogin()
-	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
-	// Setup query
-	if len(q) > 0 {
-		c.SetQueryString(q)
-	}
-
-	//fmt.Printf("%#v\n\n", c)
-	//fmt.Println(uri)
-
-	data, err := c.CLIRestAPICall(rest.GET, uri, nil)
-
-	//fmt.Println(data, err)
+func ICMapFromRest() InterconnectMap {
+	tempList, err := CLIOVClientPtr.GetURI("", "", InterconnectRestURL)
 
 	if err != nil {
-		return interconnects, err
+		log.Fatal(err)
 	}
 
-	//log.Debugf("Getinterconnects %s", data)
-	if err := json.Unmarshal([]byte(data), &interconnects); err != nil {
-		return interconnects, err
+	icCol := tempList.(InterconnectCollection)
+
+	interconnectMap := make(InterconnectMap)
+	for k := range icCol.Members {
+		interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
 	}
-	return interconnects, nil
+
+	for icCol.NextPageURI != "" {
+		tempList, err = CLIOVClientPtr.GetURI("", "", icCol.NextPageURI)
+		if err != nil {
+			log.Fatal(err, icCol)
+		}
+		icCol = tempList.(InterconnectCollection)
+
+		for k := range icCol.Members {
+			interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
+		}
+	}
+
+	return interconnectMap
 }

@@ -1,5 +1,5 @@
 {
-    "type": "SasLogicalInterconnectListV1",
+    "type": "SasLogicalInterconnectCollectionV1",
     "members": [
         {
             "type": "sas-logical-interconnect",
