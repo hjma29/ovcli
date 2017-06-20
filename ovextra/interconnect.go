@@ -1,9 +1,18 @@
 package ovextra
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 )
+
+// type ICColMap struct {
+// 	InterconnectCollection
+// 	ICMap InterconnectMap
+// }
+
+type InterconnectMap map[string]*Interconnect
 
 // InterconnectCollection a list of Interconnect objects
 type InterconnectCollection struct {
@@ -12,9 +21,9 @@ type InterconnectCollection struct {
 	Count       int            `json:"count,omitempty"`       // "count": 1,
 	Start       int            `json:"start,omitempty"`       // "start": 0,
 	PrevPageURI string         `json:"prevPageUri,omitempty"` // "prevPageUri": null,
-	NextPageURI string         `json:"nextPageUri,omitempty"` // "nextPageUri": null,
-	URI         string         `json:"uri,omitempty"`         // "uri": "/rest/server-profiles?filter=serialNumber%20matches%20%272M25090RMW%27&sort=name:asc"
-	Members     []Interconnect `json:"members,omitempty"`     // "members":[]
+	NextPageURI string         //`json:"nextPageUri,omitempty"` // "nextPageUri": null,
+	URI         string         `json:"uri,omitempty"`     // "uri": "/rest/server-profiles?filter=serialNumber%20matches%20%272M25090RMW%27&sort=name:asc"
+	Members     []Interconnect `json:"members,omitempty"` // "members":[]
 }
 
 // Interconnect object
@@ -192,45 +201,96 @@ type Neighbor struct {
 	LinkLabel                interface{} `json:"linkLabel"`
 }
 
-func GetInterconnectMap() InterconnectMap {
+func (c *CLIOVClient) GetICMap() InterconnectMap {
+	icMap := InterconnectMap{}
+	icCol := &InterconnectCollection{}
 
-	icMap := ICMapFromRest()
-
-	// need to return logicalinerconnectmap Here
-	liMap := LIMapFromRest()
-
-	for k := range icMap {
-		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
-	}
-
-	return icMap
-}
-
-func ICMapFromRest() InterconnectMap {
-	tempList, err := CLIOVClientPtr.GetURI("", "", InterconnectRestURL)
+	data, err := c.GetURI("", "", InterconnectRestURL)
+	//fmt.Println(len(data))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	icCol := tempList.(InterconnectCollection)
-
-	interconnectMap := make(InterconnectMap)
-	for k := range icCol.Members {
-		interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
+	if err := json.Unmarshal(data, icCol); err != nil {
+		log.Fatal(err)
 	}
+
+	//loop through x's embedded ICCollection's Members and apply IC's name to x's ICMap key, the value is x's embedded Members[k]
+	for k := range icCol.Members {
+		icMap[icCol.Members[k].Name] = &icCol.Members[k]
+		//fmt.Println(icMap[icCol.Members[k].Name])
+	}
+
+	fmt.Printf("1111111%#v, %#v\n\n", icCol.NextPageURI, icCol.URI)
 
 	for icCol.NextPageURI != "" {
-		tempList, err = CLIOVClientPtr.GetURI("", "", icCol.NextPageURI)
+		data, err = c.GetURI("", "", icCol.NextPageURI)
+		fmt.Printf("22222222%#v\n\n", string(data))
 		if err != nil {
-			log.Fatal(err, icCol)
+			log.Fatal(err)
 		}
-		icCol = tempList.(InterconnectCollection)
+
+		//y := &ICColMap{InterconnectCollection: InterconnectCollection{NextPageURI: "aaa"}, ICMap: InterconnectMap{}}
+		//fmt.Printf("111%#v\n", icCol.NextPageURI)
+
+		//icCol = &InterconnectCollection{}
+
+		if err := json.Unmarshal(data, icCol); err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("33333333%#v, %#v\n\n", icCol.NextPageURI, icCol.URI)
 
 		for k := range icCol.Members {
-			interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
+			icMap[icCol.Members[k].Name] = &icCol.Members[k]
 		}
 	}
 
-	return interconnectMap
+	return icMap
+
+	//fmt.Println(x.ICMap[x.Members[0].Name])
+
 }
+
+// func GetInterconnectMap() InterconnectMap {
+//
+// 	icMap := ICMapFromRest()
+//
+// 	liMap := LIMapFromRest()
+//
+// 	for k := range icMap {
+// 		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
+// 	}
+//
+// 	return icMap
+// }
+//
+// func ICMapFromRest() InterconnectMap {
+// 	tempList, err := CLIOVClientPtr.GetURI("", "", InterconnectRestURL)
+//
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+//
+// 	icCol := tempList.(InterconnectCollection)
+//
+// 	interconnectMap := make(InterconnectMap)
+// 	for k := range icCol.Members {
+// 		interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
+// 	}
+//
+// 	for icCol.NextPageURI != "" {
+// 		tempList, err = CLIOVClientPtr.GetURI("", "", icCol.NextPageURI)
+// 		if err != nil {
+// 			log.Fatal(err, icCol)
+// 		}
+// 		icCol = tempList.(InterconnectCollection)
+//
+// 		for k := range icCol.Members {
+// 			interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
+// 		}
+// 	}
+//
+// 	return interconnectMap
+// }

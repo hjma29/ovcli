@@ -8,21 +8,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
-	"strings"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
 	"github.com/docker/machine/libmachine/log"
 )
-
-var ovAddress = os.Getenv("OneView_address")
-var ovUsername = os.Getenv("OneView_username")
-var ovPassword = os.Getenv("OneView_password")
-
-//CLIOVClientPtr is the sole OV client for all CLI commands
-var CLIOVClientPtr = NewCLIOVClient()
 
 //CLIOVClient is the ov.OVCLient with additinal commands
 type CLIOVClient struct {
@@ -73,12 +64,12 @@ func NewCLIOVClient() *CLIOVClient {
 	}
 }
 
-func (c *CLIOVClient) GetURI(filter string, sort string, uri string) (interface{}, error) {
+func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, error) {
 	var (
 		//uri           = "/rest/interconnects"
-		q             map[string]interface{}
-		interconnects InterconnectCollection
-		lic           LogicalInterconnectCollection
+		q map[string]interface{}
+		//interconnects InterconnectCollection
+		//lic           LogicalInterconnectCollection
 	)
 
 	q = make(map[string]interface{})
@@ -109,22 +100,24 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) (interface{
 		return data, err
 	}
 
-	switch {
-	case strings.Contains(uri, InterconnectRestURL):
-		//log.Debugf("Getinterconnects %s", data)
-		if err := json.Unmarshal([]byte(data), &interconnects); err != nil {
-			return interconnects, err
-		}
-		return interconnects, nil
-	case strings.Contains(uri, LogicalInterconnectRestURL):
-		//log.Debugf("Getinterconnects %s", data)
-		if err := json.Unmarshal([]byte(data), &lic); err != nil {
-			return lic, err
-		}
-		return lic, nil
-	default:
-		return data, err
-	}
+	return data, err
+
+	// switch {
+	// case strings.Contains(uri, InterconnectRestURL):
+	// 	//log.Debugf("Getinterconnects %s", data)
+	// 	if err := json.Unmarshal([]byte(data), &interconnects); err != nil {
+	// 		return interconnects, err
+	// 	}
+	// 	return interconnects, nil
+	// case strings.Contains(uri, LogicalInterconnectRestURL):
+	// 	//log.Debugf("Getinterconnects %s", data)
+	// 	if err := json.Unmarshal([]byte(data), &lic); err != nil {
+	// 		return lic, err
+	// 	}
+	// 	return lic, nil
+	// default:
+	// 	return data, err
+	// }
 
 }
 

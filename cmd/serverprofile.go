@@ -196,12 +196,12 @@ func PrintProfile(ptrS *string) {
 
 	//uri := "/rest/interconnects"
 
-	tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	interconnectList := tempList.(ovextra.InterconnectCollection)
+	// tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	//
+	// interconnectList := tempList.(ovextra.InterconnectCollection)
 
 	//loop through global var profileTemplateList and find the one matching this profile and get the template name
 	for _, v := range profileTemplateList.Members {
@@ -275,13 +275,13 @@ func PrintProfile(ptrS *string) {
 		}
 
 		//get interconnect bay name
-		for _, v2 := range interconnectList.Members {
-			if string(profilePrint.Connections[i].InterconnectURI) == v2.URI {
-				profilePrint.ProfileConnectionList[i].CInterconnect = strings.Replace(strings.Replace(v2.Name, " ", "", -1), "interconnect", "Bay", -1)
-				//fmt.Println(v2.State)
-				break
-			}
-		}
+		// for _, v2 := range interconnectList.Members {
+		// 	if string(profilePrint.Connections[i].InterconnectURI) == v2.URI {
+		// 		profilePrint.ProfileConnectionList[i].CInterconnect = strings.Replace(strings.Replace(v2.Name, " ", "", -1), "interconnect", "Bay", -1)
+		// 		//fmt.Println(v2.State)
+		// 		break
+		// 	}
+		// }
 
 		//get boot property
 		profilePrint.ProfileConnectionList[i].CBoot = profilePrint.Connections[i].Boot.Priority

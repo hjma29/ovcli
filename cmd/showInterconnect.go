@@ -15,7 +15,6 @@
 package cmd
 
 import (
-	"log"
 	"os"
 	"text/tabwriter"
 	"text/template"
@@ -78,12 +77,14 @@ to quickly create a Cobra application.`,
 
 func showInterconnect(cmd *cobra.Command, args []string) {
 
-	outputmap := ovextra.GetInterconnectMap()
+	icMap := ovextra.CLIOVClientPtr.GetICMap()
 
-	var tempS []string
-	for k := range outputmap {
-		tempS = append(tempS, k)
-	}
+	//outputmap := ovextra.GetInterconnectMap()
+
+	// var tempS []string
+	// for k := range outputmap {
+	// 	tempS = append(tempS, k)
+	// }
 
 	//fmt.Println(tempS)
 
@@ -97,18 +98,18 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 	defer tw.Flush()
 
 	t := template.Must(template.New("").Parse(interconnectShowFormat))
-	t.Execute(tw, outputmap)
+	t.Execute(tw, icMap)
 
 }
 
 func showInterconnectPort(cmd *cobra.Command, args []string) {
 	//uri := "/rest/interconnects"
-	tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	interconnectList := tempList.(ovextra.InterconnectCollection)
+	//interconnectList := tempList.(ovextra.InterconnectCollection)
 
 	// //iclPtr := &interconnectList
 	//
@@ -125,12 +126,12 @@ func showInterconnectPort(cmd *cobra.Command, args []string) {
 	// fmt.Printf("%p\n", &(interconnectList.Members[0]))
 
 	//fmt.Printf("%#v\n", interconnectList.Members[0].Ports[0].ConnectorType)
-
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
-
-	t := template.Must(template.New("").Parse(portShowFormat))
-	t.Execute(tw, interconnectList)
+	//
+	// tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	// defer tw.Flush()
+	//
+	// t := template.Must(template.New("").Parse(portShowFormat))
+	// t.Execute(tw, interconnectList)
 }
 func init() {
 	showCmd.AddCommand(showInterconnectCmd)
