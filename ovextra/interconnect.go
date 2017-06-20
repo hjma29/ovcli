@@ -203,7 +203,9 @@ type Neighbor struct {
 
 func (c *CLIOVClient) GetICMap() InterconnectMap {
 	icMap := InterconnectMap{}
-	icCol := &InterconnectCollection{}
+	icCol := make([]InterconnectCollection, 10)
+	i := 0
+	//icCol2 := &InterconnectCollection{}
 
 	data, err := c.GetURI("", "", InterconnectRestURL)
 	//fmt.Println(len(data))
@@ -212,21 +214,23 @@ func (c *CLIOVClient) GetICMap() InterconnectMap {
 		log.Fatal(err)
 	}
 
-	if err := json.Unmarshal(data, icCol); err != nil {
+	if err := json.Unmarshal(data, &icCol[i]); err != nil {
 		log.Fatal(err)
 	}
 
+	fmt.Println("hello")
+
 	//loop through x's embedded ICCollection's Members and apply IC's name to x's ICMap key, the value is x's embedded Members[k]
-	for k := range icCol.Members {
-		icMap[icCol.Members[k].Name] = &icCol.Members[k]
+	for k := range icCol[i].Members {
+		icMap[icCol[i].Members[k].Name] = &icCol[i].Members[k]
 		//fmt.Println(icMap[icCol.Members[k].Name])
 	}
 
-	fmt.Printf("1111111%#v, %#v\n\n", icCol.NextPageURI, icCol.URI)
+	//fmt.Printf("1111111%#v, %#v\n\n", icCol.NextPageURI, icCol.URI)
 
-	for icCol.NextPageURI != "" {
-		data, err = c.GetURI("", "", icCol.NextPageURI)
-		fmt.Printf("22222222%#v\n\n", string(data))
+	for icCol[i].NextPageURI != "" {
+		data, err := c.GetURI("", "", icCol[i].NextPageURI)
+		//fmt.Printf("22222222%#v\n\n", string(data))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -236,15 +240,22 @@ func (c *CLIOVClient) GetICMap() InterconnectMap {
 
 		//icCol = &InterconnectCollection{}
 
-		if err := json.Unmarshal(data, icCol); err != nil {
+		// if err := json.Unmarshal(data, icCol); err != nil {
+		// 	log.Fatal(err)
+		// }
+		err = json.Unmarshal(data, &icCol[i+1])
+
+		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("33333333%#v, %#v\n\n", icCol.NextPageURI, icCol.URI)
+		//fmt.Printf("33333333%#v, %#v\n\n", icCol2.NextPageURI, icCol2.URI)
 
-		for k := range icCol.Members {
-			icMap[icCol.Members[k].Name] = &icCol.Members[k]
+		for k := range icCol[i+1].Members {
+			icMap[icCol[i+1].Members[k].Name] = &icCol[i+1].Members[k]
 		}
+
+		i++
 	}
 
 	return icMap
