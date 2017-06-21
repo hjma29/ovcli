@@ -45,6 +45,7 @@ var (
 const (
 	InterconnectRestURL        = "/rest/interconnects"
 	LogicalInterconnectRestURL = "/rest/logical-interconnects"
+	TransceiverRestURL         = "/rest/interconnects/pluggableModuleInformation/"
 )
 
 // NewCLIOVClient creates new CLIOVCLient

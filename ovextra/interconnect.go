@@ -2,17 +2,10 @@ package ovextra
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
+	"strings"
 	"time"
 )
-
-// type ICColMap struct {
-// 	InterconnectCollection
-// 	ICMap InterconnectMap
-// }
-
-type InterconnectMap map[string]*Interconnect
 
 // InterconnectCollection a list of Interconnect objects
 type InterconnectCollection struct {
@@ -201,107 +194,134 @@ type Neighbor struct {
 	LinkLabel                interface{} `json:"linkLabel"`
 }
 
-func (c *CLIOVClient) GetICMap() InterconnectMap {
-	icMap := InterconnectMap{}
-	icCol := make([]InterconnectCollection, 10)
-	i := 0
-	//icCol2 := &InterconnectCollection{}
+func (c *CLIOVClient) GetICShow() InterconnectMap {
 
-	data, err := c.GetURI("", "", InterconnectRestURL)
-	//fmt.Println(len(data))
+	icMap := c.GetICMapNameRest()
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	liMap := c.GetLIMapURIRest()
 
-	if err := json.Unmarshal(data, &icCol[i]); err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("hello")
-
-	//loop through x's embedded ICCollection's Members and apply IC's name to x's ICMap key, the value is x's embedded Members[k]
-	for k := range icCol[i].Members {
-		icMap[icCol[i].Members[k].Name] = &icCol[i].Members[k]
-		//fmt.Println(icMap[icCol.Members[k].Name])
-	}
-
-	//fmt.Printf("1111111%#v, %#v\n\n", icCol.NextPageURI, icCol.URI)
-
-	for icCol[i].NextPageURI != "" {
-		data, err := c.GetURI("", "", icCol[i].NextPageURI)
-		//fmt.Printf("22222222%#v\n\n", string(data))
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		//y := &ICColMap{InterconnectCollection: InterconnectCollection{NextPageURI: "aaa"}, ICMap: InterconnectMap{}}
-		//fmt.Printf("111%#v\n", icCol.NextPageURI)
-
-		//icCol = &InterconnectCollection{}
-
-		// if err := json.Unmarshal(data, icCol); err != nil {
-		// 	log.Fatal(err)
-		// }
-		err = json.Unmarshal(data, &icCol[i+1])
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		//fmt.Printf("33333333%#v, %#v\n\n", icCol2.NextPageURI, icCol2.URI)
-
-		for k := range icCol[i+1].Members {
-			icMap[icCol[i+1].Members[k].Name] = &icCol[i+1].Members[k]
-		}
-
-		i++
+	for k := range icMap {
+		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
 	}
 
 	return icMap
-
-	//fmt.Println(x.ICMap[x.Members[0].Name])
-
 }
 
-// func GetInterconnectMap() InterconnectMap {
-//
-// 	icMap := ICMapFromRest()
-//
-// 	liMap := LIMapFromRest()
-//
-// 	for k := range icMap {
-// 		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
-// 	}
-//
-// 	return icMap
-// }
-//
-// func ICMapFromRest() InterconnectMap {
-// 	tempList, err := CLIOVClientPtr.GetURI("", "", InterconnectRestURL)
-//
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-//
-// 	icCol := tempList.(InterconnectCollection)
-//
-// 	interconnectMap := make(InterconnectMap)
-// 	for k := range icCol.Members {
-// 		interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
-// 	}
-//
-// 	for icCol.NextPageURI != "" {
-// 		tempList, err = CLIOVClientPtr.GetURI("", "", icCol.NextPageURI)
-// 		if err != nil {
-// 			log.Fatal(err, icCol)
-// 		}
-// 		icCol = tempList.(InterconnectCollection)
-//
-// 		for k := range icCol.Members {
-// 			interconnectMap[icCol.Members[k].Name] = &icCol.Members[k]
-// 		}
-// 	}
-//
-// 	return interconnectMap
-// }
+func (c *CLIOVClient) GetICPortShow() InterconnectMap {
+
+	icMap := c.GetICMapNameRest()
+	modTransMap := c.GetTransceiverRest()
+
+	//fmt.Println(modTransMap["CN7515048Q, interconnect 3"])
+	//b := *((*modTransMap["CN7515048Q, interconnect 3"])["d1"])
+	//b := *((*modTransMap["Top - Frame1 - CN7515010J, interconnect 3"])["d1"])
+
+	//fmt.Printf("0000000%#v\n", b.VendorPartNumber)
+
+	for k := range icMap {
+		for p, v := range icMap[k].Ports {
+
+			if value, exists := (*modTransMap[k])[v.Name]; exists {
+				icMap[k].Ports[p].TransceiverPN = (*value).VendorPartNumber
+			}
+
+			// a :=
+			// fmt.Println(a)
+			// icMap[k].Ports[p].TransceiverPN = a.VendorPartNumber
+			//icMap[k].Ports[p].TransceiverPN = (*modTransMap[k])[v.Name].PortName
+			//icMap[k].Ports[p].TransceiverPN = "aaa"
+			// fmt.Println("1111", k)
+			// fmt.Println("2222", p)
+			// fmt.Println("3333", v.Name)
+			//i := modTransMap[k][v.Name].VendorPartNumber
+
+			// x := *modTransMap[k]
+			// y := *x["d1"]
+			// i := y.PortName
+			// fmt.Println(i, p, v)
+
+		}
+	}
+
+	return icMap
+}
+
+func (c *CLIOVClient) GetICMapNameRest() InterconnectMap {
+	icMap := InterconnectMap{}
+	icCol := make([]InterconnectCollection, 5)
+
+	for i, uri := 0, InterconnectRestURL; uri != ""; i++ {
+
+		data, err := c.GetURI("", "", uri)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = json.Unmarshal(data, &icCol[i])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for k := range icCol[i].Members {
+			icMap[icCol[i].Members[k].Name] = &icCol[i].Members[k]
+		}
+
+		uri = icCol[i].NextPageURI
+	}
+	return icMap
+}
+
+type Transceiver struct {
+	Identifier       string      `json:"identifier"`
+	SerialNumber     string      `json:"serialNumber"`
+	VendorName       string      `json:"vendorName"`
+	VendorPartNumber string      `json:"vendorPartNumber"`
+	VendorRevision   string      `json:"vendorRevision"`
+	Speed            string      `json:"speed"`
+	PortName         string      `json:"portName"`
+	Connector        interface{} `json:"connector"`
+	ExtIdentifier    string      `json:"extIdentifier"`
+	VendorOui        string      `json:"vendorOui"`
+}
+
+type TransceiverCol []Transceiver
+type TransceiverMap map[string]*Transceiver
+type ModTransMap map[string]*TransceiverMap
+
+func (c *CLIOVClient) GetTransceiverRest() ModTransMap {
+
+	modTransMap := ModTransMap{}
+
+	icMap := c.GetICMapNameRest()
+
+	for k := range icMap {
+
+		transMap := TransceiverMap{}
+		sfpSlice := make(TransceiverCol, 0)
+
+		icID := strings.Replace(icMap[k].URI, "/rest/interconnects/", "", -1)
+
+		data, err := c.GetURI("", "", TransceiverRestURL+icID)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = json.Unmarshal(data, &sfpSlice)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for i := range sfpSlice {
+			transMap[sfpSlice[i].PortName] = &sfpSlice[i]
+		}
+
+		modTransMap[k] = &transMap
+
+		// fmt.Println(transMap)
+		// fmt.Println("---------")
+	}
+	return modTransMap
+}

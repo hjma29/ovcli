@@ -6,6 +6,7 @@ import "os"
 //var ICMapReady = &ICColMap{ICMap: InterconnectMap{}}
 
 type LogicalInterconnectMap map[string]*LogicalInterconnect
+type InterconnectMap map[string]*Interconnect
 
 var ovAddress = os.Getenv("OneView_address")
 var ovUsername = os.Getenv("OneView_username")

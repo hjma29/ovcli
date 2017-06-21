@@ -1,6 +1,10 @@
 package ovextra
 
-import "time"
+import (
+	"encoding/json"
+	"log"
+	"time"
+)
 
 type LogicalInterconnectCollection struct {
 	Type        string                `json:"type"`
@@ -164,31 +168,29 @@ type LogicalInterconnect struct {
 	URI         string        `json:"uri"`
 }
 
-// func LIMapFromRest() LogicalInterconnectMap {
-// 	liMap := make(LogicalInterconnectMap)
-// 	tempList, err := CLIOVClientPtr.GetURI("", "", LogicalInterconnectRestURL)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-//
-// 	liCol := tempList.(LogicalInterconnectCollection)
-// 	for k := range liCol.Members {
-// 		liMap[liCol.Members[k].URI] = &liCol.Members[k]
-// 	}
-//
-// 	for liCol.NextPageURI != "" {
-// 		//liCol, err = CLIOVClientPtr.GetInterconnect("", "", liCol.NextPageURI)
-// 		tempList, err = CLIOVClientPtr.GetURI("", "", liCol.NextPageURI)
-// 		if err != nil {
-// 			log.Fatal(err, liCol)
-// 		}
-// 		liCol = tempList.(LogicalInterconnectCollection)
-//
-// 		for k := range liCol.Members {
-// 			liMap[liCol.Members[k].URI] = &liCol.Members[k]
-// 		}
-// 	}
-//
-// 	return liMap
-//
-// }
+func (c *CLIOVClient) GetLIMapURIRest() LogicalInterconnectMap {
+	liMap := LogicalInterconnectMap{}
+	liCol := make([]LogicalInterconnectCollection, 5)
+
+	for i, uri := 0, LogicalInterconnectRestURL; uri != ""; i++ {
+
+		data, err := c.GetURI("", "", uri)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = json.Unmarshal(data, &liCol[i])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for k := range liCol[i].Members {
+			liMap[liCol[i].Members[k].URI] = &liCol[i].Members[k]
+		}
+
+		uri = liCol[i].NextPageURI
+	}
+	return liMap
+
+}

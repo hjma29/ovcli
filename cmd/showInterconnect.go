@@ -32,20 +32,30 @@ const (
 		"{{end}}"
 )
 
-// const (
-// 	interconnectShowFormat = "" +
-// 		"{{.Name}}\t{{.ProductName}}\n"
-// )
-
 const (
 	portShowFormat = "" +
-		"{{range .Members}}" +
+		"{{range .}}" +
 		"-------------\n" +
 		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
 		"-------------\n" +
-		"\tPortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\n" +
+		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
 		"{{range .Ports}}" +
-		"\t{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\n" +
+		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
+		"{{end}}" +
+		"\n" +
+		"{{end}}"
+)
+
+const (
+	SFPShowFormat = "" +
+		"{{range $key, $element := .}}" +
+		"-------------\n" +
+		"Interconnect: {{$key}}\n" +
+		"-------------\n" +
+		"PortName\tVendorName\tVendorPartNumber\tVendorRevision\tSpeed\n" +
+		"{{range $element}}" +
+		"{{.PortName}}\t{{.VendorName}}\t{{.VendorPartNumber}}\t{{.VendorRevision}}\t{{.Speed}}\n" +
+		//"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\n" +
 		"{{end}}" +
 		"\n" +
 		"{{end}}"
@@ -75,24 +85,21 @@ to quickly create a Cobra application.`,
 	Run: showInterconnectPort,
 }
 
+var showInterconnectPortSFPCmd = &cobra.Command{
+	Use:   "sfp",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: showInterconnectPortSFP,
+}
+
 func showInterconnect(cmd *cobra.Command, args []string) {
 
-	icMap := ovextra.CLIOVClientPtr.GetICMap()
-
-	//outputmap := ovextra.GetInterconnectMap()
-
-	// var tempS []string
-	// for k := range outputmap {
-	// 	tempS = append(tempS, k)
-	// }
-
-	//fmt.Println(tempS)
-
-	//sort.Strings(tempS)
-
-	// for k := range outputmap {
-	// 	fmt.Println(k)
-	// }
+	icMap := ovextra.CLIOVClientPtr.GetICShow()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
@@ -103,39 +110,33 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 }
 
 func showInterconnectPort(cmd *cobra.Command, args []string) {
-	//uri := "/rest/interconnects"
-	// tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
-	//interconnectList := tempList.(ovextra.InterconnectCollection)
+	icPortMap := ovextra.CLIOVClientPtr.GetICPortShow()
 
-	// //iclPtr := &interconnectList
-	//
-	// for k := range interconnectList.Members {
-	// 	// fmt.Printf("%p\n", &interconnectList.Members[k])
-	// 	// fmt.Printf("%p\n", &(interconnectList.Members[k]))
-	// 	// fmt.Println("")
-	// 	for k2 := range interconnectList.Members[k].Ports {
-	// 		interconnectList.Members[k].Ports[k2].ConnectorType = "QSFP+SR4"
-	// 	}
-	// }
-	//
-	// fmt.Printf("\n\n%p\n", &interconnectList.Members[0])
-	// fmt.Printf("%p\n", &(interconnectList.Members[0]))
+	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	defer tw.Flush()
 
-	//fmt.Printf("%#v\n", interconnectList.Members[0].Ports[0].ConnectorType)
-	//
-	// tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	// defer tw.Flush()
-	//
-	// t := template.Must(template.New("").Parse(portShowFormat))
-	// t.Execute(tw, interconnectList)
+	t := template.Must(template.New("").Parse(portShowFormat))
+	t.Execute(tw, icPortMap)
 }
+
+func showInterconnectPortSFP(cmd *cobra.Command, args []string) {
+	modTransMap := ovextra.CLIOVClientPtr.GetTransceiverRest()
+
+	//fmt.Println(modTransMap)
+
+	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	defer tw.Flush()
+
+	t := template.Must(template.New("").Parse(SFPShowFormat))
+	t.Execute(tw, modTransMap)
+
+}
+
 func init() {
 	showCmd.AddCommand(showInterconnectCmd)
 	showInterconnectCmd.AddCommand(showInterconnectPortCmd)
+	showInterconnectPortCmd.AddCommand(showInterconnectPortSFPCmd)
 
 	//eateNetworkNamePtr = createNetworkCmd.PersistentFlags().String("name", "", "Network Name")
 	// createNetworkTypePtr = createNetworkCmd.PersistentFlags().String("type", "", "Network Type")
