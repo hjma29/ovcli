@@ -79,6 +79,18 @@ const (
 		"{{end}}"
 )
 
+var showUplinkSetCmd = &cobra.Command{
+	Use:   "uplinkset",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: showUplinkSet,
+}
+
 var showInterconnectCmd = &cobra.Command{
 	Use:   "interconnect",
 	Short: "A brief description of your command",
@@ -113,6 +125,11 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: showInterconnectPortSFP,
+}
+
+func showUplinkSet(cmd *cobra.Command, args []string) {
+	fmt.Println("hellofdasf")
+
 }
 
 func showInterconnect(cmd *cobra.Command, args []string) {
@@ -178,6 +195,8 @@ func showInterconnectPortSFP(cmd *cobra.Command, args []string) {
 
 func init() {
 	showCmd.AddCommand(showInterconnectCmd)
+	showCmd.AddCommand(showUplinkSetCmd)
+
 	showInterconnectCmd.AddCommand(showInterconnectPortCmd)
 	showInterconnectPortCmd.AddCommand(showInterconnectPortSFPCmd)
 

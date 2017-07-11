@@ -1,0 +1,331 @@
+{
+    "type": "UplinkSetCollectionV300",
+    "members": [
+        {
+            "type": "uplink-setV300",
+            "connectionMode": "Auto",
+            "manualLoginRedistributionState": "NotSupported",
+            "nativeNetworkUri": null,
+            "fcoeNetworkUris": [],
+            "fcNetworkUris": [],
+            "primaryPortLocation": null,
+            "logicalInterconnectUri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc",
+            "networkType": "Ethernet",
+            "ethernetNetworkType": "Tagged",
+            "portConfigInfos": [
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4/ports/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4:Q5",
+                    "expectedNeighbor": null,
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "Q5",
+                                "type": "Port"
+                            },
+                            {
+                                "value": "6",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "/rest/enclosures/000000CN75150484",
+                                "type": "Enclosure"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06/ports/7453d533-bb98-49e1-81de-bd782a2beb06:Q5",
+                    "expectedNeighbor": null,
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "Q5",
+                                "type": "Port"
+                            },
+                            {
+                                "value": "/rest/enclosures/000000CN7515010J",
+                                "type": "Enclosure"
+                            },
+                            {
+                                "value": "3",
+                                "type": "Bay"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "reachability": "Reachable",
+            "networkUris": [
+                "/rest/ethernet-networks/fb45e0d2-c010-4c66-b460-9ca10c8d4974",
+                "/rest/ethernet-networks/fdc059ab-e4a7-432e-a772-a35166424854",
+                "/rest/ethernet-networks/966cbe18-c6f1-4f26-aa00-82fa581a6ed4",
+                "/rest/ethernet-networks/de336316-7171-4d67-a948-f51e5a84c111",
+                "/rest/ethernet-networks/2cc56f0e-677e-4be4-a3b6-5e11a722cc0a",
+                "/rest/ethernet-networks/18ba5d72-22f5-4c16-8cbb-5cd73b6415f8"
+            ],
+            "lacpTimer": "Short",
+            "description": null,
+            "status": "OK",
+            "name": "Tech-Enablement-Testing",
+            "state": "Active",
+            "category": "logical-interconnects",
+            "modified": null,
+            "eTag": "98d980c7-c188-4e6c-a625-dd83149380b3",
+            "created": null,
+            "uri": "/rest/uplink-sets/7c73dfba-ce3f-41ba-a956-30702eb5e968"
+        },
+        {
+            "type": "uplink-setV300",
+            "connectionMode": "Auto",
+            "manualLoginRedistributionState": "NotSupported",
+            "nativeNetworkUri": null,
+            "fcoeNetworkUris": [],
+            "fcNetworkUris": [],
+            "primaryPortLocation": null,
+            "logicalInterconnectUri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc",
+            "networkType": "Ethernet",
+            "ethernetNetworkType": "ImageStreamer",
+            "portConfigInfos": [
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4/ports/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4:Q1:1",
+                    "expectedNeighbor": {
+                        "remotePortId": "122",
+                        "remoteChassisId": "fe80::c134:af4c:472d:595c"
+                    },
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "6",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "/rest/enclosures/000000CN75150484",
+                                "type": "Enclosure"
+                            },
+                            {
+                                "value": "Q1:1",
+                                "type": "Port"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4/ports/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4:Q2:1",
+                    "expectedNeighbor": {
+                        "remotePortId": "222",
+                        "remoteChassisId": "fe80::4fd8:e7de:e73:f1b7"
+                    },
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "6",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "/rest/enclosures/000000CN75150484",
+                                "type": "Enclosure"
+                            },
+                            {
+                                "value": "Q2:1",
+                                "type": "Port"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06/ports/7453d533-bb98-49e1-81de-bd782a2beb06:Q1:1",
+                    "expectedNeighbor": {
+                        "remotePortId": "222",
+                        "remoteChassisId": "fe80::c134:af4c:472d:595c"
+                    },
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "/rest/enclosures/000000CN7515010J",
+                                "type": "Enclosure"
+                            },
+                            {
+                                "value": "3",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "Q1:1",
+                                "type": "Port"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06/ports/7453d533-bb98-49e1-81de-bd782a2beb06:Q2:1",
+                    "expectedNeighbor": {
+                        "remotePortId": "122",
+                        "remoteChassisId": "fe80::4fd8:e7de:e73:f1b7"
+                    },
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "/rest/enclosures/000000CN7515010J",
+                                "type": "Enclosure"
+                            },
+                            {
+                                "value": "3",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "Q2:1",
+                                "type": "Port"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "reachability": "RedundantlyReachable",
+            "networkUris": [
+                "/rest/ethernet-networks/03021164-0670-42f1-924e-28a2d88b1286"
+            ],
+            "lacpTimer": "Short",
+            "description": null,
+            "status": "OK",
+            "name": "Deployment",
+            "state": "Active",
+            "category": "logical-interconnects",
+            "modified": null,
+            "eTag": "b6693fb0-5988-4a12-b6d2-8d9581df1074",
+            "created": null,
+            "uri": "/rest/uplink-sets/b8391633-cc4a-4c08-8b46-1217eb672834"
+        },
+        {
+            "type": "uplink-setV300",
+            "connectionMode": "Auto",
+            "manualLoginRedistributionState": "NotSupported",
+            "nativeNetworkUri": null,
+            "fcoeNetworkUris": [],
+            "fcNetworkUris": [],
+            "primaryPortLocation": null,
+            "logicalInterconnectUri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc",
+            "networkType": "Ethernet",
+            "ethernetNetworkType": "Tagged",
+            "portConfigInfos": [
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06/ports/7453d533-bb98-49e1-81de-bd782a2beb06:Q3:1",
+                    "expectedNeighbor": null,
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "Q3:1",
+                                "type": "Port"
+                            },
+                            {
+                                "value": "/rest/enclosures/000000CN7515010J",
+                                "type": "Enclosure"
+                            },
+                            {
+                                "value": "3",
+                                "type": "Bay"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4/ports/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4:Q3:1",
+                    "expectedNeighbor": null,
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "Q3:1",
+                                "type": "Port"
+                            },
+                            {
+                                "value": "6",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "/rest/enclosures/000000CN75150484",
+                                "type": "Enclosure"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06/ports/7453d533-bb98-49e1-81de-bd782a2beb06:Q4:1",
+                    "expectedNeighbor": null,
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "/rest/enclosures/000000CN7515010J",
+                                "type": "Enclosure"
+                            },
+                            {
+                                "value": "3",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "Q4:1",
+                                "type": "Port"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "desiredSpeed": "Auto",
+                    "portUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4/ports/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4:Q4:1",
+                    "expectedNeighbor": null,
+                    "location": {
+                        "locationEntries": [
+                            {
+                                "value": "6",
+                                "type": "Bay"
+                            },
+                            {
+                                "value": "Q4:1",
+                                "type": "Port"
+                            },
+                            {
+                                "value": "/rest/enclosures/000000CN75150484",
+                                "type": "Enclosure"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "reachability": "RedundantlyReachable",
+            "networkUris": [
+                "/rest/ethernet-networks/41f7d44d-e3ef-4427-a53b-12e7fac83ffe",
+                "/rest/ethernet-networks/de10a34f-e255-4ab3-bc47-1988a0ec55e1",
+                "/rest/ethernet-networks/dcfd125a-38f2-4b36-8da9-8f206f98a652",
+                "/rest/ethernet-networks/2797e4f6-d4cf-49a6-8958-24b6bb50faea",
+                "/rest/ethernet-networks/e09c1cfa-7917-4845-b736-09029bda9ae4",
+                "/rest/ethernet-networks/c7d67710-6c42-4091-8720-e1fe45b0d9aa"
+            ],
+            "lacpTimer": "Short",
+            "description": null,
+            "status": "OK",
+            "name": "DCA-ToR",
+            "state": "Active",
+            "category": "logical-interconnects",
+            "modified": null,
+            "eTag": "3b307ac7-ad7a-439f-8d62-3b79ae1a739c",
+            "created": null,
+            "uri": "/rest/uplink-sets/e697575c-0663-4d37-8274-04d75ee26cd2"
+        }
+    ],
+    "count": 3,
+    "total": 3,
+    "nextPageUri": null,
+    "start": 0,
+    "prevPageUri": null,
+    "category": "logical-interconnects",
+    "modified": null,
+    "eTag": null,
+    "created": null,
+    "uri": "/rest/uplink-sets?start=0&count=3"
+}

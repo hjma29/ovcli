@@ -195,6 +195,30 @@ type Neighbor struct {
 	LinkLabel                interface{} `json:"linkLabel"`
 }
 
+type Transceiver struct {
+	Identifier       string      `json:"identifier"`
+	SerialNumber     string      `json:"serialNumber"`
+	VendorName       string      `json:"vendorName"`
+	VendorPartNumber string      `json:"vendorPartNumber"`
+	VendorRevision   string      `json:"vendorRevision"`
+	Speed            string      `json:"speed"`
+	PortName         string      `json:"portName"`
+	Connector        interface{} `json:"connector"`
+	ExtIdentifier    string      `json:"extIdentifier"`
+	VendorOui        string      `json:"vendorOui"`
+}
+
+type TransceiverCol []Transceiver
+type TransceiverMap map[string]*Transceiver
+type ModTransMap map[string]*TransceiverMap
+
+type UplinkPortShow struct {
+	Port  string
+	Type  string
+	State string
+	Speed string
+}
+
 func GetICShow() InterconnectMap {
 
 	icMapC := make(chan InterconnectMap)
@@ -212,23 +236,6 @@ func GetICShow() InterconnectMap {
 
 	return icMap
 }
-
-type UplinkPortShow struct {
-	Port  string
-	Type  string
-	State string
-	Speed string
-}
-
-// type UplinkPortMap map[string][]UplinkPortShow
-//
-// func GetICPortUplinkShow() UplinkPortMap {
-// 	icMapC := make(chan InterconnectMap)
-//
-// 	go GetICMapRest(icMapC, "Name")
-// 	icMap := <-icMapC
-//
-// }
 
 func GetICPortShow() InterconnectMap {
 
@@ -296,59 +303,6 @@ func GetICMapRest(x chan InterconnectMap, attri string) {
 
 	//return icMap
 }
-
-// func GetICMapURIRest(x chan InterconnectMap) {
-//
-// 	fmt.Println("Rest Get IC")
-//
-// 	defer timeTrack(time.Now(), "Rest Get IC")
-//
-// 	c := NewCLIOVClient()
-//
-// 	icMap := InterconnectMap{}
-// 	icCol := make([]InterconnectCollection, 5) //create 5, feel enough for next pages
-//
-// 	for i, uri := 0, InterconnectRestURL; uri != ""; i++ {
-//
-// 		data, err := c.GetURI("", "", uri)
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-//
-// 		err = json.Unmarshal(data, &icCol[i])
-//
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-//
-// 		for k := range icCol[i].Members {
-// 			icMap[icCol[i].Members[k].Name] = &icCol[i].Members[k]
-// 		}
-//
-// 		uri = icCol[i].NextPageURI
-// 	}
-//
-// 	x <- icMap
-//
-// 	//return icMap
-// }
-
-type Transceiver struct {
-	Identifier       string      `json:"identifier"`
-	SerialNumber     string      `json:"serialNumber"`
-	VendorName       string      `json:"vendorName"`
-	VendorPartNumber string      `json:"vendorPartNumber"`
-	VendorRevision   string      `json:"vendorRevision"`
-	Speed            string      `json:"speed"`
-	PortName         string      `json:"portName"`
-	Connector        interface{} `json:"connector"`
-	ExtIdentifier    string      `json:"extIdentifier"`
-	VendorOui        string      `json:"vendorOui"`
-}
-
-type TransceiverCol []Transceiver
-type TransceiverMap map[string]*Transceiver
-type ModTransMap map[string]*TransceiverMap
 
 func GetTransceiverShow() ModTransMap {
 
@@ -426,43 +380,6 @@ func GetTransceiverRest(x chan ModTransMap, icMap InterconnectMap) {
 
 }
 
-// func GetTransceiverRest(x chan ModTransMap, icMap InterconnectMap) {
-//
-// 	fmt.Println("Rest Get SFP")
-// 	defer timeTrack(time.Now(), "Rest Get SFP")
-//
-// 	sfpMap := ModTransMap{}
-// 	c := NewCLIOVClient()
-//
-// 	for k := range icMap {
-//
-// 		transMap := TransceiverMap{}
-// 		sfpSlice := make(TransceiverCol, 0)
-//
-// 		icID := strings.Replace(icMap[k].URI, "/rest/interconnects/", "", -1)
-//
-// 		data, err := c.GetURI("", "", TransceiverRestURL+icID)
-//
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-//
-// 		err = json.Unmarshal(data, &sfpSlice)
-//
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-//
-// 		for i := range sfpSlice {
-// 			transMap[sfpSlice[i].PortName] = &sfpSlice[i]
-// 		}
-//
-// 		sfpMap[k] = &transMap
-//
-// 		// fmt.Println(transMap)
-// 		// fmt.Println("---------")
-// 	}
-//
-// 	x <- sfpMap
-//
-// }
+func GetUplinkSet() {
+
+}
