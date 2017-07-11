@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/rest"
@@ -235,4 +236,9 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 
 func (c *CLIOVClient) isOkStatus(code int) bool {
 	return codes[code]
+}
+
+func timeTrack(start time.Time, name string) {
+	elapsed := time.Since(start)
+	fmt.Printf("%s took %s\n", name, elapsed)
 }

@@ -2,6 +2,7 @@ package ovextra
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 )
@@ -168,7 +169,14 @@ type LogicalInterconnect struct {
 	URI         string        `json:"uri"`
 }
 
-func (c *CLIOVClient) GetLIMapURIRest() LogicalInterconnectMap {
+func GetLIMapURIRest(x chan LogicalInterconnectMap) {
+
+	fmt.Println("Rest Get LI")
+
+	defer timeTrack(time.Now(), "Rest Get LI")
+
+	c := NewCLIOVClient()
+
 	liMap := LogicalInterconnectMap{}
 	liCol := make([]LogicalInterconnectCollection, 5)
 
@@ -191,6 +199,9 @@ func (c *CLIOVClient) GetLIMapURIRest() LogicalInterconnectMap {
 
 		uri = liCol[i].NextPageURI
 	}
-	return liMap
+
+	x <- liMap
+
+	//return liMap
 
 }

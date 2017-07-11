@@ -25,12 +25,15 @@ var ligModuleList []LIGModule
 
 type uplinkPortListType []UplinkPort
 
-var profileNamePtr *string
-var ligNamePtr *string
-var createNetworkNamePtr *string
-var createNetworkTypePtr *string
-var createNetworkPurposePtr *string
-var createNetworkVlanIDPtr *int
+var (
+	profileNamePtr          *string
+	ligNamePtr              *string
+	createNetworkNamePtr    *string
+	createNetworkTypePtr    *string
+	createNetworkPurposePtr *string
+	createNetworkVlanIDPtr  *int
+	porttype                string
+)
 
 func init() {
 	log.SetDebug(true)

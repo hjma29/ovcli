@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"text/tabwriter"
 	"text/template"
@@ -30,9 +31,7 @@ const (
 		"{{range .}}" +
 		"{{.Name}}\t{{.ProductName}}\t{{.LogicalInterconnectName}}\n" +
 		"{{end}}"
-)
 
-const (
 	portShowFormat = "" +
 		"{{range .}}" +
 		"-------------\n" +
@@ -40,9 +39,28 @@ const (
 		"-------------\n" +
 		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
 		"{{range .Ports}}" +
+		//"{{if eq .PortType porttype}}" +
 		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
+		//"{{end}}" +
 		"{{end}}" +
 		"\n" +
+		"{{end}}"
+
+	uplinkShowFormat = "" +
+		"{{range .}}" +
+		"{{if ne .ProductName \"Synergy 20Gb Interconnect Link Module\" }}" +
+		"-------------\n" +
+		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
+		"-------------\n" +
+		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
+		"{{range .Ports}}" +
+		"{{if or (eq .PortType \"Uplink\") (eq .PortType \"Stacking\") }}" +
+		//"{{if eq .PortType Uplink }}" +
+		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
+		"{{end}}" +
+		"{{end}}" +
+		"\n" +
+		"{{end}}" +
 		"{{end}}"
 )
 
@@ -99,7 +117,7 @@ to quickly create a Cobra application.`,
 
 func showInterconnect(cmd *cobra.Command, args []string) {
 
-	icMap := ovextra.CLIOVClientPtr.GetICShow()
+	icMap := ovextra.GetICShow()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
@@ -110,18 +128,43 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 }
 
 func showInterconnectPort(cmd *cobra.Command, args []string) {
+	var showdata interface{}
+	var showformat string
 
-	icPortMap := ovextra.CLIOVClientPtr.GetICPortShow()
+	switch porttype {
+
+	case "uplink":
+		icPortMap := ovextra.GetICPortShow()
+		showdata = icPortMap
+		showformat = uplinkShowFormat
+		// uplinkPortMap := ovextra.GetICPortUplinkShow()
+		// showdata = uplinkPortMap
+	case "downlink":
+	case "interconnect":
+	case "all":
+		icPortMap := ovextra.GetICPortShow()
+		showdata = icPortMap
+		showformat = portShowFormat
+	default:
+		fmt.Println("invalid port type option")
+
+	}
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
-	t := template.Must(template.New("").Parse(portShowFormat))
-	t.Execute(tw, icPortMap)
+	// fmap := template.FuncMap{
+	// 	"filterPort": filterPort
+	// }
+
+	t := template.Must(template.New("").Parse(showformat))
+	t.Execute(tw, showdata)
 }
 
+//func filterPort()
+
 func showInterconnectPortSFP(cmd *cobra.Command, args []string) {
-	modTransMap := ovextra.CLIOVClientPtr.GetTransceiverRest()
+	modTransMap := ovextra.GetTransceiverShow()
 
 	//fmt.Println(modTransMap)
 
@@ -138,7 +181,9 @@ func init() {
 	showInterconnectCmd.AddCommand(showInterconnectPortCmd)
 	showInterconnectPortCmd.AddCommand(showInterconnectPortSFPCmd)
 
-	//eateNetworkNamePtr = createNetworkCmd.PersistentFlags().String("name", "", "Network Name")
+	showInterconnectPortCmd.Flags().StringVarP(&porttype, "type", "t", "all", "Port Type:uplink,downlink,interconnect,all")
+	//&porttype = showInterconnectPortCmd.Flags().String("type", "", "Port Type:uplink,downlink,interconnect")
+
 	// createNetworkTypePtr = createNetworkCmd.PersistentFlags().String("type", "", "Network Type")
 	// createNetworkPurposePtr = createNetworkCmd.PersistentFlags().String("purpose", "", "General or Management etc")
 	// createNetworkVlanIDPtr = createNetworkCmd.PersistentFlags().Int("vlan", 777, "General or Management etc")
