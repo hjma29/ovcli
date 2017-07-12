@@ -219,13 +219,13 @@ type UplinkPortShow struct {
 	Speed string
 }
 
-func GetICShow() InterconnectMap {
+func GetIC() InterconnectMap {
 
 	icMapC := make(chan InterconnectMap)
 	liMapC := make(chan LogicalInterconnectMap)
 
-	go GetICMapRest(icMapC, "Name")
-	go GetLIMapURIRest(liMapC)
+	go ICGetURI(icMapC, "Name")
+	go LIGetURI(liMapC)
 
 	icMap := <-icMapC
 	liMap := <-liMapC
@@ -237,15 +237,15 @@ func GetICShow() InterconnectMap {
 	return icMap
 }
 
-func GetICPortShow() InterconnectMap {
+func GetICPort() InterconnectMap {
 
 	icMapC := make(chan InterconnectMap)
 	sfpMapC := make(chan ModTransMap)
 
-	go GetICMapRest(icMapC, "Name")
+	go ICGetURI(icMapC, "Name")
 	icMap := <-icMapC
 
-	go GetTransceiverRest(sfpMapC, icMap)
+	go SFPGetURI(sfpMapC, icMap)
 	sfpMap := <-sfpMapC
 
 	//switch porttype
@@ -262,7 +262,7 @@ func GetICPortShow() InterconnectMap {
 }
 
 //func (c *CLIOVClient) GetICMapNameRest() InterconnectMap {
-func GetICMapRest(x chan InterconnectMap, attri string) {
+func ICGetURI(x chan InterconnectMap, attri string) {
 
 	fmt.Println("Rest Get IC")
 
@@ -309,13 +309,13 @@ func GetTransceiverShow() ModTransMap {
 	sfpMapC := make(chan ModTransMap)
 	icMapC := make(chan InterconnectMap)
 
-	go GetICMapRest(icMapC, "Name")
+	go ICGetURI(icMapC, "Name")
 	icMap := <-icMapC
 
 	// for k := range icMap {
-	// 	go GetTransceiverRest(x, icMap)
+	// 	go SFPGetURI(x, icMap)
 
-	go GetTransceiverRest(sfpMapC, icMap)
+	go SFPGetURI(sfpMapC, icMap)
 	sfpMap := <-sfpMapC
 	fmt.Println("Get sfpmap chann")
 
@@ -323,7 +323,7 @@ func GetTransceiverShow() ModTransMap {
 
 }
 
-func GetTransceiverRest(x chan ModTransMap, icMap InterconnectMap) {
+func SFPGetURI(x chan ModTransMap, icMap InterconnectMap) {
 
 	fmt.Println("Rest Get SFP")
 	defer timeTrack(time.Now(), "Rest Get SFP")
@@ -380,6 +380,6 @@ func GetTransceiverRest(x chan ModTransMap, icMap InterconnectMap) {
 
 }
 
-func GetUplinkSet() {
-
+//GetUplinkSet is a
+func getUplinkSet() {
 }

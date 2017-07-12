@@ -134,7 +134,7 @@ func showUplinkSet(cmd *cobra.Command, args []string) {
 
 func showInterconnect(cmd *cobra.Command, args []string) {
 
-	icMap := ovextra.GetICShow()
+	icMap := ovextra.GetIC()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
@@ -151,7 +151,7 @@ func showInterconnectPort(cmd *cobra.Command, args []string) {
 	switch porttype {
 
 	case "uplink":
-		icPortMap := ovextra.GetICPortShow()
+		icPortMap := ovextra.GetICPort()
 		showdata = icPortMap
 		showformat = uplinkShowFormat
 		// uplinkPortMap := ovextra.GetICPortUplinkShow()
@@ -159,7 +159,7 @@ func showInterconnectPort(cmd *cobra.Command, args []string) {
 	case "downlink":
 	case "interconnect":
 	case "all":
-		icPortMap := ovextra.GetICPortShow()
+		icPortMap := ovextra.GetICPort()
 		showdata = icPortMap
 		showformat = portShowFormat
 	default:

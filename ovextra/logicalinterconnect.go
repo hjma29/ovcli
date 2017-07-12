@@ -169,7 +169,7 @@ type LogicalInterconnect struct {
 	URI         string        `json:"uri"`
 }
 
-func GetLIMapURIRest(x chan LogicalInterconnectMap) {
+func LIGetURI(x chan LogicalInterconnectMap) {
 
 	fmt.Println("Rest Get LI")
 
