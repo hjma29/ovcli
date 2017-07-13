@@ -32,6 +32,7 @@ const (
 		"{{.Name}}\t{{.ProductName}}\t{{.LogicalInterconnectName}}\n" +
 		"{{end}}"
 
+	//portshowFormat will loop map["IC name"]*{IC struct{[]sliceof{port struct} }}
 	portShowFormat = "" +
 		"{{range .}}" +
 		"-------------\n" +
@@ -46,52 +47,24 @@ const (
 		"\n" +
 		"{{end}}"
 
-	uplinkShowFormat = "" +
-		"{{range .}}" +
-		"{{if ne .ProductName \"Synergy 20Gb Interconnect Link Module\" }}" +
-		"-------------\n" +
-		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
-		"-------------\n" +
-		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
-		"{{range .Ports}}" +
-		"{{if or (eq .PortType \"Uplink\") (eq .PortType \"Stacking\") }}" +
-		//"{{if eq .PortType Uplink }}" +
-		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
-		"{{end}}" +
-		"{{end}}" +
-		"\n" +
-		"{{end}}" +
-		"{{end}}"
-)
-
-const (
-	SFPShowFormat = "" +
+	//sfpShowFormat is to display icsfpMap, which  is mapping between each module and its own port mapping table, such as map["module 1, top frame"]*map[d1]struct{for d1}
+	sfpShowFormat = "" +
 		"{{range $key, $element := .}}" +
 		"-------------\n" +
-		"Interconnect: {{$key}}\n" +
+		"Interconnect: {{$key}} ({{.ModuleName}})\n" +
 		"-------------\n" +
 		"PortName\tVendorName\tVendorPartNumber\tVendorRevision\tSpeed\n" +
-		"{{range $element}}" +
+		"{{range $element.SFPMapping}}" +
 		"{{.PortName}}\t{{.VendorName}}\t{{.VendorPartNumber}}\t{{.VendorRevision}}\t{{.Speed}}\n" +
 		//"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\n" +
 		"{{end}}" +
 		"\n" +
 		"{{end}}"
+
+
 )
 
-var showUplinkSetCmd = &cobra.Command{
-	Use:   "uplinkset",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showUplinkSet,
-}
-
-var showInterconnectCmd = &cobra.Command{
+var showICCmd = &cobra.Command{
 	Use:   "interconnect",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -100,10 +73,10 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: showInterconnect,
+	Run: showIC,
 }
 
-var showInterconnectPortCmd = &cobra.Command{
+var showICPortCmd = &cobra.Command{
 	Use:   "port",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -112,10 +85,10 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: showInterconnectPort,
+	Run: showICPort,
 }
 
-var showInterconnectPortSFPCmd = &cobra.Command{
+var showSFPCmd = &cobra.Command{
 	Use:   "sfp",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -124,15 +97,10 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: showInterconnectPortSFP,
+	Run: showSFP,
 }
 
-func showUplinkSet(cmd *cobra.Command, args []string) {
-	fmt.Println("hellofdasf")
-
-}
-
-func showInterconnect(cmd *cobra.Command, args []string) {
+func showIC(cmd *cobra.Command, args []string) {
 
 	icMap := ovextra.GetIC()
 
@@ -144,7 +112,7 @@ func showInterconnect(cmd *cobra.Command, args []string) {
 
 }
 
-func showInterconnectPort(cmd *cobra.Command, args []string) {
+func showICPort(cmd *cobra.Command, args []string) {
 	var showdata interface{}
 	var showformat string
 
@@ -180,28 +148,26 @@ func showInterconnectPort(cmd *cobra.Command, args []string) {
 
 //func filterPort()
 
-func showInterconnectPortSFP(cmd *cobra.Command, args []string) {
-	modTransMap := ovextra.GetTransceiverShow()
+func showSFP(cmd *cobra.Command, args []string) {
+	icSFPMap := ovextra.GetSFP()
 
 	//fmt.Println(modTransMap)
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
-	t := template.Must(template.New("").Parse(SFPShowFormat))
-	t.Execute(tw, modTransMap)
+	t := template.Must(template.New("").Parse(sfpShowFormat))
+	t.Execute(tw, icSFPMap)
 
 }
 
 func init() {
-	showCmd.AddCommand(showInterconnectCmd)
-	showCmd.AddCommand(showUplinkSetCmd)
 
-	showInterconnectCmd.AddCommand(showInterconnectPortCmd)
-	showInterconnectPortCmd.AddCommand(showInterconnectPortSFPCmd)
+	showICCmd.AddCommand(showICPortCmd)
+	showICPortCmd.AddCommand(showSFPCmd)
 
-	showInterconnectPortCmd.Flags().StringVarP(&porttype, "type", "t", "all", "Port Type:uplink,downlink,interconnect,all")
-	//&porttype = showInterconnectPortCmd.Flags().String("type", "", "Port Type:uplink,downlink,interconnect")
+	showICPortCmd.Flags().StringVarP(&porttype, "type", "t", "all", "Port Type:uplink,downlink,interconnect,all")
+	//&porttype = showICPortCmd.Flags().String("type", "", "Port Type:uplink,downlink,interconnect")
 
 	// createNetworkTypePtr = createNetworkCmd.PersistentFlags().String("type", "", "Network Type")
 	// createNetworkPurposePtr = createNetworkCmd.PersistentFlags().String("purpose", "", "General or Management etc")

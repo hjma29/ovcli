@@ -99,7 +99,7 @@
                 "/rest/ethernet-networks/70e2cc00-ee47-49fd-8978-4c4cb966e29f",
                 "/rest/ethernet-networks/7360528c-14b2-4396-89f4-080bdca0196c"
             ],
-            "interconnectMap": {
+            "ICMap": {
                 "interconnectMapEntries": [
                     {
                         "interconnectUri": "/rest/interconnects/7b677464-8db6-403a-9d2f-f563a9d9358f",

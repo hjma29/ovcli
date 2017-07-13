@@ -19,7 +19,7 @@ var networkSetList ov.NetworkSetList
 
 var empty_query_string = make(map[string]interface{})
 
-//var cliOVClientPtr *ov.OVClien
+//var OVClient *ov.OVClien
 
 var ligModuleList []LIGModule
 

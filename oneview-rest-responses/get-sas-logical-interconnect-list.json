@@ -8,7 +8,7 @@
                 "/rest/enclosures/000000CN75150484"
             ],
             "consistencyStatus": "CONSISTENT",
-            "interconnectMap": {
+            "ICMap": {
                 "interconnectMapEntries": [
                     {
                         "interconnectUri": "/rest/sas-interconnects/TWT551W02K",

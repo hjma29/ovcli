@@ -195,7 +195,7 @@ type Neighbor struct {
 	LinkLabel                interface{} `json:"linkLabel"`
 }
 
-type Transceiver struct {
+type SFP struct {
 	Identifier       string      `json:"identifier"`
 	SerialNumber     string      `json:"serialNumber"`
 	VendorName       string      `json:"vendorName"`
@@ -208,9 +208,22 @@ type Transceiver struct {
 	VendorOui        string      `json:"vendorOui"`
 }
 
-type TransceiverCol []Transceiver
-type TransceiverMap map[string]*Transceiver
-type ModTransMap map[string]*TransceiverMap
+//SFPCol is to take REST response for a slice of SFPs on a particular module
+type SFPCol []SFP
+
+//SFPMap is from conversion of raw SFPCol(a slice) to mapping struct with port names as keys and the pointers of SFP structs as values. Each module has its own "sfpMap" to pass to channel
+type SFPMap map[string]*SFP
+
+//ICSFPStruct can give us information of Modulename, which we can't get from simple map key for IC module
+type ICSFPStruct struct {
+	ModuleName string
+	SFPMapping *SFPMap
+}
+
+//ICSFPMap is mapping between each module and its own port mapping table, such as map["module 1, top frame"]*map[d1]struct{for d1}
+//type ICSFPMap map[string]*SFPMap
+//create extract struct inside map to give us information on Module Name
+type ICSFPMap map[string]*ICSFPStruct
 
 type UplinkPortShow struct {
 	Port  string
@@ -219,9 +232,9 @@ type UplinkPortShow struct {
 	Speed string
 }
 
-func GetIC() InterconnectMap {
+func GetIC() ICMap {
 
-	icMapC := make(chan InterconnectMap)
+	icMapC := make(chan ICMap)
 	liMapC := make(chan LogicalInterconnectMap)
 
 	go ICGetURI(icMapC, "Name")
@@ -237,23 +250,23 @@ func GetIC() InterconnectMap {
 	return icMap
 }
 
-func GetICPort() InterconnectMap {
+func GetICPort() ICMap {
 
-	icMapC := make(chan InterconnectMap)
-	sfpMapC := make(chan ModTransMap)
+	icMapC := make(chan ICMap)
+	icSFPMapC := make(chan ICSFPMap)
 
 	go ICGetURI(icMapC, "Name")
 	icMap := <-icMapC
 
-	go SFPGetURI(sfpMapC, icMap)
-	sfpMap := <-sfpMapC
+	go SFPGetURI(icSFPMapC, icMap)
+	icSFPMap := <-icSFPMapC
 
 	//switch porttype
-	for k := range icMap {
-		for p, v := range icMap[k].Ports {
+	for k1 := range icMap {
+		for k2, v := range icMap[k1].Ports {
 
-			if value, exists := (*sfpMap[k])[v.Name]; exists {
-				icMap[k].Ports[p].TransceiverPN = (*value).VendorPartNumber
+			if value, exists := (*(*icSFPMap[k1]).SFPMapping)[v.Name]; exists {
+				icMap[k1].Ports[k2].TransceiverPN = (*value).VendorPartNumber
 			}
 		}
 	}
@@ -261,8 +274,8 @@ func GetICPort() InterconnectMap {
 	return icMap
 }
 
-//func (c *CLIOVClient) GetICMapNameRest() InterconnectMap {
-func ICGetURI(x chan InterconnectMap, attri string) {
+//func (c *CLIOVClient) GetICMapNameRest() ICMap {
+func ICGetURI(x chan ICMap, attri string) {
 
 	fmt.Println("Rest Get IC")
 
@@ -270,13 +283,14 @@ func ICGetURI(x chan InterconnectMap, attri string) {
 
 	c := NewCLIOVClient()
 
-	icMap := InterconnectMap{}
+	icMap := ICMap{}
 	icCol := make([]InterconnectCollection, 5) //create 5, feel enough for next pages
 
-	for i, uri := 0, InterconnectRestURL; uri != ""; i++ {
+	for i, uri := 0, ICRestURL; uri != ""; i++ {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
+
 			log.Fatal(err)
 		}
 
@@ -304,10 +318,10 @@ func ICGetURI(x chan InterconnectMap, attri string) {
 	//return icMap
 }
 
-func GetTransceiverShow() ModTransMap {
+func GetSFP() ICSFPMap {
 
-	sfpMapC := make(chan ModTransMap)
-	icMapC := make(chan InterconnectMap)
+	icSFPMapC := make(chan ICSFPMap)
+	icMapC := make(chan ICMap)
 
 	go ICGetURI(icMapC, "Name")
 	icMap := <-icMapC
@@ -315,21 +329,23 @@ func GetTransceiverShow() ModTransMap {
 	// for k := range icMap {
 	// 	go SFPGetURI(x, icMap)
 
-	go SFPGetURI(sfpMapC, icMap)
-	sfpMap := <-sfpMapC
+	go SFPGetURI(icSFPMapC, icMap)
+	icSFPMap := <-icSFPMapC
 	fmt.Println("Get sfpmap chann")
 
-	return sfpMap
+	return icSFPMap
 
 }
 
-func SFPGetURI(x chan ModTransMap, icMap InterconnectMap) {
+func SFPGetURI(x chan ICSFPMap, icMap ICMap) {
 
 	fmt.Println("Rest Get SFP")
 	defer timeTrack(time.Now(), "Rest Get SFP")
 
-	sfpMap := ModTransMap{}
-	transMapC := make(chan TransceiverMap)
+	//initialization for icSFPMap is important, outer map is done by make, inside struct is done individually inside each IC loop, inner map didn't need to do it as it's copied from generated map, didn't do individual component access
+	icSFPMap := make(ICSFPMap)
+	sfpMapC := make(chan SFPMap)
+	kC := make(chan string)
 
 	c := NewCLIOVClient()
 
@@ -339,47 +355,57 @@ func SFPGetURI(x chan ModTransMap, icMap InterconnectMap) {
 		k := k
 
 		go func() {
-			transMap := TransceiverMap{}
-			sfpSlice := make(TransceiverCol, 0)
+			sfpMap := SFPMap{}
+			sfpCol := make(SFPCol, 0)
 
 			icID := strings.Replace(icMap[k].URI, "/rest/interconnects/", "", -1)
 
-			data, err := c.GetURI("", "", TransceiverRestURL+icID)
-			//fmt.Println(TransceiverRestURL + icID)
+			data, err := c.GetURI("", "", SFPRestURL+icID)
+			//fmt.Println(SFPRestURL + icID)
 
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			err = json.Unmarshal(data, &sfpSlice)
+			err = json.Unmarshal(data, &sfpCol)
 
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			for i := range sfpSlice {
-				transMap[sfpSlice[i].PortName] = &sfpSlice[i]
+			for i := range sfpCol {
+				sfpMap[sfpCol[i].PortName] = &sfpCol[i]
 			}
 
-			transMapC <- transMap
+			sfpMapC <- sfpMap
+			kC <- k
+
+			//fmt.Println("done collecting SFP for module", k)
+
+			//icSFPMap[k] = &sfpMap
 
 		}()
 
 	}
 
-	for k := range icMap {
+	for i := 0; i < len(icMap); i++ {
 
-		transMap := <-transMapC
-		sfpMap[k] = &transMap
+		//make sure k is below sfpMap to receive value, otherwise it's deadlock.
+		sfpMap := <-sfpMapC
+		k := <-kC
 
-		// fmt.Println(transMap)
+		//fmt.Println("done receiving SFP for module", k)
+
+		//need to initiatize struct inside outmap to get pointer, otherwise program panic when trying to assign value below
+		icSFPMap[k] = new(ICSFPStruct)
+
+		icSFPMap[k].ModuleName = icMap[k].ProductName
+		icSFPMap[k].SFPMapping = &sfpMap
+
+		// fmt.Println(sfpMap)
 		// fmt.Println("---------")
 	}
 
-	x <- sfpMap
+	x <- icSFPMap
 
-}
-
-//GetUplinkSet is a
-func getUplinkSet() {
 }

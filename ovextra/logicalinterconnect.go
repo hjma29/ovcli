@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-type LogicalInterconnectCollection struct {
+type LICol struct {
 	Type        string                `json:"type"`
-	Members     []LogicalInterconnect `json:"members"`
+	Members     []LI `json:"members"`
 	NextPageURI string                `json:"nextPageUri"`
 	Start       int                   `json:"start"`
 	PrevPageURI interface{}           `json:"prevPageUri"`
@@ -22,7 +22,7 @@ type LogicalInterconnectCollection struct {
 	URI         string                `json:"uri"`
 }
 
-type LogicalInterconnect struct {
+type LI struct {
 	Type                        string `json:"type"`
 	LogicalInterconnectGroupURI string `json:"logicalInterconnectGroupUri"`
 	// SnmpConfiguration           struct {
@@ -92,7 +92,7 @@ type LogicalInterconnect struct {
 	// 	URI                      interface{} `json:"uri"`
 	// } `json:"qosConfiguration"`
 	InternalNetworkUris []string `json:"internalNetworkUris"`
-	InterconnectMap     struct {
+	ICMap               struct {
 		InterconnectMapEntries []struct {
 			InterconnectURI              string `json:"interconnectUri"`
 			EnclosureIndex               int    `json:"enclosureIndex"`
@@ -105,7 +105,7 @@ type LogicalInterconnect struct {
 				} `json:"locationEntries"`
 			} `json:"location"`
 		} `json:"interconnectMapEntries"`
-	} `json:"interconnectMap"`
+	} `json:"ICMap"`
 	IcmLicenses struct {
 		License []struct {
 			RequiredCount int         `json:"requiredCount"`
@@ -178,9 +178,9 @@ func LIGetURI(x chan LogicalInterconnectMap) {
 	c := NewCLIOVClient()
 
 	liMap := LogicalInterconnectMap{}
-	liCol := make([]LogicalInterconnectCollection, 5)
+	liCol := make([]LICol, 5)
 
-	for i, uri := 0, LogicalInterconnectRestURL; uri != ""; i++ {
+	for i, uri := 0, LIRestURL; uri != ""; i++ {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {

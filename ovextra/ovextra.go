@@ -44,9 +44,9 @@ var (
 )
 
 const (
-	InterconnectRestURL        = "/rest/interconnects"
-	LogicalInterconnectRestURL = "/rest/logical-interconnects"
-	TransceiverRestURL         = "/rest/interconnects/pluggableModuleInformation/"
+	ICRestURL  = "/rest/interconnects"
+	LIRestURL  = "/rest/logical-interconnects"
+	SFPRestURL = "/rest/interconnects/pluggableModuleInformation/"
 )
 
 // NewCLIOVClient creates new CLIOVCLient
@@ -71,7 +71,7 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, er
 		//uri           = "/rest/interconnects"
 		q map[string]interface{}
 		//interconnects InterconnectCollection
-		//lic           LogicalInterconnectCollection
+		//lic           LICol
 	)
 
 	q = make(map[string]interface{})
@@ -111,7 +111,7 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, er
 	// 		return interconnects, err
 	// 	}
 	// 	return interconnects, nil
-	// case strings.Contains(uri, LogicalInterconnectRestURL):
+	// case strings.Contains(uri, LogicalInI:
 	// 	//log.Debugf("Getinterconnects %s", data)
 	// 	if err := json.Unmarshal([]byte(data), &lic); err != nil {
 	// 		return lic, err

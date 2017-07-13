@@ -40,7 +40,7 @@ to quickly create a Cobra application.`,
 func createNetwork(cmd *cobra.Command, args []string) {
 	var newNetwork ov.EthernetNetwork
 	var err error
-	//ovextra.CLIOVClientPtr = ovextra.CLIOVClientPtr.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
+	//ovextra.OVClient = ovextra.OVClient.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
 
 	if *createNetworkNamePtr == "" {
 		fmt.Println("Neet wo specify name")
@@ -52,7 +52,7 @@ func createNetwork(cmd *cobra.Command, args []string) {
 	newNetwork.Purpose = *createNetworkPurposePtr
 	newNetwork.VlanId = *createNetworkVlanIDPtr
 
-	err = ovextra.CLIOVClientPtr.CreateEthernetNetwork(newNetwork)
+	err = ovextra.OVClient.CreateEthernetNetwork(newNetwork)
 	if err != nil {
 		log.Fatal(err)
 	}

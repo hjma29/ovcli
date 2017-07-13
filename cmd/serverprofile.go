@@ -103,7 +103,7 @@ type serverHardwareTypePrint struct {
 	Model string
 }
 
-//var ovextra.CLIOVClientPtr *ov.OVClient
+//var ovextra.OVClient *ov.OVClient
 
 var serverProfilePrintlist []serverProfilePrint
 var serverHardwarePrintList []serverHardwarePrint
@@ -136,21 +136,21 @@ var serverHardwareTypePrintList []serverHardwareTypePrint
 
 func serverprofile(cmd *cobra.Command, args []string) {
 
-	//ovextra.CLIOVClientPtr = ovextra.CLIOVClientPtr.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
+	//ovextra.OVClient = ovextra.OVClient.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
 
 	var err error
 
-	serverHardwareTypeList, err = ovextra.CLIOVClientPtr.GetServerHardwareTypes("", "")
+	serverHardwareTypeList, err = ovextra.OVClient.GetServerHardwareTypes("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	serverHardwareList, err = ovextra.CLIOVClientPtr.GetServerHardwareList(make([]string, 0), "")
+	serverHardwareList, err = ovextra.OVClient.GetServerHardwareList(make([]string, 0), "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	profileTemplateList, err = ovextra.CLIOVClientPtr.GetProfileTemplates("", "")
+	profileTemplateList, err = ovextra.OVClient.GetProfileTemplates("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -166,37 +166,37 @@ func serverprofile(cmd *cobra.Command, args []string) {
 
 func PrintProfile(ptrS *string) {
 
-	profile, err := ovextra.CLIOVClientPtr.GetProfileByName(*ptrS)
+	profile, err := ovextra.OVClient.GetProfileByName(*ptrS)
 
 	if err != nil {
 		log.Panic(err)
 	}
 
-	ovextra.CLIOVClientPtr.SetQueryString(empty_query_string)
+	ovextra.OVClient.SetQueryString(empty_query_string)
 
 	profilePrint := serverprofileDetailPrint{
 		ServerProfile:         profile,
 		ProfileConnectionList: make([]ProfileConnection, len(profile.Connections)),
 	}
 
-	enclosureGroupList, err = ovextra.CLIOVClientPtr.GetEnclosureGroups("", "")
+	enclosureGroupList, err = ovextra.OVClient.GetEnclosureGroups("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	ethernetNetworkList, err = ovextra.CLIOVClientPtr.GetEthernetNetworks("", "")
+	ethernetNetworkList, err = ovextra.OVClient.GetEthernetNetworks("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	networkSetList, err = ovextra.CLIOVClientPtr.GetNetworkSets("", "")
+	networkSetList, err = ovextra.OVClient.GetNetworkSets("", "")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	//uri := "/rest/interconnects"
 
-	// tempList, err := ovextra.CLIOVClientPtr.GetURI("", "", ovextra.InterconnectRestURL)
+	// tempList, err := ovextra.OVClient.GetURI("", "", ovextra.InterconnectRestURL)
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
@@ -298,7 +298,7 @@ func PrintProfile(ptrS *string) {
 }
 
 func PrintAllProfiles() {
-	serverProfileList, _ = ovextra.CLIOVClientPtr.GetProfiles("", "")
+	serverProfileList, _ = ovextra.OVClient.GetProfiles("", "")
 
 	for _, v := range serverProfileList.Members {
 		serverProfilePrintlist = append(serverProfilePrintlist, newServerProfilePrint(v))

@@ -117,17 +117,17 @@ func lig(cmd *cobra.Command, args []string) {
 	//
 	// start := time.Now()
 
-	//ovextra.CLIOVClientPtr = ovextra.CLIOVClientPtr.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
+	//ovextra.OVClient = ovextra.OVClient.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
 	// elapsed := time.Since(start)
 	// log.Printf("NewOVClient took %s", elapsed)
 
 	// start = time.Now()
-	logicalInterconnectGroupList, _ = ovextra.CLIOVClientPtr.GetLogicalInterconnectGroups("", "")
+	logicalInterconnectGroupList, _ = ovextra.OVClient.GetLogicalInterconnectGroups("", "")
 	// elapsed = time.Since(start)
 	// log.Printf("Get LIG Groups took %s", elapsed)
 
 	// start = time.Now()
-	interconnectTypeList, _ = ovextra.CLIOVClientPtr.GetInterconnectTypes("", "")
+	interconnectTypeList, _ = ovextra.OVClient.GetInterconnectTypes("", "")
 	// elapsed = time.Since(start)
 	// log.Printf("Get InterConnect Types took %s", elapsed)
 
@@ -140,7 +140,7 @@ func lig(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	PrintLIG(ovextra.CLIOVClientPtr, ligNamePtr)
+	PrintLIG(ovextra.OVClient, ligNamePtr)
 }
 
 func PrintAllLIGs() {
@@ -285,8 +285,8 @@ func NewLIGModule(e ov.InterconnectMapEntryTemplate) LIGModule {
 		}
 	}
 
-	// ovextra.CLIOVClientPtr.SetQueryString(empty_query_string)
-	// interconnectTypeList, _ := ovextra.CLIOVClientPtr.GetInterconnectTypeByUri(e.PermittedInterconnectTypeUri)
+	// ovextra.OVClient.SetQueryString(empty_query_string)
+	// interconnectTypeList, _ := ovextra.OVClient.GetInterconnectTypeByUri(e.PermittedInterconnectTypeUri)
 	for _, i := range interconnectTypeList.Members {
 		if i.URI == e.PermittedInterconnectTypeUri {
 			module.ModelName, module.ModelNumber = string(i.Name), i.PartNumber
