@@ -1,7 +1,5 @@
 package ovextra
 
-import "fmt"
-
 type UplinkSetCol struct {
 	Type        string      `json:"type"`
 	Members     []UplinkSet `json:"members"`
@@ -74,21 +72,21 @@ const (
 
 //GetUplinkSet is to retrive uplinkset information
 func GetUplinkSet() {
-	fmt.Println("hello")
+	// fmt.Println("hello")
 
-	icMapC := make(chan ICMap)
-	liMapC := make(chan LogicalInterconnectMap)
+	// icMapC := make(chan ICMap)
+	// liMapC := make(chan LogicalInterconnectMap)
 
-	go ICGetURI(icMapC, "Name")
-	go LIGetURI(liMapC)
+	// go ICGetURI(icMapC, "Name")
+	// go LIGetURI(liMapC)
 
-	icMap := <-icMapC
-	liMap := <-liMapC
+	// icMap := <-icMapC
+	// liMap := <-liMapC
 
-	for k := range icMap {
-		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
-	}
+	// for k := range icMap {
+	// 	icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
+	// }
 
-	return icMap
+	// return icMap
 
 }
