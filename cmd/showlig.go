@@ -16,13 +16,11 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"sort"
 	"strings"
 	"text/tabwriter"
 	"text/template"
-	"time"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/hjma29/ovcli/ovextra"
@@ -30,7 +28,7 @@ import (
 )
 
 // ligCmd represents the lig command
-var ligCmd = &cobra.Command{
+var showLIGCmd = &cobra.Command{
 	Use:   "lig",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -39,7 +37,7 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: lig,
+	Run: showLIG,
 }
 
 type ModulePortMapping struct {
@@ -106,34 +104,15 @@ func (x uplinkPortListType) multiSort(i, j int) bool {
 	return false
 }
 
-func timeTrack(start time.Time, name string) {
-	elapsed := time.Since(start)
-	log.Printf("%s took %s", name, elapsed)
-}
+// func timeTrack(start time.Time, name string) {
+// 	elapsed := time.Since(start)
+// 	log.Printf("%s took %s", name, elapsed)
+// }
 
-func lig(cmd *cobra.Command, args []string) {
-	//
-	// defer timeTrack(time.Now(), "lig-main")
-	//
-	// start := time.Now()
+func showLIG(cmd *cobra.Command, args []string) {
 
-	//ovextra.OVClient = ovextra.OVClient.NewOVClient(ov_username, ov_password, "LOCAL", "https://"+ov_address, false, 300)
-	// elapsed := time.Since(start)
-	// log.Printf("NewOVClient took %s", elapsed)
-
-	// start = time.Now()
 	logicalInterconnectGroupList, _ = ovextra.OVClient.GetLogicalInterconnectGroups("", "")
-	// elapsed = time.Since(start)
-	// log.Printf("Get LIG Groups took %s", elapsed)
-
-	// start = time.Now()
 	interconnectTypeList, _ = ovextra.OVClient.GetInterconnectTypes("", "")
-	// elapsed = time.Since(start)
-	// log.Printf("Get InterConnect Types took %s", elapsed)
-
-	//fmt.Println(len(ioBayShowHeader))
-	//elapsed = time.Since(start)
-	//log.Printf("Init took %s", elapsed)
 
 	if *ligNamePtr == "" {
 		PrintAllLIGs()
@@ -355,9 +334,8 @@ func (ms *multiSorter) Less(i, j int) bool {
 }
 
 func init() {
-	showCmd.AddCommand(ligCmd)
 
-	ligNamePtr = ligCmd.PersistentFlags().String("name", "", "LIG Name")
+	ligNamePtr = showLIGCmd.PersistentFlags().String("name", "", "LIG Name")
 
 	//fmt.Println("this is lig module init")
 

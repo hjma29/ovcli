@@ -8,20 +8,20 @@ import (
 	"time"
 )
 
-// InterconnectCollection a list of Interconnect objects
-type InterconnectCollection struct {
-	Type        string         `json:"type"`
-	Total       int            `json:"total,omitempty"`       // "total": 1,
-	Count       int            `json:"count,omitempty"`       // "count": 1,
-	Start       int            `json:"start,omitempty"`       // "start": 0,
-	PrevPageURI string         `json:"prevPageUri,omitempty"` // "prevPageUri": null,
-	NextPageURI string         //`json:"nextPageUri,omitempty"` // "nextPageUri": null,
-	URI         string         `json:"uri,omitempty"`     // "uri": "/rest/server-profiles?filter=serialNumber%20matches%20%272M25090RMW%27&sort=name:asc"
-	Members     []Interconnect `json:"members,omitempty"` // "members":[]
+// ICCol a list of Interconnect objects
+type ICCol struct {
+	Type        string `json:"type"`
+	Total       int    `json:"total,omitempty"`       // "total": 1,
+	Count       int    `json:"count,omitempty"`       // "count": 1,
+	Start       int    `json:"start,omitempty"`       // "start": 0,
+	PrevPageURI string `json:"prevPageUri,omitempty"` // "prevPageUri": null,
+	NextPageURI string //`json:"nextPageUri,omitempty"` // "nextPageUri": null,
+	URI         string `json:"uri,omitempty"`     // "uri": "/rest/server-profiles?filter=serialNumber%20matches%20%272M25090RMW%27&sort=name:asc"
+	Members     []IC   `json:"members,omitempty"` // "members":[]
 }
 
 // Interconnect object
-type Interconnect struct {
+type IC struct {
 	Type                   string        `json:"type"`
 	LogicalInterconnectURI string        `json:"logicalInterconnectUri"`
 	PartNumber             string        `json:"partNumber"`
@@ -208,40 +208,44 @@ type SFP struct {
 	VendorOui        string      `json:"vendorOui"`
 }
 
-//SFPCol is to take REST response for a slice of SFPs on a particular module
-type SFPCol []SFP
+// type UplinkPortShow struct {
+// 	Port  string
+// 	Type  string
+// 	State string
+// 	Speed string
+// }
 
-//SFPMap is from conversion of raw SFPCol(a slice) to mapping struct with port names as keys and the pointers of SFP structs as values. Each module has its own "sfpMap" to pass to channel
-type SFPMap map[string]*SFP
+// func GetICbyName() ICMap {
+// 	icMapbyName := make(ICMap)
 
-//ICSFPStruct can give us information of Modulename, which we can't get from simple map key for IC module
-type ICSFPStruct struct {
-	ModuleName string
-	SFPMapping *SFPMap
-}
+// 	icMap := GetIC()
 
-//ICSFPMap is mapping between each module and its own port mapping table, such as map["module 1, top frame"]*map[d1]struct{for d1}
-//type ICSFPMap map[string]*SFPMap
-//create extract struct inside map to give us information on Module Name
-type ICSFPMap map[string]*ICSFPStruct
+// 	for k := range icMap {
+// 		icMapbyName[icMap[k].Name] = icMap[k]
+// 	}
 
-type UplinkPortShow struct {
-	Port  string
-	Type  string
-	State string
-	Speed string
-}
+// 	return icMapbyName
+// }
 
 func GetIC() ICMap {
 
 	icMapC := make(chan ICMap)
-	liMapC := make(chan LogicalInterconnectMap)
+	liMapC := make(chan LIMap)
 
 	go ICGetURI(icMapC, "Name")
-	go LIGetURI(liMapC)
+	go LIGetURI(liMapC, "URI")
 
-	icMap := <-icMapC
-	liMap := <-liMapC
+	var icMap ICMap
+	var liMap LIMap
+
+	for i := 0; i < 2; i++ {
+		select {
+		case icMap = <-icMapC:
+			//fmt.Println("received icMap")
+		case liMap = <-liMapC:
+			//fmt.Println("received liMap")
+		}
+	}
 
 	for k := range icMap {
 		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
@@ -275,7 +279,7 @@ func GetICPort() ICMap {
 }
 
 //func (c *CLIOVClient) GetICMapNameRest() ICMap {
-func ICGetURI(x chan ICMap, attri string) {
+func ICGetURI(x chan ICMap, key string) {
 
 	fmt.Println("Rest Get IC")
 
@@ -284,7 +288,7 @@ func ICGetURI(x chan ICMap, attri string) {
 	c := NewCLIOVClient()
 
 	icMap := ICMap{}
-	icCol := make([]InterconnectCollection, 5) //create 5, feel enough for next pages
+	pages := make([]ICCol, 5) //create 5, feel enough for next pages
 
 	for i, uri := 0, ICRestURL; uri != ""; i++ {
 
@@ -294,23 +298,23 @@ func ICGetURI(x chan ICMap, attri string) {
 			log.Fatal(err)
 		}
 
-		err = json.Unmarshal(data, &icCol[i])
+		err = json.Unmarshal(data, &pages[i])
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		for k := range icCol[i].Members {
-			switch attri {
+		for k := range pages[i].Members {
+			switch key {
 			case "Name":
-				icMap[icCol[i].Members[k].Name] = &icCol[i].Members[k]
+				icMap[pages[i].Members[k].Name] = &pages[i].Members[k]
 			case "URI":
-				icMap[icCol[i].Members[k].URI] = &icCol[i].Members[k]
+				icMap[pages[i].Members[k].URI] = &pages[i].Members[k]
 			}
 
 		}
 
-		uri = icCol[i].NextPageURI
+		uri = pages[i].NextPageURI
 	}
 
 	x <- icMap
@@ -356,7 +360,10 @@ func SFPGetURI(x chan ICSFPMap, icMap ICMap) {
 
 		go func() {
 			sfpMap := SFPMap{}
-			sfpCol := make(SFPCol, 0)
+
+			//this sfpCol make is different than make(ICCOl, 5) which is to create 5 pages assuming high enough to hold next pages
+			//this sfpCol is to make a slice init 0 and let unmarshall func to append and grow slice as appropriate
+			sfpCol := make(SFPList, 0)
 
 			icID := strings.Replace(icMap[k].URI, "/rest/interconnects/", "", -1)
 

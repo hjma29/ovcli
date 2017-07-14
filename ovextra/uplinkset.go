@@ -1,54 +1,56 @@
 package ovextra
 
-type UplinkSetCol struct {
-	Type        string      `json:"type"`
-	Members     []UplinkSet `json:"members"`
-	Count       int         `json:"count"`
-	Total       int         `json:"total"`
-	NextPageURI string      `json:"nextPageUri"`
-	Start       int         `json:"start"`
-	PrevPageURI string      `json:"prevPageUri"`
-	Category    string      `json:"category"`
-	Modified    string      `json:"modified"`
-	ETag        string      `json:"eTag"`
-	Created     string      `json:"created"`
-	URI         string      `json:"uri"`
+type ICUplinkSetCol struct {
+	Type        string        `json:"type"`
+	Members     []ICUplinkSet `json:"members"`
+	Count       int           `json:"count"`
+	Total       int           `json:"total"`
+	NextPageURI string        `json:"nextPageUri"`
+	Start       int           `json:"start"`
+	PrevPageURI string        `json:"prevPageUri"`
+	Category    string        `json:"category"`
+	Modified    string        `json:"modified"`
+	ETag        string        `json:"eTag"`
+	Created     string        `json:"created"`
+	URI         string        `json:"uri"`
 }
 
-type UplinkSet struct {
-	Type                           string   `json:"type"`
-	ConnectionMode                 string   `json:"connectionMode"`
-	ManualLoginRedistributionState string   `json:"manualLoginRedistributionState"`
-	NativeNetworkURI               string   `json:"nativeNetworkUri"`
-	FcoeNetworkUris                []string `json:"fcoeNetworkUris"`
-	FcNetworkUris                  []string `json:"fcNetworkUris"`
-	PrimaryPortLocation            string   `json:"primaryPortLocation"`
-	LogicalInterconnectURI         string   `json:"logicalInterconnectUri"`
-	NetworkType                    string   `json:"networkType"`
-	EthernetNetworkType            string   `json:"ethernetNetworkType"`
-	PortConfigInfos                []struct {
-		DesiredSpeed     string `json:"desiredSpeed"`
-		PortURI          string `json:"portUri"`
-		ExpectedNeighbor string `json:"expectedNeighbor"`
-		Location         struct {
-			LocationEntries []struct {
-				Value string `json:"value"`
-				Type  string `json:"type"`
-			} `json:"locationEntries"`
-		} `json:"location"`
-	} `json:"portConfigInfos"`
-	Reachability string   `json:"reachability"`
-	NetworkUris  []string `json:"networkUris"`
-	LacpTimer    string   `json:"lacpTimer"`
-	Description  string   `json:"description"`
-	Status       string   `json:"status"`
-	Name         string   `json:"name"`
-	State        string   `json:"state"`
-	Category     string   `json:"category"`
-	Modified     string   `json:"modified"`
-	ETag         string   `json:"eTag"`
-	Created      string   `json:"created"`
-	URI          string   `json:"uri"`
+type ICUplinkSet struct {
+	Type                           string           `json:"type"`
+	ConnectionMode                 string           `json:"connectionMode"`
+	ManualLoginRedistributionState string           `json:"manualLoginRedistributionState"`
+	NativeNetworkURI               string           `json:"nativeNetworkUri"`
+	FcoeNetworkUris                []string         `json:"fcoeNetworkUris"`
+	FcNetworkUris                  []string         `json:"fcNetworkUris"`
+	PrimaryPortLocation            string           `json:"primaryPortLocation"`
+	LogicalInterconnectURI         string           `json:"logicalInterconnectUri"`
+	NetworkType                    string           `json:"networkType"`
+	EthernetNetworkType            string           `json:"ethernetNetworkType"`
+	PortConfigInfos                []PortConfigInfo `json:"portConfigInfos"`
+	Reachability                   string           `json:"reachability"`
+	NetworkUris                    []string         `json:"networkUris"`
+	LacpTimer                      string           `json:"lacpTimer"`
+	Description                    string           `json:"description"`
+	Status                         string           `json:"status"`
+	Name                           string           `json:"name"`
+	State                          string           `json:"state"`
+	Category                       string           `json:"category"`
+	Modified                       string           `json:"modified"`
+	ETag                           string           `json:"eTag"`
+	Created                        string           `json:"created"`
+	URI                            string           `json:"uri"`
+}
+
+type PortConfigInfo struct {
+	DesiredSpeed     string `json:"desiredSpeed"`
+	PortURI          string `json:"portUri"`
+	ExpectedNeighbor string `json:"expectedNeighbor"`
+	Location         struct {
+		LocationEntries []struct {
+			Value string `json:"value"`
+			Type  string `json:"type"`
+		} `json:"locationEntries"`
+	} `json:"location"`
 }
 
 const (
@@ -75,7 +77,7 @@ func GetUplinkSet() {
 	// fmt.Println("hello")
 
 	// icMapC := make(chan ICMap)
-	// liMapC := make(chan LogicalInterconnectMap)
+	// liMapC := make(chan LIMap)
 
 	// go ICGetURI(icMapC, "Name")
 	// go LIGetURI(liMapC)

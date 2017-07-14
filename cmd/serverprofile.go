@@ -201,7 +201,7 @@ func PrintProfile(ptrS *string) {
 	// 	log.Fatal(err)
 	// }
 	//
-	// interconnectList := tempList.(ovextra.InterconnectCollection)
+	// interconnectList := tempList.(ovextra.ICCol)
 
 	//loop through global var profileTemplateList and find the one matching this profile and get the template name
 	for _, v := range profileTemplateList.Members {

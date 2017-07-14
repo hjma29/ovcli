@@ -8,18 +8,18 @@ import (
 )
 
 type LICol struct {
-	Type        string                `json:"type"`
-	Members     []LI `json:"members"`
-	NextPageURI string                `json:"nextPageUri"`
-	Start       int                   `json:"start"`
-	PrevPageURI interface{}           `json:"prevPageUri"`
-	Count       int                   `json:"count"`
-	Total       int                   `json:"total"`
-	Created     interface{}           `json:"created"`
-	ETag        interface{}           `json:"eTag"`
-	Modified    interface{}           `json:"modified"`
-	Category    string                `json:"category"`
-	URI         string                `json:"uri"`
+	Type        string      `json:"type"`
+	Members     []LI        `json:"members"`
+	NextPageURI string      `json:"nextPageUri"`
+	Start       int         `json:"start"`
+	PrevPageURI interface{} `json:"prevPageUri"`
+	Count       int         `json:"count"`
+	Total       int         `json:"total"`
+	Created     interface{} `json:"created"`
+	ETag        interface{} `json:"eTag"`
+	Modified    interface{} `json:"modified"`
+	Category    string      `json:"category"`
+	URI         string      `json:"uri"`
 }
 
 type LI struct {
@@ -167,9 +167,41 @@ type LI struct {
 	Modified    time.Time     `json:"modified"`
 	Category    string        `json:"category"`
 	URI         string        `json:"uri"`
+	LIGName     string
 }
 
-func LIGetURI(x chan LogicalInterconnectMap) {
+//GetLI is the function called from ovcli cmd package to get information on "show li", it in turn calls RestGet
+func GetLI() LIMap {
+
+	liMapC := make(chan LIMap)
+	go LIGetURI(liMapC, "Name")
+	//liMap := <-liMapC
+
+	ligMapC := make(chan LIGMap)
+	go LIGGetURI(ligMapC, "URI")
+	//ligMap := <-ligMapC
+
+	var liMap LIMap
+	var ligMap LIGMap
+
+	for i := 0; i < 2; i++ {
+		select {
+		case ligMap = <-ligMapC:
+		case liMap = <-liMapC:
+		}
+	}
+
+	//Save LIG value to LI entrie field, LIGName is manually added in JSON struct. use LI's LIG URI as index to find among LIG Map
+	for k := range liMap {
+		liMap[k].LIGName = ligMap[liMap[k].LogicalInterconnectGroupURI].Name
+	}
+
+	return liMap
+
+}
+
+//LIGetURI is the function to get raw structs from all json next pages
+func LIGetURI(x chan LIMap, key string) {
 
 	fmt.Println("Rest Get LI")
 
@@ -177,8 +209,8 @@ func LIGetURI(x chan LogicalInterconnectMap) {
 
 	c := NewCLIOVClient()
 
-	liMap := LogicalInterconnectMap{}
-	liCol := make([]LICol, 5)
+	liMap := LIMap{}
+	pages := make([]LICol, 5)
 
 	for i, uri := 0, LIRestURL; uri != ""; i++ {
 
@@ -187,17 +219,22 @@ func LIGetURI(x chan LogicalInterconnectMap) {
 			log.Fatal(err)
 		}
 
-		err = json.Unmarshal(data, &liCol[i])
+		err = json.Unmarshal(data, &pages[i])
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		for k := range liCol[i].Members {
-			liMap[liCol[i].Members[k].URI] = &liCol[i].Members[k]
+		for k := range pages[i].Members {
+			switch key {
+			case "Name":
+				liMap[pages[i].Members[k].Name] = &pages[i].Members[k]
+			case "URI":
+				liMap[pages[i].Members[k].URI] = &pages[i].Members[k]
+			}
 		}
 
-		uri = liCol[i].NextPageURI
+		uri = pages[i].NextPageURI
 	}
 
 	x <- liMap

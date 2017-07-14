@@ -43,11 +43,6 @@ var (
 	client = &http.Client{Transport: tr}
 )
 
-const (
-	ICRestURL  = "/rest/interconnects"
-	LIRestURL  = "/rest/logical-interconnects"
-	SFPRestURL = "/rest/interconnects/pluggableModuleInformation/"
-)
 
 // NewCLIOVClient creates new CLIOVCLient
 func NewCLIOVClient() *CLIOVClient {
@@ -70,7 +65,7 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, er
 	var (
 		//uri           = "/rest/interconnects"
 		q map[string]interface{}
-		//interconnects InterconnectCollection
+		//interconnects ICCol
 		//lic           LICol
 	)
 
