@@ -1,8 +1,9 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/HewlettPackard/oneview-golang/ov"
-	"github.com/docker/machine/libmachine/log"
 )
 
 var serverProfileList ov.ServerProfileList
@@ -33,9 +34,27 @@ var (
 	createNetworkPurposePtr *string
 	createNetworkVlanIDPtr  *int
 	porttype                string
+	Debugmode               = false
 )
 
 func init() {
-	log.SetDebug(true)
 
+	//cobra.OnInitialize(initConfig)
+	log.SetFlags(log.Lshortfile)
+	//	fmt.Println(debugmode)
+
+	//if commandflag -d is not set, then we should change default logger destination to discard
+	// if !debugmode {
+	// 	log.SetOutput(ioutil.Discard)
+	// }
+
+	// log.Println("cmd package log")
 }
+
+// func initConfig() {
+// 	//if commandflag -d is not set, then we should change default logger destination to discard
+// 	if !Debugmode {
+// 		log.SetOutput(ioutil.Discard)
+// 	}
+
+// }

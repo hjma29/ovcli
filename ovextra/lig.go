@@ -2,7 +2,6 @@ package ovextra
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 )
@@ -29,7 +28,7 @@ type LIG struct {
 	Status                  string                   `json:"status,omitempty"`                 // "status": "Critical",
 	TelemetryConfiguration  *TelemetryConfiguration  `json:"telemetryConfiguration,omitempty"` // "telemetryConfiguration": {...},
 	Type                    string                   `json:"type"`                             // "type": "logical-interconnect-groupsV3",
-	UplinkSets              []UplinkSet              `json:"uplinkSets,omitempty"`             // "uplinkSets": {...},
+	UplinkSets              []LIGUplinkSet           `json:"uplinkSets,omitempty"`             // "uplinkSets": {...},
 	URI                     string                   `json:"uri,omitempty"`                    // "uri": "/rest/logical-interconnect-groups/e2f0031b-52bd-4223-9ac1-d91cb519d548",
 }
 
@@ -207,7 +206,7 @@ type TelemetryConfiguration struct {
 	URI             string `json:"uri,omitempty"`             // "uri": null
 }
 
-type UplinkSet struct {
+type LIGUplinkSet struct {
 	EthernetNetworkType    string                  `json:"ethernetNetworkType,omitempty"` // "ethernetNetworkType": "Tagged",
 	LacpTimer              string                  `json:"lacpTimer,omitempty"`           // "lacpTimer": "Long",
 	LogicalPortConfigInfos []LogicalPortConfigInfo `json:"logicalPortConfigInfos"`        // "logicalPortConfigInfos": {...},
@@ -238,7 +237,7 @@ type LIGCol struct {
 //LIGGetURI to get mapping between LIG URI/name to LIG struct
 func LIGGetURI(x chan LIGMap, attri string) {
 
-	fmt.Println("Rest Get LIG")
+	log.Println("Rest Get LIG")
 
 	defer timeTrack(time.Now(), "Rest Get LIG")
 
@@ -247,7 +246,7 @@ func LIGGetURI(x chan LIGMap, attri string) {
 	ligMap := make(LIGMap)
 	pages := make([]LIGCol, 5) //create 5, feel enough for next pages
 
-	for i, uri := 0, LIGRestURL; uri != ""; i++ {
+	for i, uri := 0, LIGURL; uri != ""; i++ {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {

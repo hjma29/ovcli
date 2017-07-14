@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -46,13 +48,15 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(-1)
 	}
+
 }
 
 func init() {
 	cobra.OnInitialize(initConfig)
 
-		RootCmd.AddCommand(showCmd)
+	RootCmd.AddCommand(showCmd)
 
+	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags, which, if defined here,
@@ -78,4 +82,21 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+
+	//viper.BindPFlag("debugbit", RootCmd.PersistentFlags().Lookup("Debugmode"))
+
+	//fmt.Println(viper.GetBool("debugbit"))
+
+	//fmt.Println(Debugmode)
+
+	if !Debugmode {
+		//fmt.Println("setting output to discard")
+		//if viper.GetBool("debugbit") {
+		log.SetOutput(ioutil.Discard)
+	} else {
+		//fmt.Println("setting output to stdout")
+
+		log.SetOutput(os.Stdout)
+	}
+
 }

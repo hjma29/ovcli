@@ -20,6 +20,10 @@ import (
 	// "text/tabwriter"
 	// "text/template"
 
+	"html/template"
+	"os"
+	"text/tabwriter"
+
 	"github.com/hjma29/ovcli/ovextra"
 	"github.com/spf13/cobra"
 )
@@ -36,8 +40,23 @@ to quickly create a Cobra application.`,
 	Run: showUplinkSet,
 }
 
+const (
+	uplinkSetShowFormat = "" +
+		"Name\tConsistency\tStacking\tLIG\n" +
+		//"----\t-----\n" +
+		"{{range .}}" +
+		"{{.Name}}\t{{.ConsistencyStatus}}\t{{.StackingHealth}}\t{{.LIGName}}\n" +
+		"{{end}}"
+)
+
 func showUplinkSet(cmd *cobra.Command, args []string) {
-	ovextra.GetUplinkSet()
+	liUplinksetMap := ovextra.GetUplinkSet()
+
+	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	defer tw.Flush()
+
+	t := template.Must(template.New("").Parse(uplinkSetShowFormat))
+	t.Execute(tw, liUplinksetMap)
 
 }
 

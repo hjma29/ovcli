@@ -2,7 +2,6 @@ package ovextra
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 )
@@ -203,7 +202,7 @@ func GetLI() LIMap {
 //LIGetURI is the function to get raw structs from all json next pages
 func LIGetURI(x chan LIMap, key string) {
 
-	fmt.Println("Rest Get LI")
+	log.Println("Rest Get LI")
 
 	defer timeTrack(time.Now(), "Rest Get LI")
 
@@ -212,7 +211,7 @@ func LIGetURI(x chan LIMap, key string) {
 	liMap := LIMap{}
 	pages := make([]LICol, 5)
 
-	for i, uri := 0, LIRestURL; uri != ""; i++ {
+	for i, uri := 0, LIURL; uri != ""; i++ {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
@@ -238,7 +237,5 @@ func LIGetURI(x chan LIMap, key string) {
 	}
 
 	x <- liMap
-
-	//return liMap
 
 }

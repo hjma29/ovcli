@@ -239,7 +239,7 @@ func PrintProfile(ptrS *string) {
 		}
 	}
 
-	for i, _ := range profilePrint.Connections {
+	for i := range profilePrint.Connections {
 
 		// get network name depending on it's network-set or individual network
 		switch strings.Contains(string(profilePrint.Connections[i].NetworkURI), "ethernet-networks") {

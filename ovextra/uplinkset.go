@@ -1,21 +1,27 @@
 package ovextra
 
-type ICUplinkSetCol struct {
-	Type        string        `json:"type"`
-	Members     []ICUplinkSet `json:"members"`
-	Count       int           `json:"count"`
-	Total       int           `json:"total"`
-	NextPageURI string        `json:"nextPageUri"`
-	Start       int           `json:"start"`
-	PrevPageURI string        `json:"prevPageUri"`
-	Category    string        `json:"category"`
-	Modified    string        `json:"modified"`
-	ETag        string        `json:"eTag"`
-	Created     string        `json:"created"`
-	URI         string        `json:"uri"`
+import (
+	"encoding/json"
+	"log"
+	"time"
+)
+
+type UplinkSetCol struct {
+	Type        string      `json:"type"`
+	Members     []UplinkSet `json:"members"`
+	Count       int         `json:"count"`
+	Total       int         `json:"total"`
+	NextPageURI string      `json:"nextPageUri"`
+	Start       int         `json:"start"`
+	PrevPageURI string      `json:"prevPageUri"`
+	Category    string      `json:"category"`
+	Modified    string      `json:"modified"`
+	ETag        string      `json:"eTag"`
+	Created     string      `json:"created"`
+	URI         string      `json:"uri"`
 }
 
-type ICUplinkSet struct {
+type UplinkSet struct {
 	Type                           string           `json:"type"`
 	ConnectionMode                 string           `json:"connectionMode"`
 	ManualLoginRedistributionState string           `json:"manualLoginRedistributionState"`
@@ -39,6 +45,7 @@ type ICUplinkSet struct {
 	ETag                           string           `json:"eTag"`
 	Created                        string           `json:"created"`
 	URI                            string           `json:"uri"`
+	LIURI                          string           //manually add to be get LI name from LogicalInterconnectURI
 }
 
 type PortConfigInfo struct {
@@ -73,22 +80,72 @@ const (
 )
 
 //GetUplinkSet is to retrive uplinkset information
-func GetUplinkSet() {
-	// fmt.Println("hello")
+func GetUplinkSet() LIUplinkSetMap {
 
-	// icMapC := make(chan ICMap)
-	// liMapC := make(chan LIMap)
+	uplinkSetMapC := make(chan UplinkSetMap)
+	liMapC := make(chan LIMap)
 
-	// go ICGetURI(icMapC, "Name")
-	// go LIGetURI(liMapC)
+	go UplinkSetGetURI(uplinkSetMapC, "Name")
+	go LIGetURI(liMapC, "Name")
 
-	// icMap := <-icMapC
-	// liMap := <-liMapC
+	var liMap LIMap
+	var uplinkSetMap UplinkSetMap
 
-	// for k := range icMap {
-	// 	icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
-	// }
+	for i := 0; i < 2; i++ {
+		select {
+		case uplinkSetMap = <-uplinkSetMapC:
+		case liMap = <-liMapC:
+		}
+	}
 
-	// return icMap
+	//Save LIG value to LI entrie field, LIGName is manually added in JSON struct. use LI's LIG URI as index to find among LIG Map
+	for k := range liMap {
+		liMap[k].LIGName = uplinkSetMap[liMap[k].LogicalInterconnectGroupURI].Name
+	}
+
+	var liUplinkSetMap LIUplinkSetMap
+
+	return liUplinkSetMap
+
+}
+
+//UplinkSetGetURI is the function to get raw structs from all json next pages
+func UplinkSetGetURI(x chan UplinkSetMap, key string) {
+
+	log.Println("Rest Get UplinkSet Collection")
+
+	defer timeTrack(time.Now(), "Rest Get UplinkSet Collection")
+
+	c := NewCLIOVClient()
+
+	uplinkSetMap := UplinkSetMap{}
+	pages := make([]UplinkSetCol, 5)
+
+	for i, uri := 0, UplinkSetURL; uri != ""; i++ {
+
+		data, err := c.GetURI("", "", uri)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = json.Unmarshal(data, &pages[i])
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for k := range pages[i].Members {
+			switch key {
+			case "Name":
+				uplinkSetMap[pages[i].Members[k].Name] = &pages[i].Members[k]
+			case "URI":
+				uplinkSetMap[pages[i].Members[k].URI] = &pages[i].Members[k]
+			}
+		}
+
+		uri = pages[i].NextPageURI
+	}
+
+	x <- uplinkSetMap
 
 }

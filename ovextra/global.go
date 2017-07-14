@@ -30,6 +30,12 @@ type ICSFPStruct struct {
 //create extract struct inside map to give us information on Module Name
 type ICSFPMap map[string]*ICSFPStruct
 
+//UplinkSetMap is mapping between each uplinkset name/URI and its struct
+type UplinkSetMap map[string]*UplinkSet
+
+//LIUplinkSetMap is mapping between each LI and its own Uplinkset maps
+type LIUplinkSetMap map[string]UplinkSetMap
+
 var ovAddress = os.Getenv("OneView_address")
 var ovUsername = os.Getenv("OneView_username")
 var ovPassword = os.Getenv("OneView_password")
@@ -38,10 +44,11 @@ var ovPassword = os.Getenv("OneView_password")
 var OVClient = NewCLIOVClient()
 
 const (
-	LIGRestURL = "/rest/logical-interconnect-groups"
-	LIRestURL  = "/rest/logical-interconnects"
-	ICRestURL  = "/rest/interconnects"
-	SFPRestURL = "/rest/interconnects/pluggableModuleInformation/"
+	LIGURL       = "/rest/logical-interconnect-groups"
+	LIURL        = "/rest/logical-interconnects"
+	UplinkSetURL = "/rest/uplink-sets"
+	ICURL        = "/rest/interconnects"
+	SFPURL       = "/rest/interconnects/pluggableModuleInformation/"
 )
 
 type OVCol interface {

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -13,7 +14,7 @@ import (
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	"github.com/docker/machine/libmachine/log"
+	//"github.com/docker/machine/libmachine/log"
 )
 
 //CLIOVClient is the ov.OVCLient with additinal commands
@@ -42,7 +43,6 @@ var (
 	// get a client
 	client = &http.Client{Transport: tr}
 )
-
 
 // NewCLIOVClient creates new CLIOVCLient
 func NewCLIOVClient() *CLIOVClient {
@@ -120,9 +120,9 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, er
 
 // RestAPICall - general rest method caller
 func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options interface{}) ([]byte, error) {
-	log.SetDebug(false)
+	//log.SetDebug(false)
 	//fmt.Println("=================================================")
-	log.Debugf("RestAPICall %s - %s%s", method, utils.Sanatize(c.Endpoint), path)
+	//log.Debugf("RestAPICall %s - %s%s", method, utils.Sanatize(c.Endpoint), path)
 
 	var (
 		Url *url.URL
@@ -145,8 +145,8 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 	// Manage the query string
 	c.GetQueryString(Url)
 
-	log.Debugf("*** url => %s", Url.String())
-	log.Debugf("*** method => %s", method.String())
+	// log.Debugf("*** url => %s", Url.String())
+	// log.Debugf("*** method => %s", method.String())
 
 	// parse url
 	//reqUrl, err := url.Parse(Url.String())
@@ -165,7 +165,7 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 		if err != nil {
 			return nil, err
 		}
-		log.Debugf("*** options => %+v", bytes.NewBuffer(OptionsJSON))
+		//log.Debugf("*** options => %+v", bytes.NewBuffer(OptionsJSON))
 		req, err = http.NewRequest(method.String(), Url.String(), bytes.NewBuffer(OptionsJSON))
 		//req, err = http.NewRequest(method.String(), Url.Path, bytes.NewBuffer(OptionsJSON))
 	} else {
@@ -184,12 +184,12 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 	}
 	if proxyUrl != nil {
 		tr.Proxy = http.ProxyURL(proxyUrl)
-		log.Debugf("*** proxy => %+v", tr.Proxy)
+		//log.Debugf("*** proxy => %+v", tr.Proxy)
 	}
 
 	// build the auth headerU
 	for k, v := range c.Option.Headers {
-		log.Debugf("Headers -> %s -> %+v\n", k, v)
+		//log.Debugf("Headers -> %s -> %+v\n", k, v)
 		req.Header.Add(k, v)
 	}
 
@@ -206,9 +206,9 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 	// DEBUGGING WHILE WE WORK
 	// DEBUGGING WHILE WE WORK
 	// fmt.Printf("METHOD --> %+v\n",method)
-	log.Debugf("REQ    --> %+v\n", req)
-	log.Debugf("RESP   --> %+v\n", resp)
-	log.Debugf("ERROR  --> %+v\n", err)
+	// log.Debugf("REQ    --> %+v\n", req)
+	// log.Debugf("RESP   --> %+v\n", resp)
+	// log.Debugf("ERROR  --> %+v\n", err)
 	// DEBUGGING WHILE WE WORK
 
 	data, err := ioutil.ReadAll(resp.Body)
@@ -235,5 +235,5 @@ func (c *CLIOVClient) isOkStatus(code int) bool {
 
 func timeTrack(start time.Time, name string) {
 	elapsed := time.Since(start)
-	fmt.Printf("%s took %s\n", name, elapsed)
+	log.Printf("%s took %s\n", name, elapsed)
 }

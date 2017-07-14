@@ -14,9 +14,21 @@
 
 package main
 
-import "github.com/hjma29/ovcli/cmd"
+import (
+	"io/ioutil"
+	"log"
+
+	"github.com/hjma29/ovcli/cmd"
+)
 
 func main() {
+
+	//pflag.Parse()
+	//if commandflag -d is not set, then we should change default logger destination to discard
+	//fmt.Println(cmd.Debugmode)
+	if !cmd.Debugmode {
+		log.SetOutput(ioutil.Discard)
+	}
 	cmd.Execute()
 }
 

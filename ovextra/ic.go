@@ -2,7 +2,6 @@ package ovextra
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -278,10 +277,10 @@ func GetICPort() ICMap {
 	return icMap
 }
 
-//func (c *CLIOVClient) GetICMapNameRest() ICMap {
+//ICGetURI call GetURI func to pull IC collection
 func ICGetURI(x chan ICMap, key string) {
 
-	fmt.Println("Rest Get IC")
+	log.Println("Rest Get IC")
 
 	defer timeTrack(time.Now(), "Rest Get IC")
 
@@ -290,7 +289,7 @@ func ICGetURI(x chan ICMap, key string) {
 	icMap := ICMap{}
 	pages := make([]ICCol, 5) //create 5, feel enough for next pages
 
-	for i, uri := 0, ICRestURL; uri != ""; i++ {
+	for i, uri := 0, ICURL; uri != ""; i++ {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
@@ -335,7 +334,6 @@ func GetSFP() ICSFPMap {
 
 	go SFPGetURI(icSFPMapC, icMap)
 	icSFPMap := <-icSFPMapC
-	fmt.Println("Get sfpmap chann")
 
 	return icSFPMap
 
@@ -343,7 +341,7 @@ func GetSFP() ICSFPMap {
 
 func SFPGetURI(x chan ICSFPMap, icMap ICMap) {
 
-	fmt.Println("Rest Get SFP")
+	log.Println("Rest Get SFP")
 	defer timeTrack(time.Now(), "Rest Get SFP")
 
 	//initialization for icSFPMap is important, outer map is done by make, inside struct is done individually inside each IC loop, inner map didn't need to do it as it's copied from generated map, didn't do individual component access
@@ -367,7 +365,7 @@ func SFPGetURI(x chan ICSFPMap, icMap ICMap) {
 
 			icID := strings.Replace(icMap[k].URI, "/rest/interconnects/", "", -1)
 
-			data, err := c.GetURI("", "", SFPRestURL+icID)
+			data, err := c.GetURI("", "", SFPURL+icID)
 			//fmt.Println(SFPRestURL + icID)
 
 			if err != nil {
