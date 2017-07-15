@@ -45,7 +45,7 @@ type UplinkSet struct {
 	ETag                           string           `json:"eTag"`
 	Created                        string           `json:"created"`
 	URI                            string           `json:"uri"`
-	LIURI                          string           //manually add to be get LI name from LogicalInterconnectURI
+	LIName                         string           //manually add to be get LI name from LogicalInterconnectURI
 }
 
 type PortConfigInfo struct {
@@ -98,9 +98,11 @@ func GetUplinkSet() LIUplinkSetMap {
 		}
 	}
 
-	//Save LIG value to LI entrie field, LIGName is manually added in JSON struct. use LI's LIG URI as index to find among LIG Map
-	for k := range liMap {
-		liMap[k].LIGName = uplinkSetMap[liMap[k].LogicalInterconnectGroupURI].Name
+	for k := range uplinkSetMap {
+		//left side is the new field LI name in uplinkset struct, right side is to use uplinkset's LI URI as index to find LI's name using LI Map
+
+		uplinkSetMap[k].LIName = liMap[uplinkSetMap[k].LogicalInterconnectURI].Name
+
 	}
 
 	var liUplinkSetMap LIUplinkSetMap
