@@ -286,10 +286,9 @@ func ICGetURI(x chan ICMap, key string) {
 
 	c := NewCLIOVClient()
 
-	icMap := ICMap{}
-	pages := make([]ICCol, 5) //create 5, feel enough for next pages
+	icMap := make(ICMap)
 
-	for i, uri := 0, ICURL; uri != ""; i++ {
+	for uri := ICURL; uri != ""; {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
@@ -297,23 +296,23 @@ func ICGetURI(x chan ICMap, key string) {
 			log.Fatal(err)
 		}
 
-		err = json.Unmarshal(data, &pages[i])
+		var page ICCol
 
-		if err != nil {
+		if err := json.Unmarshal(data, &page); err != nil {
 			log.Fatal(err)
 		}
 
-		for k := range pages[i].Members {
+		for k := range page.Members {
 			switch key {
 			case "Name":
-				icMap[pages[i].Members[k].Name] = &pages[i].Members[k]
+				icMap[page.Members[k].Name] = &page.Members[k]
 			case "URI":
-				icMap[pages[i].Members[k].URI] = &pages[i].Members[k]
+				icMap[page.Members[k].URI] = &page.Members[k]
 			}
 
 		}
 
-		uri = pages[i].NextPageURI
+		uri = page.NextPageURI
 	}
 
 	x <- icMap

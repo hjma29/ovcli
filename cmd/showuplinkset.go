@@ -45,7 +45,7 @@ const (
 		"Name\tConsistency\tStacking\tLIG\n" +
 		//"----\t-----\n" +
 		"{{range .}}" +
-		"{{.Name}}\t{{.ConsistencyStatus}}\t{{.StackingHealth}}\t{{.LIGName}}\n" +
+		"{{.Name}}\t{{.Name}}\t{{.Name}}\t{{.Name}}\n" +
 		"{{end}}"
 )
 

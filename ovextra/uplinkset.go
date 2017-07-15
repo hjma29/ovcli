@@ -86,7 +86,7 @@ func GetUplinkSet() LIUplinkSetMap {
 	liMapC := make(chan LIMap)
 
 	go UplinkSetGetURI(uplinkSetMapC, "Name")
-	go LIGetURI(liMapC, "Name")
+	go LIGetURI(liMapC, "URI")
 
 	var liMap LIMap
 	var uplinkSetMap UplinkSetMap
@@ -120,32 +120,31 @@ func UplinkSetGetURI(x chan UplinkSetMap, key string) {
 
 	c := NewCLIOVClient()
 
-	uplinkSetMap := UplinkSetMap{}
-	pages := make([]UplinkSetCol, 5)
+	uplinkSetMap := make(UplinkSetMap)
+	var page UplinkSetCol
 
-	for i, uri := 0, UplinkSetURL; uri != ""; i++ {
+	for uri := UplinkSetURL; uri != ""; {
 
 		data, err := c.GetURI("", "", uri)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		err = json.Unmarshal(data, &pages[i])
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		for k := range pages[i].Members {
+		if err := json.Unmarshal(data, &page); err != nil {
+			log.Fatal(err)
+		}
+
+		for k := range page.Members {
 			switch key {
 			case "Name":
-				uplinkSetMap[pages[i].Members[k].Name] = &pages[i].Members[k]
+				uplinkSetMap[page.Members[k].Name] = &page.Members[k]
 			case "URI":
-				uplinkSetMap[pages[i].Members[k].URI] = &pages[i].Members[k]
+				uplinkSetMap[page.Members[k].URI] = &page.Members[k]
 			}
 		}
 
-		uri = pages[i].NextPageURI
+		uri = page.NextPageURI
 	}
 
 	x <- uplinkSetMap
