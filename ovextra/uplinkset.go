@@ -82,11 +82,11 @@ const (
 //GetUplinkSet is to retrive uplinkset information
 func GetUplinkSet() LIUplinkSetMap {
 
-	uplinkSetMapC := make(chan UplinkSetMap)
-	liMapC := make(chan LIMap)
+	uplinkSetListC := make(chan []uplinkSetList)
+	liListC := make(chan []LI)
 
-	go UplinkSetGetURI(uplinkSetMapC, "Name")
-	go LIGetURI(liMapC, "URI")
+	go UplinkSetGetURI(uplinkSetListC)
+	go LIGetURI(liMapC)
 
 	var liMap LIMap
 	var uplinkSetMap UplinkSetMap
@@ -112,18 +112,18 @@ func GetUplinkSet() LIUplinkSetMap {
 }
 
 //UplinkSetGetURI is the function to get raw structs from all json next pages
-func UplinkSetGetURI(x chan UplinkSetMap, key string) {
+func UplinkSetGetURI(x chan []UplinkSet) {
 
-	log.Println("Rest Get UplinkSet Collection")
+	log.Println("Fetch UplinkSet")
 
-	defer timeTrack(time.Now(), "Rest Get UplinkSet Collection")
+	defer timeTrack(time.Now(), "Fetch UplinkSet")
 
 	c := NewCLIOVClient()
 
-	uplinkSetMap := make(UplinkSetMap)
-	var page UplinkSetCol
+	var list []UplinkSet
+	uri := UplinkSetURL
 
-	for uri := UplinkSetURL; uri != ""; {
+	for uri != "" {
 
 		data, err := c.GetURI("", "", uri)
 
@@ -131,22 +131,88 @@ func UplinkSetGetURI(x chan UplinkSetMap, key string) {
 			log.Fatal(err)
 		}
 
+		var page UplinkSetCol
 		if err := json.Unmarshal(data, &page); err != nil {
 			log.Fatal(err)
 		}
 
-		for k := range page.Members {
-			switch key {
-			case "Name":
-				uplinkSetMap[page.Members[k].Name] = &page.Members[k]
-			case "URI":
-				uplinkSetMap[page.Members[k].URI] = &page.Members[k]
-			}
-		}
+		list = append(list, page.Members...)
 
 		uri = page.NextPageURI
 	}
 
-	x <- uplinkSetMap
+	x <- list
 
 }
+
+// //GetUplinkSet is to retrive uplinkset information
+// func GetUplinkSet() LIUplinkSetMap {
+
+// 	uplinkSetMapC := make(chan UplinkSetMap)
+// 	liMapC := make(chan LIMap)
+
+// 	go UplinkSetGetURI(uplinkSetMapC, "Name")
+// 	go LIGetURI(liMapC, "URI")
+
+// 	var liMap LIMap
+// 	var uplinkSetMap UplinkSetMap
+
+// 	for i := 0; i < 2; i++ {
+// 		select {
+// 		case uplinkSetMap = <-uplinkSetMapC:
+// 		case liMap = <-liMapC:
+// 		}
+// 	}
+
+// 	for k := range uplinkSetMap {
+// 		//left side is the new field LI name in uplinkset struct, right side is to use uplinkset's LI URI as index to find LI's name using LI Map
+
+// 		uplinkSetMap[k].LIName = liMap[uplinkSetMap[k].LogicalInterconnectURI].Name
+
+// 	}
+
+// 	var liUplinkSetMap LIUplinkSetMap
+
+// 	return liUplinkSetMap
+
+// }
+
+// //UplinkSetGetURI is the function to get raw structs from all json next pages
+// func UplinkSetGetURI(x chan UplinkSetMap, key string) {
+
+// 	log.Println("Rest Get UplinkSet Collection")
+
+// 	defer timeTrack(time.Now(), "Rest Get UplinkSet Collection")
+
+// 	c := NewCLIOVClient()
+
+// 	uplinkSetMap := make(UplinkSetMap)
+// 	var page UplinkSetCol
+
+// 	for uri := UplinkSetURL; uri != ""; {
+
+// 		data, err := c.GetURI("", "", uri)
+
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+
+// 		if err := json.Unmarshal(data, &page); err != nil {
+// 			log.Fatal(err)
+// 		}
+
+// 		for k := range page.Members {
+// 			switch key {
+// 			case "Name":
+// 				uplinkSetMap[page.Members[k].Name] = &page.Members[k]
+// 			case "URI":
+// 				uplinkSetMap[page.Members[k].URI] = &page.Members[k]
+// 			}
+// 		}
+
+// 		uri = page.NextPageURI
+// 	}
+
+// 	x <- uplinkSetMap
+
+// }

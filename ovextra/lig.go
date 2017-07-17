@@ -277,3 +277,47 @@ func LIGGetURI(x chan LIGMap, attri string) {
 
 	//return ligMap
 }
+
+// //LIGGetURI to get mapping between LIG URI/name to LIG struct
+// func LIGGetURI(x chan LIGMap, attri string) {
+
+// 	log.Println("Rest Get LIG")
+
+// 	defer timeTrack(time.Now(), "Rest Get LIG")
+
+// 	c := NewCLIOVClient()
+
+// 	ligMap := make(LIGMap)
+// 	pages := make([]LIGCol, 5) //create 5, feel enough for next pages
+
+// 	for i, uri := 0, LIGURL; uri != ""; i++ {
+
+// 		data, err := c.GetURI("", "", uri)
+// 		if err != nil {
+
+// 			log.Fatal(err)
+// 		}
+
+// 		err = json.Unmarshal(data, &pages[i])
+
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+
+// 		for k := range pages[i].Members {
+// 			switch attri {
+// 			case "Name":
+// 				ligMap[pages[i].Members[k].Name] = &pages[i].Members[k]
+// 			case "URI":
+// 				ligMap[pages[i].Members[k].URI] = &pages[i].Members[k]
+// 			}
+
+// 		}
+// 		//assign each Rest response page to a unique collection inside the collection slice
+// 		uri = pages[i].NextPageURI
+// 	}
+
+// 	x <- ligMap
+
+// 	//return ligMap
+// }
