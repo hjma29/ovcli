@@ -42,21 +42,21 @@ to quickly create a Cobra application.`,
 
 const (
 	uplinkSetShowFormat = "" +
-		"Name\tConsistency\tStacking\tLIG\n" +
+		"Name\tLIMap\n" +
 		//"----\t-----\n" +
 		"{{range .}}" +
-		"{{.Name}}\t{{.Name}}\t{{.Name}}\t{{.Name}}\n" +
+		"{{.Name}}\t{{.LIName}}\n" +
 		"{{end}}"
 )
 
 func showUplinkSet(cmd *cobra.Command, args []string) {
-	liUplinksetMap := ovextra.GetUplinkSet()
+	usList := ovextra.GetUplinkSet()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
 	t := template.Must(template.New("").Parse(uplinkSetShowFormat))
-	t.Execute(tw, liUplinksetMap)
+	t.Execute(tw, usList)
 
 }
 

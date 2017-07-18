@@ -2,7 +2,9 @@ package ovextra
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"os"
 	"time"
 )
 
@@ -172,35 +174,35 @@ type LI struct {
 //GetLI is the function called from ovcli cmd package to get information on "show li", it in turn calls RestGet
 func GetLI() LIMap {
 
-	liMapC := make(chan LIMap)
-	go LIGetURI(liMapC, "Name")
-	//liMap := <-liMapC
+	// liMapC := make(chan LIMap)
+	// go LIGetURI(liMapC, "Name")
+	// //liMap := <-liMapC
 
-	ligMapC := make(chan LIGMap)
-	go LIGGetURI(ligMapC, "URI")
-	//ligMap := <-ligMapC
+	// ligMapC := make(chan LIGMap)
+	// go LIGGetURI(ligMapC, "URI")
+	// //ligMap := <-ligMapC
 
 	var liMap LIMap
-	var ligMap LIGMap
+	// var ligMap LIGMap
 
-	for i := 0; i < 2; i++ {
-		select {
-		case ligMap = <-ligMapC:
-		case liMap = <-liMapC:
-		}
-	}
+	// for i := 0; i < 2; i++ {
+	// 	select {
+	// 	case ligMap = <-ligMapC:
+	// 	case liMap = <-liMapC:
+	// 	}
+	// }
 
-	//Save LIG value to LI entrie field, LIGName is manually added in JSON struct. use LI's LIG URI as index to find among LIG Map
-	for k := range liMap {
-		liMap[k].LIGName = ligMap[liMap[k].LogicalInterconnectGroupURI].Name
-	}
+	// //Save LIG value to LI entrie field, LIGName is manually added in JSON struct. use LI's LIG URI as index to find among LIG Map
+	// for k := range liMap {
+	// 	liMap[k].LIGName = ligMap[liMap[k].LogicalInterconnectGroupURI].Name
+	// }
 
 	return liMap
 
 }
 
 //LIGetURI is the function to get raw structs from all json next pages
-func LIGetURI(x chan LIMap, key string) {
+func LIGetURI(x chan []LI) {
 
 	log.Println("Rest Get LI")
 
@@ -208,35 +210,28 @@ func LIGetURI(x chan LIMap, key string) {
 
 	c := NewCLIOVClient()
 
-	liMap := LIMap{}
-	pages := make([]LICol, 5)
+	var list []LI
 
 	for i, uri := 0, LIURL; uri != ""; i++ {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
-		err = json.Unmarshal(data, &pages[i])
+		var page LICol
 
-		if err != nil {
-			log.Fatal(err)
+		if err := json.Unmarshal(data, &page); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
-		for k := range pages[i].Members {
-			switch key {
-			case "Name":
-				liMap[pages[i].Members[k].Name] = &pages[i].Members[k]
-			case "URI":
-				liMap[pages[i].Members[k].URI] = &pages[i].Members[k]
-			}
-		}
+		list = append(list, page.Members...)
 
-		uri = pages[i].NextPageURI
+		uri = page.NextPageURI
 	}
 
-	//
-	x <- liMap
+	x <- list
 
 }

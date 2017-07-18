@@ -25,11 +25,11 @@ import (
 )
 
 const (
-	interconnectShowFormat = "" +
+	icShowFormat = "" +
 		"Name\tModel\tLogical Interconnect\n" +
 		//"----\t-----\n" +
 		"{{range .}}" +
-		"{{.Name}}\t{{.ProductName}}\t{{.LogicalInterconnectName}}\n" +
+		"{{.Name}}\t{{.ProductName}}\t{{.LIName}}\n" +
 		"{{end}}"
 
 	//portshowFormat will loop map["IC name"]*{IC struct{[]sliceof{port struct} }}
@@ -117,13 +117,13 @@ to quickly create a Cobra application.`,
 
 func showIC(cmd *cobra.Command, args []string) {
 
-	icMap := ovextra.GetIC()
+	icList := ovextra.GetIC()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
-	t := template.Must(template.New("").Parse(interconnectShowFormat))
-	t.Execute(tw, icMap)
+	t := template.Must(template.New("").Parse(icShowFormat))
+	t.Execute(tw, icList)
 
 }
 

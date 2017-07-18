@@ -2,7 +2,10 @@ package ovextra
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"os"
+	"sort"
 	"time"
 )
 
@@ -80,34 +83,35 @@ const (
 )
 
 //GetUplinkSet is to retrive uplinkset information
-func GetUplinkSet() LIUplinkSetMap {
+func GetUplinkSet() []UplinkSet {
 
-	uplinkSetListC := make(chan []uplinkSetList)
+	usListC := make(chan []UplinkSet)
 	liListC := make(chan []LI)
 
-	go UplinkSetGetURI(uplinkSetListC)
-	go LIGetURI(liMapC)
+	go UplinkSetGetURI(usListC)
+	go LIGetURI(liListC)
 
-	var liMap LIMap
-	var uplinkSetMap UplinkSetMap
+	var usList []UplinkSet
+	var liList []LI
 
 	for i := 0; i < 2; i++ {
 		select {
-		case uplinkSetMap = <-uplinkSetMapC:
-		case liMap = <-liMapC:
+		case usList = <-usListC:
+		case liList = <-liListC:
 		}
 	}
 
-	for k := range uplinkSetMap {
-		//left side is the new field LI name in uplinkset struct, right side is to use uplinkset's LI URI as index to find LI's name using LI Map
+	liMap := make(map[string]LI)
 
-		uplinkSetMap[k].LIName = liMap[uplinkSetMap[k].LogicalInterconnectURI].Name
-
+	for _, v := range liList {
+		liMap[v.URI] = v
 	}
 
-	var liUplinkSetMap LIUplinkSetMap
+	for i, v := range usList {
+		usList[i].LIName = liMap[v.LogicalInterconnectURI].Name
+	}
 
-	return liUplinkSetMap
+	return usList
 
 }
 
@@ -128,18 +132,22 @@ func UplinkSetGetURI(x chan []UplinkSet) {
 		data, err := c.GetURI("", "", uri)
 
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		var page UplinkSetCol
 		if err := json.Unmarshal(data, &page); err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		list = append(list, page.Members...)
 
 		uri = page.NextPageURI
 	}
+
+	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
 	x <- list
 

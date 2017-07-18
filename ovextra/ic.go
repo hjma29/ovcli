@@ -2,7 +2,10 @@ package ovextra
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"os"
+	"sort"
 	"strings"
 	"time"
 )
@@ -133,7 +136,7 @@ type IC struct {
 	Modified                      time.Time     `json:"modified"`
 	Category                      string        `json:"category"`
 	URI                           string        `json:"uri"`
-	LogicalInterconnectName       string
+	LIName                        string
 }
 
 type Port struct {
@@ -226,59 +229,66 @@ type SFP struct {
 // 	return icMapbyName
 // }
 
-func GetIC() ICMap {
+func GetIC() []IC {
 
-	icMapC := make(chan ICMap)
-	liMapC := make(chan LIMap)
+	icListC := make(chan []IC)
+	liListC := make(chan []LI)
 
-	go ICGetURI(icMapC, "Name")
-	go LIGetURI(liMapC, "URI")
+	go ICGetURI(icListC)
+	go LIGetURI(liListC)
 
-	var icMap ICMap
-	var liMap LIMap
+	var icList []IC
+	var liList []LI
 
 	for i := 0; i < 2; i++ {
 		select {
-		case icMap = <-icMapC:
-			//fmt.Println("received icMap")
-		case liMap = <-liMapC:
-			//fmt.Println("received liMap")
+		case icList = <-icListC:
+			//fmt.Println("received icList")
+		case liList = <-liListC:
+			//fmt.Println("received liList")
 		}
 	}
 
-	for k := range icMap {
-		icMap[k].LogicalInterconnectName = liMap[icMap[k].LogicalInterconnectURI].Name
+	liMap := make(map[string]LI)
+
+	for _, v := range liList {
+		liMap[v.URI] = v
 	}
 
-	return icMap
+	for i, v := range icList {
+		icList[i].LIName = liMap[v.LogicalInterconnectURI].Name
+	}
+
+	return icList
 }
 
 func GetICPort() ICMap {
 
-	icMapC := make(chan ICMap)
-	icSFPMapC := make(chan ICSFPMap)
+	// icMapC := make(chan ICMap)
+	// icSFPMapC := make(chan ICSFPMap)
 
-	go ICGetURI(icMapC, "Name")
-	icMap := <-icMapC
+	// go ICGetURI(icMapC, "Name")
+	// icMap := <-icMapC
 
-	go SFPGetURI(icSFPMapC, icMap)
-	icSFPMap := <-icSFPMapC
+	// go SFPGetURI(icSFPMapC, icMap)
+	// icSFPMap := <-icSFPMapC
 
-	//switch porttype
-	for k1 := range icMap {
-		for k2, v := range icMap[k1].Ports {
+	// //switch porttype
+	// for k1 := range icMap {
+	// 	for k2, v := range icMap[k1].Ports {
 
-			if value, exists := (*(*icSFPMap[k1]).SFPMapping)[v.Name]; exists {
-				icMap[k1].Ports[k2].TransceiverPN = (*value).VendorPartNumber
-			}
-		}
-	}
+	// 		if value, exists := (*(*icSFPMap[k1]).SFPMapping)[v.Name]; exists {
+	// 			icMap[k1].Ports[k2].TransceiverPN = (*value).VendorPartNumber
+	// 		}
+	// 	}
+	// }
 
+	var icMap ICMap
 	return icMap
 }
 
 //ICGetURI call GetURI func to pull IC collection
-func ICGetURI(x chan ICMap, key string) {
+func ICGetURI(x chan []IC) {
 
 	log.Println("Rest Get IC")
 
@@ -286,54 +296,52 @@ func ICGetURI(x chan ICMap, key string) {
 
 	c := NewCLIOVClient()
 
-	icMap := make(ICMap)
+	var list []IC
+	uri := ICURL
 
-	for uri := ICURL; uri != ""; {
+	for uri != "" {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
 
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		var page ICCol
 
 		if err := json.Unmarshal(data, &page); err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
-		for k := range page.Members {
-			switch key {
-			case "Name":
-				icMap[page.Members[k].Name] = &page.Members[k]
-			case "URI":
-				icMap[page.Members[k].URI] = &page.Members[k]
-			}
-
-		}
+		list = append(list, page.Members...)
 
 		uri = page.NextPageURI
 	}
 
-	x <- icMap
+	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+
+	x <- list
 
 	//return icMap
 }
 
 func GetSFP() ICSFPMap {
 
-	icSFPMapC := make(chan ICSFPMap)
-	icMapC := make(chan ICMap)
+	// icSFPMapC := make(chan ICSFPMap)
+	// icMapC := make(chan ICMap)
 
-	go ICGetURI(icMapC, "Name")
-	icMap := <-icMapC
+	// go ICGetURI(icMapC, "Name")
+	// icMap := <-icMapC
 
-	// for k := range icMap {
-	// 	go SFPGetURI(x, icMap)
+	// // for k := range icMap {
+	// // 	go SFPGetURI(x, icMap)
 
-	go SFPGetURI(icSFPMapC, icMap)
-	icSFPMap := <-icSFPMapC
+	// go SFPGetURI(icSFPMapC, icMap)
+	// icSFPMap := <-icSFPMapC
 
+	var icSFPMap ICSFPMap
 	return icSFPMap
 
 }
