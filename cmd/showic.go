@@ -24,61 +24,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	icShowFormat = "" +
-		"Name\tModel\tLogical Interconnect\n" +
-		//"----\t-----\n" +
-		"{{range .}}" +
-		"{{.Name}}\t{{.ProductName}}\t{{.LIName}}\n" +
-		"{{end}}"
-
-	//portshowFormat will loop map["IC name"]*{IC struct{[]sliceof{port struct} }}
-	portShowFormat = "" +
-		"{{range .}}" +
-		"-------------\n" +
-		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
-		"-------------\n" +
-		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
-		"{{range .Ports}}" +
-		//"{{if eq .PortType porttype}}" +
-		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
-		//"{{end}}" +
-		"{{end}}" +
-		"\n" +
-		"{{end}}"
-
-	//sfpShowFormat is to display icsfpMap, which  is mapping between each module and its own port mapping table, such as map["module 1, top frame"]*map[d1]struct{for d1}
-	sfpShowFormat = "" +
-		"{{range $key, $element := .}}" +
-		"-------------\n" +
-		"Interconnect: {{$key}} ({{.ModuleName}})\n" +
-		"-------------\n" +
-		"PortName\tVendorName\tVendorPartNumber\tVendorRevision\tSpeed\n" +
-		"{{range $element.SFPMapping}}" +
-		"{{.PortName}}\t{{.VendorName}}\t{{.VendorPartNumber}}\t{{.VendorRevision}}\t{{.Speed}}\n" +
-		//"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\n" +
-		"{{end}}" +
-		"\n" +
-		"{{end}}"
-
-	uplinkShowFormat = "" +
-		"{{range .}}" +
-		"{{if ne .ProductName \"Synergy 20Gb Interconnect Link Module\" }}" +
-		"-------------\n" +
-		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
-		"-------------\n" +
-		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
-		"{{range .Ports}}" +
-		"{{if or (eq .PortType \"Uplink\") (eq .PortType \"Stacking\") }}" +
-		//"{{if eq .PortType Uplink }}" +
-		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
-		"{{end}}" +
-		"{{end}}" +
-		"\n" +
-		"{{end}}" +
-		"{{end}}"
-)
-
 var showICCmd = &cobra.Command{
 	Use:   "interconnect",
 	Short: "A brief description of your command",
@@ -115,6 +60,61 @@ to quickly create a Cobra application.`,
 	Run: showSFP,
 }
 
+const (
+	icShowFormat = "" +
+		"Name\tModel\tLogical Interconnect\n" +
+		//"----\t-----\n" +
+		"{{range .}}" +
+		"{{.Name}}\t{{.ProductName}}\t{{.LIName}}\n" +
+		"{{end}}"
+
+	//portshowFormat will loop map["IC name"]*{IC struct{[]sliceof{port struct} }}
+	portShowFormat = "" +
+		"{{range .}}" +
+		"-------------\n" +
+		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
+		"-------------\n" +
+		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\n" +
+		"{{range .Ports}}" +
+		//"{{if eq .PortType porttype}}" +
+		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\n" +
+		//"{{end}}" +
+		"{{end}}" +
+		"\n" +
+		"{{end}}"
+
+	//sfpShowFormat is to display icsfpMap, which  is mapping between each module and its own port mapping table, such as map["module 1, top frame"]*map[d1]struct{for d1}
+	sfpShowFormat = "" +
+		"{{range .}}" +
+		"-------------\n" +
+		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
+		"-------------\n" +
+		"PortName\tVendorName\tVendorPartNumber\tVendorRevision\tSpeed\n" +
+		"{{range .SFPList}}" +
+		"{{.PortName}}\t{{.VendorName}}\t{{.VendorPartNumber}}\t{{.VendorRevision}}\t{{.Speed}}\n" +
+		//"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\n" +
+		"{{end}}" +
+		"\n" +
+		"{{end}}"
+
+	uplinkShowFormat = "" +
+		"{{range .}}" +
+		"{{if ne .ProductName \"Synergy 20Gb Interconnect Link Module\" }}" +
+		"-------------\n" +
+		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
+		"-------------\n" +
+		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
+		"{{range .Ports}}" +
+		"{{if or (eq .PortType \"Uplink\") (eq .PortType \"Stacking\") }}" +
+		//"{{if eq .PortType Uplink }}" +
+		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
+		"{{end}}" +
+		"{{end}}" +
+		"\n" +
+		"{{end}}" +
+		"{{end}}"
+)
+
 func showIC(cmd *cobra.Command, args []string) {
 
 	icList := ovextra.GetIC()
@@ -142,8 +142,8 @@ func showICPort(cmd *cobra.Command, args []string) {
 	case "downlink":
 	case "interconnect":
 	case "all":
-		icPortMap := ovextra.GetICPort()
-		showdata = icPortMap
+		icList := ovextra.GetICPort()
+		showdata = icList
 		showformat = portShowFormat
 	default:
 		fmt.Println("invalid port type option")
@@ -164,7 +164,7 @@ func showICPort(cmd *cobra.Command, args []string) {
 //func filterPort()
 
 func showSFP(cmd *cobra.Command, args []string) {
-	icSFPMap := ovextra.GetSFP()
+	icList := ovextra.GetSFP()
 
 	//fmt.Println(modTransMap)
 
@@ -172,7 +172,7 @@ func showSFP(cmd *cobra.Command, args []string) {
 	defer tw.Flush()
 
 	t := template.Must(template.New("").Parse(sfpShowFormat))
-	t.Execute(tw, icSFPMap)
+	t.Execute(tw, icList)
 
 }
 

@@ -137,6 +137,7 @@ type IC struct {
 	Category                      string        `json:"category"`
 	URI                           string        `json:"uri"`
 	LIName                        string
+	SFPList                       []SFP
 }
 
 type Port struct {
@@ -262,29 +263,21 @@ func GetIC() []IC {
 	return icList
 }
 
-func GetICPort() ICMap {
+func GetICPort() []IC {
 
-	// icMapC := make(chan ICMap)
-	// icSFPMapC := make(chan ICSFPMap)
+	icListC := make(chan []IC)
+	//icSFPMapC := make(chan ICSFPMap)
 
-	// go ICGetURI(icMapC, "Name")
-	// icMap := <-icMapC
+	go ICGetURI(icListC)
+	icList := <-icListC
 
-	// go SFPGetURI(icSFPMapC, icMap)
-	// icSFPMap := <-icSFPMapC
+	//returned port list is in ascending order so no need to sort manually
 
-	// //switch porttype
-	// for k1 := range icMap {
-	// 	for k2, v := range icMap[k1].Ports {
-
-	// 		if value, exists := (*(*icSFPMap[k1]).SFPMapping)[v.Name]; exists {
-	// 			icMap[k1].Ports[k2].TransceiverPN = (*value).VendorPartNumber
-	// 		}
-	// 	}
+	// for i := range icList {
+	// 	sort.Slice(icList[i].Ports, func(x, y int) bool { return icList[i].Ports[x].Name < icList[i].Ports[y].Name })
 	// }
 
-	var icMap ICMap
-	return icMap
+	return icList
 }
 
 //ICGetURI call GetURI func to pull IC collection
@@ -324,100 +317,54 @@ func ICGetURI(x chan []IC) {
 
 	x <- list
 
-	//return icMap
 }
 
-func GetSFP() ICSFPMap {
+func GetSFP() []IC {
 
-	// icSFPMapC := make(chan ICSFPMap)
-	// icMapC := make(chan ICMap)
+	icListC := make(chan []IC)
 
-	// go ICGetURI(icMapC, "Name")
-	// icMap := <-icMapC
+	go ICGetURI(icListC)
+	icList := <-icListC
 
-	// // for k := range icMap {
-	// // 	go SFPGetURI(x, icMap)
+	done := make(chan bool, len(icList))
+	for i := range icList {
+		go SFPGetURI(&icList[i], done)
+	}
 
-	// go SFPGetURI(icSFPMapC, icMap)
-	// icSFPMap := <-icSFPMapC
+	for i := 0; i < len(icList); i++ {
+		<-done
+	}
 
-	var icSFPMap ICSFPMap
-	return icSFPMap
+	return icList
 
 }
 
-func SFPGetURI(x chan ICSFPMap, icMap ICMap) {
+func SFPGetURI(ic *IC, done chan bool) {
 
-	log.Println("Rest Get SFP")
+	log.Println("Rest Get SFP", ic.Name)
 	defer timeTrack(time.Now(), "Rest Get SFP")
 
-	//initialization for icSFPMap is important, outer map is done by make, inside struct is done individually inside each IC loop, inner map didn't need to do it as it's copied from generated map, didn't do individual component access
-	icSFPMap := make(ICSFPMap)
-	sfpMapC := make(chan SFPMap)
-	kC := make(chan string)
+	icID := strings.Replace(ic.URI, "/rest/interconnects/", "", -1)
 
 	c := NewCLIOVClient()
 
-	for k := range icMap {
+	data, err := c.GetURI("", "", SFPURL+icID)
 
-		//intentially shadow "k" so different goroutines can use different k value
-		k := k
-
-		go func() {
-			sfpMap := SFPMap{}
-
-			//this sfpCol make is different than make(ICCOl, 5) which is to create 5 pages assuming high enough to hold next pages
-			//this sfpCol is to make a slice init 0 and let unmarshall func to append and grow slice as appropriate
-			sfpCol := make(SFPList, 0)
-
-			icID := strings.Replace(icMap[k].URI, "/rest/interconnects/", "", -1)
-
-			data, err := c.GetURI("", "", SFPURL+icID)
-			//fmt.Println(SFPRestURL + icID)
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			err = json.Unmarshal(data, &sfpCol)
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			for i := range sfpCol {
-				sfpMap[sfpCol[i].PortName] = &sfpCol[i]
-			}
-
-			sfpMapC <- sfpMap
-			kC <- k
-
-			//fmt.Println("done collecting SFP for module", k)
-
-			//icSFPMap[k] = &sfpMap
-
-		}()
-
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	for i := 0; i < len(icMap); i++ {
-
-		//make sure k is below sfpMap to receive value, otherwise it's deadlock.
-		sfpMap := <-sfpMapC
-		k := <-kC
-
-		//fmt.Println("done receiving SFP for module", k)
-
-		//need to initiatize struct inside outmap to get pointer, otherwise program panic when trying to assign value below
-		icSFPMap[k] = new(ICSFPStruct)
-
-		icSFPMap[k].ModuleName = icMap[k].ProductName
-		icSFPMap[k].SFPMapping = &sfpMap
-
-		// fmt.Println(sfpMap)
-		// fmt.Println("---------")
+	var list []SFP
+	if err := json.Unmarshal(data, &list); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	x <- icSFPMap
+	sort.Slice(list, func(i, j int) bool { return list[i].PortName < list[j].PortName })
+
+	(*ic).SFPList = list
+
+	done <- true
 
 }
