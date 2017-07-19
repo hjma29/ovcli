@@ -49,6 +49,7 @@ const (
 	UplinkSetURL = "/rest/uplink-sets"
 	ICURL        = "/rest/interconnects"
 	SFPURL       = "/rest/interconnects/pluggableModuleInformation/"
+	ICTypeURL    = "/rest/interconnect-types"
 )
 
 type OVCol interface {

@@ -2,7 +2,10 @@ package ovextra
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"os"
+	"sort"
 	"time"
 )
 
@@ -32,6 +35,17 @@ type LIG struct {
 	URI                     string                   `json:"uri,omitempty"`                    // "uri": "/rest/logical-interconnect-groups/e2f0031b-52bd-4223-9ac1-d91cb519d548",
 }
 
+type InterconnectMapTemplate struct {
+	InterconnectMapEntryTemplates []InterconnectMapEntryTemplate `json:"interconnectMapEntryTemplates"` // "interconnectMapEntryTemplates": {...},
+}
+
+type InterconnectMapEntryTemplate struct {
+	EnclosureIndex               int             `json:"enclosureIndex,omitempty"`               // "enclosureIndex": 1,
+	LogicalDownlinkUri           string          `json:"logicalDownlinkUri,omitempty"`           // "logicalDownlinkUri": "/rest/logical-downlinks/5b33fec1-63e8-40e1-9e3d-3af928917b2f",
+	LogicalLocation              LogicalLocation `json:"logicalLocation,omitempty"`              // "logicalLocation": {...},
+	PermittedInterconnectTypeUri string          `json:"permittedInterconnectTypeUri,omitempty"` //"permittedSwitchTypeUri": "/rest/switch-types/a2bc8f42-8bb8-4560-b80f-6c3c0e0d66e0",
+}
+
 type EthernetSettings struct {
 	Category                    string `json:"category,omitempty"`                    // "category": null,
 	Created                     string `json:"created,omitempty"`                     // "created": "20150831T154835.250Z",
@@ -53,26 +67,6 @@ type EthernetSettings struct {
 	Status                      string `json:"status,omitempty"`                      // "status": "Critical",
 	Type                        string `json:"type,omitempty"`                        // "EthernetInterconnectSettingsV3",
 	URI                         string `json:"uri,omitempty"`                         // "uri": "/rest/logical-interconnect-groups/b7b144e9-1f5e-4d52-8534-2e39280f9e86/ethernetSettings"
-}
-
-type InterconnectMapTemplate struct {
-	InterconnectMapEntryTemplates []InterconnectMapEntryTemplate `json:"interconnectMapEntryTemplates"` // "interconnectMapEntryTemplates": {...},
-}
-
-type InterconnectMapEntryTemplate struct {
-	EnclosureIndex               int             `json:"enclosureIndex,omitempty"`               // "enclosureIndex": 1,
-	LogicalDownlinkUri           string          `json:"logicalDownlinkUri,omitempty"`           // "logicalDownlinkUri": "/rest/logical-downlinks/5b33fec1-63e8-40e1-9e3d-3af928917b2f",
-	LogicalLocation              LogicalLocation `json:"logicalLocation,omitempty"`              // "logicalLocation": {...},
-	PermittedInterconnectTypeUri string          `json:"permittedInterconnectTypeUri,omitempty"` //"permittedSwitchTypeUri": "/rest/switch-types/a2bc8f42-8bb8-4560-b80f-6c3c0e0d66e0",
-}
-
-type LogicalLocation struct {
-	LocationEntries []LocationEntry `json:"locationEntries,omitempty"` // "locationEntries": {...}
-}
-
-type LocationEntry struct {
-	RelativeValue int    `json:"relativeValue,omitempty"` //"relativeValue": 2,
-	Type          string `json:"type,omitempty"`          //"type": "StackingMemberId",
 }
 
 type QosConfiguration struct {
@@ -217,12 +211,40 @@ type LIGUplinkSet struct {
 	NetworkUris            []string                `json:"networkUris"`                   // "networkUris": ["/rest/ethernet-networks/f1e38895-721b-4204-8395-ae0caba5e163"]
 	PrimaryPort            *LogicalLocation        `json:"primaryPort,omitempty"`         // "primaryPort": {...},
 	Reachability           string                  `json:"reachability,omitempty"`        // "reachability": "Reachable",
+	PortPosition           map[int]map[int][]int   //get final port location from LogicalLocation fields, 3 dimentional slice to sort and print
+	IOBayList              []IOBay
+}
+
+type IOBay struct {
+	Enclosure   int
+	Bay         int
+	ModelName   string
+	ModelNumber string
 }
 
 type LogicalPortConfigInfo struct {
 	DesiredSpeed    string          `json:"desiredSpeed,omitempty"`    // "desiredSpeed": "Auto",
 	LogicalLocation LogicalLocation `json:"logicalLocation,omitempty"` // "logicalLocation": {...},
 }
+
+type LogicalLocation struct {
+	LocationEntries []LocationEntry `json:"locationEntries,omitempty"` // "locationEntries": {...}
+}
+
+type LocationEntry struct {
+	RelativeValue int    `json:"relativeValue,omitempty"` //"relativeValue": 2,
+	Type          string `json:"type,omitempty"`          //"type": "StackingMemberId",
+}
+
+// type ESP struct {
+// 	Enclosure int
+// 	SlotPorts []SlotPort
+// }
+
+// type SlotPort struct {
+// 	Slot  int
+// 	Ports []string
+// }
 
 type LIGCol struct {
 	Total       int    `json:"total,omitempty"`       // "total": 1,
@@ -234,8 +256,114 @@ type LIGCol struct {
 	Members     []LIG  `json:"members,omitempty"`     // "members":[]
 }
 
+func GetLIG() []LIG {
+
+	ligListC := make(chan []LIG)
+
+	go LIGGetURI(ligListC)
+	ligList := <-ligListC
+
+	return ligList
+
+}
+
+func GetLIGVerbose(s string) []LIG {
+
+	ligListC := make(chan []LIG)
+	ictypeListC := make(chan []ICType)
+
+	go LIGGetURI(ligListC)
+	go ICTypeGetURI(ictypeListC)
+
+	var ligList []LIG
+	var ictypeList []ICType
+
+	for i := 0; i < 2; i++ {
+		select {
+		case ligList = <-ligListC:
+			//fmt.Println("received ligList")
+		case ictypeList = <-ictypeListC:
+			//fmt.Println("received ictypeList")
+		}
+	}
+
+	//convert ICType list to ICType URI mapping to prepare lookup later
+	ictypeMap := make(map[string]ICType)
+	for _, v := range ictypeList {
+		ictypeMap[v.URI] = v
+	}
+
+	for i1 := range ligList {
+		for i2 := range ligList[i1].UplinkSets {
+			ligUs := &ligList[i1].UplinkSets[i2]
+
+			ligUs.getUplinkPort()
+		}
+
+		lig := &ligList[i1]
+		lig.getIOBay()
+
+	}
+
+	return ligList
+
+}
+
+func (ligUs *LIGUplinkSet) getUplinkPort() {
+
+	portmap := make(map[int]map[int][]int)
+
+	for _, v := range ligUs.LogicalPortConfigInfos {
+
+		var e, s, p int
+
+		for _, v := range v.LogicalLocation.LocationEntries {
+
+			switch v.Type {
+			case "Enclosure":
+				e = v.RelativeValue
+			case "Bay":
+				s = v.RelativeValue
+			case "Port":
+				p = v.RelativeValue
+			}
+
+		}
+
+		if _, ok := portmap[e][s]; !ok {
+			ms := make(map[int][]int)
+			portmap[e] = ms
+		}
+
+		portmap[e][s] = append(portmap[e][s], p)
+
+	}
+
+	ligUs.PortPosition = portmap
+}
+
+func (lig *LIG) getIOBay() {
+
+	for _, v := range lig.InterconnectMapTemplate.InterconnectMapEntryTemplates {
+
+		var e, s int
+
+		for _, v := range v.LogicalLocation.LocationEntries {
+			switch v.Type {
+			case "Enclosure":
+				e = v.RelativeValue
+			case "Bay":
+				s = v.RelativeValue
+			}
+
+		}
+
+	}
+
+}
+
 //LIGGetURI to get mapping between LIG URI/name to LIG struct
-func LIGGetURI(x chan LIGMap, attri string) {
+func LIGGetURI(x chan []LIG) {
 
 	log.Println("Rest Get LIG")
 
@@ -243,39 +371,34 @@ func LIGGetURI(x chan LIGMap, attri string) {
 
 	c := NewCLIOVClient()
 
-	ligMap := make(LIGMap)
-	pages := make([]LIGCol, 5) //create 5, feel enough for next pages
+	var list []LIG
+	uri := LIGURL
 
-	for i, uri := 0, LIGURL; uri != ""; i++ {
+	for uri != "" {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
 
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
-		err = json.Unmarshal(data, &pages[i])
+		var page LIGCol
 
-		if err != nil {
-			log.Fatal(err)
+		if err := json.Unmarshal(data, &page); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
-		for k := range pages[i].Members {
-			switch attri {
-			case "Name":
-				ligMap[pages[i].Members[k].Name] = &pages[i].Members[k]
-			case "URI":
-				ligMap[pages[i].Members[k].URI] = &pages[i].Members[k]
-			}
+		list = append(list, page.Members...)
 
-		}
-		//assign each Rest response page to a unique collection inside the collection slice
-		uri = pages[i].NextPageURI
+		uri = page.NextPageURI
 	}
 
-	x <- ligMap
+	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	//return ligMap
+	x <- list
+
 }
 
 // //LIGGetURI to get mapping between LIG URI/name to LIG struct

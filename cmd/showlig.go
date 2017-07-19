@@ -88,6 +88,62 @@ const (
 	//ioBayShowFormat = "{{ range . }}{{.Enclosure}}\t{{.IOBay}}\t{{.ModelName}}\t{{.ModelNumber}}\n{{ end }}	"
 )
 
+const (
+	ligShowFormat = "" +
+		"Name\tState\n" +
+		//"----\t-----\n" +
+		"{{range .}}" +
+		"{{.Name}}\t{{.State}}\n" +
+		"{{end}}"
+
+	ligShowFormatVerbose = "" +
+		//"Name\tState\n" +
+		//"----\t-----\n" +
+		"{{range .}}" +
+		//"{{.Name}}\t{{.State}}\n" +
+		"{{.Name}}\n" +
+		"{{range .UplinkSets}}" +
+		"  - UplinkSet: {{.Name}}\n" +
+		"    * UplinkPort:\n" +
+		"{{range $e, $smap := .PortPosition}}" + //range enclosure map
+		"{{range $s, $plist := $smap}}" + //range slot map
+		"        Enclosure: {{$e}}, Slot: {{$s}}, Port: " +
+		"{{range $plist}}" +
+		"{{.}} " +
+		"{{end}}\n" +
+		"{{end}}" +
+		"{{end}}" +
+		"{{end}}\n" +
+		"{{end}}"
+)
+
+func showLIG(cmd *cobra.Command, args []string) {
+
+	var ligList []ovextra.LIG
+	var showFormat string
+
+	if ligName != "" {
+		ligList = ovextra.GetLIGVerbose(ligName)
+		showFormat = ligShowFormatVerbose
+
+	} else {
+		ligList = ovextra.GetLIG()
+		showFormat = ligShowFormat
+
+	}
+
+	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	defer tw.Flush()
+
+	t := template.Must(template.New("").Parse(showFormat))
+	t.Execute(tw, ligList)
+
+	// logicalInterconnectGroupList, _ = ovextra.OVClient.GetLogicalInterconnectGroups("", "")
+	// interconnectTypeList, _ = ovextra.OVClient.GetInterconnectTypes("", "")
+
+	// PrintLIG(ovextra.OVClient, ligNamePtr)
+}
+
 func (x uplinkPortListType) multiSort(i, j int) bool {
 	switch {
 	case x[i].Enclosure < x[j].Enclosure:
@@ -108,19 +164,6 @@ func (x uplinkPortListType) multiSort(i, j int) bool {
 // 	elapsed := time.Since(start)
 // 	log.Printf("%s took %s", name, elapsed)
 // }
-
-func showLIG(cmd *cobra.Command, args []string) {
-
-	logicalInterconnectGroupList, _ = ovextra.OVClient.GetLogicalInterconnectGroups("", "")
-	interconnectTypeList, _ = ovextra.OVClient.GetInterconnectTypes("", "")
-
-	if *ligNamePtr == "" {
-		PrintAllLIGs()
-		return
-	}
-
-	PrintLIG(ovextra.OVClient, ligNamePtr)
-}
 
 func PrintAllLIGs() {
 
@@ -335,7 +378,7 @@ func (ms *multiSorter) Less(i, j int) bool {
 
 func init() {
 
-	ligNamePtr = showLIGCmd.PersistentFlags().String("name", "", "LIG Name")
+	showLIGCmd.Flags().StringVarP(&ligName, "name", "n", "", "LIG Name")
 
 	//fmt.Println("this is lig module init")
 

@@ -1,0 +1,4167 @@
+{
+    "type": "InterconnectTypeCollectionV400",
+    "members": [
+        {
+            "type": "interconnect-typeV400",
+            "partNumber": "794502-B23",
+            "minimumFirmwareVersion": "1.0.0",
+            "portInfos": [
+                {
+                    "portName": "l1",
+                    "portNumber": 101,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:2",
+                    "portNumber": 93,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4",
+                    "portNumber": 76,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d23",
+                    "portNumber": 23,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d54",
+                    "portNumber": 54,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d35",
+                    "portNumber": 35,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:4",
+                    "portNumber": 70,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d48",
+                    "portNumber": 48,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d53",
+                    "portNumber": 53,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:1",
+                    "portNumber": 67,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d2",
+                    "portNumber": 2,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:3",
+                    "portNumber": 89,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:1",
+                    "portNumber": 87,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d52",
+                    "portNumber": 52,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:2",
+                    "portNumber": 73,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d57",
+                    "portNumber": 57,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d34",
+                    "portNumber": 34,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:3",
+                    "portNumber": 79,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d51",
+                    "portNumber": 51,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:4",
+                    "portNumber": 80,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d40",
+                    "portNumber": 40,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d8",
+                    "portNumber": 8,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:2",
+                    "portNumber": 78,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d41",
+                    "portNumber": 41,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d6",
+                    "portNumber": 6,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:1",
+                    "portNumber": 72,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:3",
+                    "portNumber": 74,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d9",
+                    "portNumber": 9,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "l2",
+                    "portNumber": 102,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:2",
+                    "portNumber": 68,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d39",
+                    "portNumber": 39,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:4",
+                    "portNumber": 100,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:2",
+                    "portNumber": 83,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:4",
+                    "portNumber": 90,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d49",
+                    "portNumber": 49,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d19",
+                    "portNumber": 19,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1",
+                    "portNumber": 61,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:3",
+                    "portNumber": 94,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:2",
+                    "portNumber": 63,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:3",
+                    "portNumber": 64,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d59",
+                    "portNumber": 59,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:4",
+                    "portNumber": 85,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6",
+                    "portNumber": 86,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "l3",
+                    "portNumber": 103,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d5",
+                    "portNumber": 5,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:2",
+                    "portNumber": 88,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d28",
+                    "portNumber": 28,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d10",
+                    "portNumber": 10,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:2",
+                    "portNumber": 98,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d56",
+                    "portNumber": 56,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:1",
+                    "portNumber": 77,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d24",
+                    "portNumber": 24,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d37",
+                    "portNumber": 37,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d3",
+                    "portNumber": 3,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3",
+                    "portNumber": 71,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d44",
+                    "portNumber": 44,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:4",
+                    "portNumber": 75,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d14",
+                    "portNumber": 14,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d27",
+                    "portNumber": 27,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8",
+                    "portNumber": 96,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d16",
+                    "portNumber": 16,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d15",
+                    "portNumber": 15,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d43",
+                    "portNumber": 43,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7",
+                    "portNumber": 91,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d55",
+                    "portNumber": 55,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d30",
+                    "portNumber": 30,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d12",
+                    "portNumber": 12,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d29",
+                    "portNumber": 29,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d38",
+                    "portNumber": 38,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "l4",
+                    "portNumber": 104,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d11",
+                    "portNumber": 11,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d7",
+                    "portNumber": 7,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:4",
+                    "portNumber": 65,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d50",
+                    "portNumber": 50,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:1",
+                    "portNumber": 62,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d60",
+                    "portNumber": 60,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d46",
+                    "portNumber": 46,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d31",
+                    "portNumber": 31,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d45",
+                    "portNumber": 45,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d26",
+                    "portNumber": 26,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2",
+                    "portNumber": 66,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d47",
+                    "portNumber": 47,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:3",
+                    "portNumber": 84,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:1",
+                    "portNumber": 82,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:3",
+                    "portNumber": 99,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d36",
+                    "portNumber": 36,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d33",
+                    "portNumber": 33,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d4",
+                    "portNumber": 4,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d17",
+                    "portNumber": 17,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d18",
+                    "portNumber": 18,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:4",
+                    "portNumber": 95,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d58",
+                    "portNumber": 58,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d32",
+                    "portNumber": 32,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d20",
+                    "portNumber": 20,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:3",
+                    "portNumber": 69,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:1",
+                    "portNumber": 92,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d22",
+                    "portNumber": 22,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d42",
+                    "portNumber": 42,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d13",
+                    "portNumber": 13,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:1",
+                    "portNumber": 97,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d25",
+                    "portNumber": 25,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d1",
+                    "portNumber": 1,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d21",
+                    "portNumber": 21,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "ConnectionReservation",
+                        "ConnectionBandwidthConfiguration",
+                        "Qbg",
+                        "iSCSI",
+                        "ConnectionVirtualWWN",
+                        "SRIOV",
+                        "Ethernet",
+                        "ConnectionDeployment",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5",
+                    "portNumber": 81,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                }
+            ],
+            "unsupportedCapabilities": [],
+            "otherFamilyMembers": null,
+            "maximumFirmwareVersion": "9.0.0",
+            "downlinkPortCapability": {
+                "type": "downlink-port-capability",
+                "maxBandwidthInGbps": 40,
+                "totalSubPort": 8,
+                "portCapabilities": [
+                    "ConnectionReservation",
+                    "ConnectionBandwidthConfiguration",
+                    "Qbg",
+                    "iSCSI",
+                    "ConnectionVirtualWWN",
+                    "SRIOV",
+                    "Ethernet",
+                    "ConnectionDeployment",
+                    "EnetFcoe"
+                ],
+                "downlinkSubPorts": {
+                    "1": "a",
+                    "2": "b",
+                    "3": "c",
+                    "4": "d",
+                    "5": "e",
+                    "6": "f",
+                    "7": "g",
+                    "8": "h"
+                },
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": null,
+                "eTag": null,
+                "modified": null,
+                "category": null,
+                "uri": null
+            },
+            "taaCompliant": true,
+            "interconnectCapabilities": {
+                "maxBandwidthInGbps": 40,
+                "capabilities": [
+                    "Ethernet",
+                    "EnetFcoe",
+                    "FibreChannel"
+                ]
+            },
+            "downlinkCount": 60,
+            "description": null,
+            "status": "OK",
+            "name": "Virtual Connect SE 40Gb F8 Module for Synergy",
+            "state": "Active",
+            "created": "2017-03-21T17:36:30.967Z",
+            "eTag": "a58b4ede-2c0f-440d-af77-b9889aa7fb95",
+            "modified": "2017-03-21T17:36:30.985Z",
+            "category": "interconnect-types",
+            "uri": "/rest/interconnect-types/1b8f70bb-507b-493c-b1ae-f748dbd0d3ae"
+        },
+        {
+            "type": "interconnect-typeV400",
+            "partNumber": "799330-B21",
+            "minimumFirmwareVersion": "1.00",
+            "portInfos": [
+                {
+                    "portName": "d10",
+                    "portNumber": 10,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d1",
+                    "portNumber": 1,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S12/S6",
+                    "portNumber": 14,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d4",
+                    "portNumber": 4,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d6",
+                    "portNumber": 6,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d7",
+                    "portNumber": 7,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d9",
+                    "portNumber": 9,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d12",
+                    "portNumber": 12,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d8",
+                    "portNumber": 8,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S3/S9",
+                    "portNumber": 19,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d3",
+                    "portNumber": 3,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S8/S2",
+                    "portNumber": 22,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d11",
+                    "portNumber": 11,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S9/S3",
+                    "portNumber": 20,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S4/S10",
+                    "portNumber": 17,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S10/S4",
+                    "portNumber": 18,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S2/S8",
+                    "portNumber": 21,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S1/S7",
+                    "portNumber": 23,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S5/S11",
+                    "portNumber": 15,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d2",
+                    "portNumber": 2,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S11/S5",
+                    "portNumber": 16,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S6/S12",
+                    "portNumber": 13,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "S7/S1",
+                    "portNumber": 24,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d5",
+                    "portNumber": 5,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                }
+            ],
+            "unsupportedCapabilities": [],
+            "otherFamilyMembers": null,
+            "maximumFirmwareVersion": "4000.99",
+            "downlinkPortCapability": {
+                "type": "downlink-port-capability",
+                "maxBandwidthInGbps": 10,
+                "totalSubPort": 8,
+                "portCapabilities": [
+                    "Ethernet"
+                ],
+                "downlinkSubPorts": {
+                    "1": "a",
+                    "2": "b",
+                    "3": "c",
+                    "4": "d",
+                    "5": "e",
+                    "6": "f",
+                    "7": "g",
+                    "8": "h"
+                },
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": null,
+                "eTag": null,
+                "modified": null,
+                "category": null,
+                "uri": null
+            },
+            "taaCompliant": null,
+            "interconnectCapabilities": {
+                "maxBandwidthInGbps": 10,
+                "capabilities": [
+                    "Ethernet"
+                ]
+            },
+            "downlinkCount": 12,
+            "description": null,
+            "status": "OK",
+            "name": "Synergy 10Gb Pass-Thru Module",
+            "state": "Active",
+            "created": "2017-03-21T17:36:33.551Z",
+            "eTag": "e72f74e1-ac99-4214-a338-4d15f926b02e",
+            "modified": "2017-03-21T17:36:33.558Z",
+            "category": "interconnect-types",
+            "uri": "/rest/interconnect-types/4e92aa2e-efe9-4770-8cc0-ef056012bb7f"
+        },
+        {
+            "type": "interconnect-typeV400",
+            "partNumber": "779215-B21",
+            "minimumFirmwareVersion": "1.02",
+            "portInfos": [
+                {
+                    "portName": "l1",
+                    "portNumber": 13,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d8",
+                    "portNumber": 8,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d10",
+                    "portNumber": 10,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d11",
+                    "portNumber": 11,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d1",
+                    "portNumber": 1,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d9",
+                    "portNumber": 9,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d6",
+                    "portNumber": 6,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d4",
+                    "portNumber": 4,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d5",
+                    "portNumber": 5,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d12",
+                    "portNumber": 12,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d3",
+                    "portNumber": 3,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d7",
+                    "portNumber": 7,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d2",
+                    "portNumber": 2,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                }
+            ],
+            "unsupportedCapabilities": [],
+            "otherFamilyMembers": null,
+            "maximumFirmwareVersion": "2.00",
+            "downlinkPortCapability": {
+                "type": "downlink-port-capability",
+                "maxBandwidthInGbps": 10,
+                "totalSubPort": 8,
+                "portCapabilities": [
+                    "Qbg",
+                    "Ethernet",
+                    "EnetFcoe"
+                ],
+                "downlinkSubPorts": {
+                    "1": "a",
+                    "2": "b",
+                    "3": "c",
+                    "4": "d",
+                    "5": "e",
+                    "6": "f",
+                    "7": "g",
+                    "8": "h"
+                },
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": null,
+                "eTag": null,
+                "modified": null,
+                "category": null,
+                "uri": null
+            },
+            "taaCompliant": null,
+            "interconnectCapabilities": {
+                "maxBandwidthInGbps": 10,
+                "capabilities": [
+                    "Ethernet"
+                ]
+            },
+            "downlinkCount": 12,
+            "description": null,
+            "status": "OK",
+            "name": "Synergy 10Gb Interconnect Link Module",
+            "state": "Active",
+            "created": "2017-03-21T17:36:31.516Z",
+            "eTag": "9660530e-d32a-4781-b97d-4d25f69ef1b3",
+            "modified": "2017-03-21T17:36:31.533Z",
+            "category": "interconnect-types",
+            "uri": "/rest/interconnect-types/5e5e7390-f073-4162-8d14-b404fb5d37f7"
+        },
+        {
+            "type": "interconnect-typeV400",
+            "partNumber": "779224-B23",
+            "minimumFirmwareVersion": "0.0",
+            "portInfos": [
+                {
+                    "portName": "l1",
+                    "portNumber": 101,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d22",
+                    "portNumber": 22,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:2",
+                    "portNumber": 93,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4",
+                    "portNumber": 76,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:3",
+                    "portNumber": 84,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d52",
+                    "portNumber": 52,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:1",
+                    "portNumber": 72,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d20",
+                    "portNumber": 20,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:1",
+                    "portNumber": 82,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:4",
+                    "portNumber": 85,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d17",
+                    "portNumber": 17,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:3",
+                    "portNumber": 79,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d43",
+                    "portNumber": 43,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:1",
+                    "portNumber": 77,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d24",
+                    "portNumber": 24,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d55",
+                    "portNumber": 55,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d44",
+                    "portNumber": 44,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d21",
+                    "portNumber": 21,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d26",
+                    "portNumber": 26,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d12",
+                    "portNumber": 12,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d15",
+                    "portNumber": 15,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d37",
+                    "portNumber": 37,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5:2",
+                    "portNumber": 83,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:1",
+                    "portNumber": 87,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d3",
+                    "portNumber": 3,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d10",
+                    "portNumber": 10,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d2",
+                    "portNumber": 2,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d14",
+                    "portNumber": 14,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d38",
+                    "portNumber": 38,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d9",
+                    "portNumber": 9,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "l2",
+                    "portNumber": 102,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:2",
+                    "portNumber": 63,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:4",
+                    "portNumber": 65,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:4",
+                    "portNumber": 100,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d59",
+                    "portNumber": 59,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:3",
+                    "portNumber": 89,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d39",
+                    "portNumber": 39,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:3",
+                    "portNumber": 69,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d36",
+                    "portNumber": 36,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d5",
+                    "portNumber": 5,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d56",
+                    "portNumber": 56,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1",
+                    "portNumber": 61,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:3",
+                    "portNumber": 94,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d47",
+                    "portNumber": 47,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d25",
+                    "portNumber": 25,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6",
+                    "portNumber": 86,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "l3",
+                    "portNumber": 103,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d46",
+                    "portNumber": 46,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d8",
+                    "portNumber": 8,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d32",
+                    "portNumber": 32,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d6",
+                    "portNumber": 6,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:2",
+                    "portNumber": 98,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d29",
+                    "portNumber": 29,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d51",
+                    "portNumber": 51,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d11",
+                    "portNumber": 11,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3",
+                    "portNumber": 71,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d13",
+                    "portNumber": 13,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d33",
+                    "portNumber": 33,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d16",
+                    "portNumber": 16,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8",
+                    "portNumber": 96,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d1",
+                    "portNumber": 1,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d60",
+                    "portNumber": 60,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d48",
+                    "portNumber": 48,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d4",
+                    "portNumber": 4,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7",
+                    "portNumber": 91,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:2",
+                    "portNumber": 68,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:4",
+                    "portNumber": 70,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:1",
+                    "portNumber": 62,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "l4",
+                    "portNumber": 104,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d28",
+                    "portNumber": 28,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d31",
+                    "portNumber": 31,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d18",
+                    "portNumber": 18,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d35",
+                    "portNumber": 35,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d30",
+                    "portNumber": 30,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:3",
+                    "portNumber": 74,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:2",
+                    "portNumber": 73,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:3",
+                    "portNumber": 64,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2",
+                    "portNumber": 66,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:4",
+                    "portNumber": 75,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:4",
+                    "portNumber": 90,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d42",
+                    "portNumber": 42,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d7",
+                    "portNumber": 7,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:3",
+                    "portNumber": 99,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:4",
+                    "portNumber": 80,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q6:2",
+                    "portNumber": 88,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d40",
+                    "portNumber": 40,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d57",
+                    "portNumber": 57,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d45",
+                    "portNumber": 45,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:4",
+                    "portNumber": 95,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:2",
+                    "portNumber": 78,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d53",
+                    "portNumber": 53,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d23",
+                    "portNumber": 23,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:1",
+                    "portNumber": 67,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d34",
+                    "portNumber": 34,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q7:1",
+                    "portNumber": 92,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d27",
+                    "portNumber": 27,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q8:1",
+                    "portNumber": 97,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Stacking",
+                        "Ethernet"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d50",
+                    "portNumber": 50,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d58",
+                    "portNumber": 58,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d41",
+                    "portNumber": 41,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d49",
+                    "portNumber": 49,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d19",
+                    "portNumber": 19,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d54",
+                    "portNumber": 54,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "iSCSI",
+                        "SRIOV",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q5",
+                    "portNumber": 81,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                }
+            ],
+            "unsupportedCapabilities": [],
+            "otherFamilyMembers": null,
+            "maximumFirmwareVersion": "4000.99",
+            "downlinkPortCapability": {
+                "type": "downlink-port-capability",
+                "maxBandwidthInGbps": null,
+                "totalSubPort": null,
+                "portCapabilities": [
+                    "iSCSI",
+                    "SRIOV",
+                    "Ethernet",
+                    "EnetFcoe"
+                ],
+                "downlinkSubPorts": {},
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": null,
+                "eTag": null,
+                "modified": null,
+                "category": null,
+                "uri": null
+            },
+            "taaCompliant": true,
+            "interconnectCapabilities": {
+                "maxBandwidthInGbps": 40,
+                "capabilities": [
+                    "Ethernet",
+                    "EnetFcoe"
+                ]
+            },
+            "downlinkCount": 60,
+            "description": null,
+            "status": "OK",
+            "name": "Synergy 40Gb F8 Switch Module",
+            "state": "Active",
+            "created": "2017-03-21T17:36:31.289Z",
+            "eTag": "746b0b2e-0ba3-4ce8-aa31-e3a9508cf23d",
+            "modified": "2017-03-21T17:36:31.311Z",
+            "category": "interconnect-types",
+            "uri": "/rest/interconnect-types/910ddad4-c34e-4ee2-9322-98b110d9d2bf"
+        },
+        {
+            "type": "interconnect-typeV400",
+            "partNumber": "779218-B21",
+            "minimumFirmwareVersion": "1.02",
+            "portInfos": [
+                {
+                    "portName": "l2",
+                    "portNumber": 14,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "l1",
+                    "portNumber": 13,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Extension"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d10",
+                    "portNumber": 10,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d1",
+                    "portNumber": 1,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d9",
+                    "portNumber": 9,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d3",
+                    "portNumber": 3,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d2",
+                    "portNumber": 2,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d7",
+                    "portNumber": 7,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d8",
+                    "portNumber": 8,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d11",
+                    "portNumber": 11,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d6",
+                    "portNumber": 6,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d4",
+                    "portNumber": 4,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d5",
+                    "portNumber": 5,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d12",
+                    "portNumber": 12,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "Qbg",
+                        "Ethernet",
+                        "EnetFcoe"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                }
+            ],
+            "unsupportedCapabilities": [],
+            "otherFamilyMembers": null,
+            "maximumFirmwareVersion": "2.00",
+            "downlinkPortCapability": {
+                "type": "downlink-port-capability",
+                "maxBandwidthInGbps": 20,
+                "totalSubPort": 8,
+                "portCapabilities": [
+                    "Qbg",
+                    "Ethernet",
+                    "EnetFcoe"
+                ],
+                "downlinkSubPorts": {
+                    "1": "a",
+                    "2": "b",
+                    "3": "c",
+                    "4": "d",
+                    "5": "e",
+                    "6": "f",
+                    "7": "g",
+                    "8": "h"
+                },
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": null,
+                "eTag": null,
+                "modified": null,
+                "category": null,
+                "uri": null
+            },
+            "taaCompliant": null,
+            "interconnectCapabilities": {
+                "maxBandwidthInGbps": 20,
+                "capabilities": [
+                    "Ethernet"
+                ]
+            },
+            "downlinkCount": 12,
+            "description": null,
+            "status": "OK",
+            "name": "Synergy 20Gb Interconnect Link Module",
+            "state": "Active",
+            "created": "2017-03-21T17:36:31.600Z",
+            "eTag": "236fe708-a0a1-4149-94a7-f94bec692a9a",
+            "modified": "2017-03-21T17:36:31.615Z",
+            "category": "interconnect-types",
+            "uri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608"
+        },
+        {
+            "type": "interconnect-typeV400",
+            "partNumber": "779227-B21",
+            "minimumFirmwareVersion": "1.00",
+            "portInfos": [
+                {
+                    "portName": "d12",
+                    "portNumber": 12,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d7",
+                    "portNumber": 7,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d11",
+                    "portNumber": 11,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:2",
+                    "portNumber": 22,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "5",
+                    "portNumber": 17,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d1",
+                    "portNumber": 1,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "8",
+                    "portNumber": 20,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "4",
+                    "portNumber": 16,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:4",
+                    "portNumber": 36,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:4",
+                    "portNumber": 32,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:1",
+                    "portNumber": 33,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d9",
+                    "portNumber": 9,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "6",
+                    "portNumber": 18,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:3",
+                    "portNumber": 27,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d2",
+                    "portNumber": 2,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:4",
+                    "portNumber": 28,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:3",
+                    "portNumber": 23,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:1",
+                    "portNumber": 25,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d4",
+                    "portNumber": 4,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:3",
+                    "portNumber": 35,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:2",
+                    "portNumber": 30,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "2",
+                    "portNumber": 14,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "7",
+                    "portNumber": 19,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d10",
+                    "portNumber": 10,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q4:2",
+                    "portNumber": 34,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:3",
+                    "portNumber": 31,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d6",
+                    "portNumber": 6,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d5",
+                    "portNumber": 5,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d8",
+                    "portNumber": 8,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "d3",
+                    "portNumber": 3,
+                    "uplinkCapable": false,
+                    "portCapability": [
+                        "FibreChannel",
+                        "ConnectionReservation",
+                        "ConnectionDeployment"
+                    ],
+                    "downlinkCapable": true,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:4",
+                    "portNumber": 24,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "1",
+                    "portNumber": 13,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "3",
+                    "portNumber": 15,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q3:1",
+                    "portNumber": 29,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q2:2",
+                    "portNumber": 26,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                },
+                {
+                    "portName": "Q1:1",
+                    "portNumber": 21,
+                    "uplinkCapable": true,
+                    "portCapability": [
+                        "FibreChannel"
+                    ],
+                    "downlinkCapable": false,
+                    "pairedPortName": null
+                }
+            ],
+            "unsupportedCapabilities": [],
+            "otherFamilyMembers": null,
+            "maximumFirmwareVersion": "6.99",
+            "downlinkPortCapability": {
+                "type": "downlink-port-capability",
+                "maxBandwidthInGbps": 16,
+                "totalSubPort": 0,
+                "portCapabilities": [
+                    "FibreChannel",
+                    "ConnectionReservation",
+                    "ConnectionDeployment"
+                ],
+                "downlinkSubPorts": {},
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": null,
+                "eTag": null,
+                "modified": null,
+                "category": null,
+                "uri": null
+            },
+            "taaCompliant": null,
+            "interconnectCapabilities": {
+                "maxBandwidthInGbps": 16,
+                "capabilities": [
+                    "FibreChannel"
+                ]
+            },
+            "downlinkCount": 12,
+            "description": null,
+            "status": "OK",
+            "name": "Virtual Connect SE 16Gb FC Module for Synergy",
+            "state": "Active",
+            "created": "2017-06-11T23:44:29.321Z",
+            "eTag": "da2b0a94-8578-48c7-951b-5418efca6859",
+            "modified": "2017-06-11T23:44:29.341Z",
+            "category": "interconnect-types",
+            "uri": "/rest/interconnect-types/9601ac01-5a64-480a-90b7-478f53a301a2"
+        },
+        {
+            "type": "interconnect-typeV400",
+            "partNumber": "Unsupported",
+            "minimumFirmwareVersion": "0.0",
+            "portInfos": [],
+            "unsupportedCapabilities": [],
+            "otherFamilyMembers": null,
+            "maximumFirmwareVersion": "0.0",
+            "downlinkPortCapability": {
+                "type": "downlink-port-capability",
+                "maxBandwidthInGbps": null,
+                "totalSubPort": null,
+                "portCapabilities": [],
+                "downlinkSubPorts": {},
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": null,
+                "eTag": null,
+                "modified": null,
+                "category": null,
+                "uri": null
+            },
+            "taaCompliant": null,
+            "interconnectCapabilities": {
+                "maxBandwidthInGbps": null,
+                "capabilities": []
+            },
+            "downlinkCount": 0,
+            "description": null,
+            "status": "OK",
+            "name": "Unsupported",
+            "state": "Active",
+            "created": "2017-03-21T17:36:33.606Z",
+            "eTag": "e6a17c90-458b-4927-bdd2-27dffd09ba9a",
+            "modified": "2017-03-21T17:36:33.613Z",
+            "category": "interconnect-types",
+            "uri": "/rest/interconnect-types/f5ef9cd5-be4b-4094-8dfe-046c0c0bb02a"
+        }
+    ],
+    "nextPageUri": null,
+    "start": 0,
+    "prevPageUri": null,
+    "count": 7,
+    "total": 7,
+    "created": null,
+    "eTag": null,
+    "modified": null,
+    "category": "interconnect-types",
+    "uri": "/rest/interconnect-types?start=0&count=7"
+}
