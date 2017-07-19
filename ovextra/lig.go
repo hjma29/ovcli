@@ -33,6 +33,16 @@ type LIG struct {
 	Type                    string                   `json:"type"`                             // "type": "logical-interconnect-groupsV3",
 	UplinkSets              []LIGUplinkSet           `json:"uplinkSets,omitempty"`             // "uplinkSets": {...},
 	URI                     string                   `json:"uri,omitempty"`                    // "uri": "/rest/logical-interconnect-groups/e2f0031b-52bd-4223-9ac1-d91cb519d548",
+	IOBayList               ioBayList                //define []IOBay as named type to use multisort method later
+}
+
+type ioBayList []IOBay
+
+type IOBay struct {
+	Enclosure   int
+	Bay         int
+	ModelName   string
+	ModelNumber string
 }
 
 type InterconnectMapTemplate struct {
@@ -211,15 +221,16 @@ type LIGUplinkSet struct {
 	NetworkUris            []string                `json:"networkUris"`                   // "networkUris": ["/rest/ethernet-networks/f1e38895-721b-4204-8395-ae0caba5e163"]
 	PrimaryPort            *LogicalLocation        `json:"primaryPort,omitempty"`         // "primaryPort": {...},
 	Reachability           string                  `json:"reachability,omitempty"`        // "reachability": "Reachable",
-	PortPosition           map[int]map[int][]int   //get final port location from LogicalLocation fields, 3 dimentional slice to sort and print
-	IOBayList              []IOBay
+	//PortPosition           map[int]map[int][]int   //get final port location from LogicalLocation fields, 3 dimentional slice to sort and print
+	UplinkPorts UplinkPortList //define named type to use multisort method later
 }
 
-type IOBay struct {
-	Enclosure   int
-	Bay         int
-	ModelName   string
-	ModelNumber string
+type UplinkPortList []UplinkPort
+
+type UplinkPort struct {
+	Enclosure int
+	Bay       int
+	Port      string
 }
 
 type LogicalPortConfigInfo struct {
@@ -287,12 +298,6 @@ func GetLIGVerbose(s string) []LIG {
 		}
 	}
 
-	//convert ICType list to ICType URI mapping to prepare lookup later
-	ictypeMap := make(map[string]ICType)
-	for _, v := range ictypeList {
-		ictypeMap[v.URI] = v
-	}
-
 	for i1 := range ligList {
 		for i2 := range ligList[i1].UplinkSets {
 			ligUs := &ligList[i1].UplinkSets[i2]
@@ -301,7 +306,7 @@ func GetLIGVerbose(s string) []LIG {
 		}
 
 		lig := &ligList[i1]
-		lig.getIOBay()
+		lig.getIOBay(ictypeList)
 
 	}
 
@@ -342,7 +347,9 @@ func (ligUs *LIGUplinkSet) getUplinkPort() {
 	ligUs.PortPosition = portmap
 }
 
-func (lig *LIG) getIOBay() {
+func (lig *LIG) getIOBay(ictypeList []ICType) {
+
+	lig.IOBayList = make([]IOBay, 0)
 
 	for _, v := range lig.InterconnectMapTemplate.InterconnectMapEntryTemplates {
 
@@ -355,11 +362,39 @@ func (lig *LIG) getIOBay() {
 			case "Bay":
 				s = v.RelativeValue
 			}
-
 		}
+
+		//convert ICType list to ICType URI mapping to prepare lookup later
+		ictypeMap := make(map[string]ICType)
+		for _, v := range ictypeList {
+			ictypeMap[v.URI] = v
+		}
+
+		n := ictypeMap[v.PermittedInterconnectTypeUri].Name
+		m := ictypeMap[v.PermittedInterconnectTypeUri].PartNumber
+
+		lig.IOBayList = append(lig.IOBayList, IOBay{e, s, n, m})
 
 	}
 
+	sort.Slice(lig.IOBayList, func(i, j int) bool { return lig.IOBayList.multiSort(i, j) })
+
+}
+
+func (x ioBayList) multiSort(i, j int) bool {
+	switch {
+	case x[i].Enclosure < x[j].Enclosure:
+		return true
+	case x[i].Enclosure > x[j].Enclosure:
+		return false
+	case x[i].Bay < x[j].Bay:
+		return true
+	case x[i].Bay > x[j].Bay:
+		return false
+		// case x[i].Port < x[j].Port:
+		// 	return true
+	}
+	return false
 }
 
 //LIGGetURI to get mapping between LIG URI/name to LIG struct

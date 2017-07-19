@@ -96,25 +96,37 @@ const (
 		"{{.Name}}\t{{.State}}\n" +
 		"{{end}}"
 
-	ligShowFormatVerbose = "" +
-		//"Name\tState\n" +
-		//"----\t-----\n" +
-		"{{range .}}" +
-		//"{{.Name}}\t{{.State}}\n" +
-		"{{.Name}}\n" +
-		"{{range .UplinkSets}}" +
-		"  - UplinkSet: {{.Name}}\n" +
-		"    * UplinkPort:\n" +
-		"{{range $e, $smap := .PortPosition}}" + //range enclosure map
-		"{{range $s, $plist := $smap}}" + //range slot map
-		"        Enclosure: {{$e}}, Slot: {{$s}}, Port: " +
-		"{{range $plist}}" +
-		"{{.}} " +
-		"{{end}}\n" +
-		"{{end}}" +
-		"{{end}}" +
-		"{{end}}\n" +
-		"{{end}}"
+	ligShowFormatVerbose = `
+{{range .}}{{.Name}}
+{{range .UplinkSets}}  *UplinkSet: {{.Name}} 
+	- UplinkPort: 
+{{end}}
+Enclosure \t Bay Name Model
+{{range .IOBayList}}
+{{.Enclosure}}  {{.Bay}} {{.ModelName}} {{.ModelNumber}}
+{{end}}{{end}}
+
+`
+
+	// ligShowFormatVerbose = "" +
+	// 	//"Name\tState\n" +
+	// 	//"----\t-----\n" +
+	// 	"{{range .}}" +
+	// 	//"{{.Name}}\t{{.State}}\n" +
+	// 	"{{.Name}}\n" +
+	// 	"{{range .UplinkSets}}" +
+	// 	"  - UplinkSet: {{.Name}}\n" +
+	// 	"    * UplinkPort:\n" +
+	// 	"{{range $e, $smap := .PortPosition}}" + //range enclosure map
+	// 	"{{range $s, $plist := $smap}}" + //range slot map
+	// 	"        Enclosure: {{$e}}, Slot: {{$s}}, Port: " +
+	// 	"{{range $plist}}" +
+	// 	"{{.}} " +
+	// 	"{{end}}\n" +
+	// 	"{{end}}" +
+	// 	"{{end}}" +
+	// 	"{{end}}\n" +
+	// 	"{{end}}"
 )
 
 func showLIG(cmd *cobra.Command, args []string) {
@@ -159,11 +171,6 @@ func (x uplinkPortListType) multiSort(i, j int) bool {
 	}
 	return false
 }
-
-// func timeTrack(start time.Time, name string) {
-// 	elapsed := time.Since(start)
-// 	log.Printf("%s took %s", name, elapsed)
-// }
 
 func PrintAllLIGs() {
 
