@@ -222,11 +222,13 @@ type LIGUplinkSet struct {
 	PrimaryPort            *LogicalLocation        `json:"primaryPort,omitempty"`         // "primaryPort": {...},
 	Reachability           string                  `json:"reachability,omitempty"`        // "reachability": "Reachable",
 	UplinkPorts            UplinkPortList          //define named type to use multisort method later
-	Networks               []ENetwork              //collect network name and vlanid from NetworkURI list
+	Networks               []NetworkSummary        //collect network name and vlanid from NetworkURI list
 }
 
-//PortPosition           map[int]map[int][]int   //get final port location from LogicalLocation fields, 3 dimentional slice to sort and print
-
+type NetworkSummary struct {
+	Name   string
+	Vlanid int
+}
 type UplinkPortList []UplinkPort
 
 type UplinkPort struct {
@@ -431,8 +433,6 @@ func (x ioBayList) multiSort(i, j int) bool {
 		return true
 	case x[i].Bay > x[j].Bay:
 		return false
-		// case x[i].Port < x[j].Port:
-		// 	return true
 	}
 	return false
 }
@@ -445,45 +445,17 @@ func (lig *LIG) getNetwork(networkList []ENetwork) {
 	}
 
 	for i, v := range lig.UplinkSets {
-		lig.UplinkSets[i].Networks = make([]ENetwork, 0)
+		lig.UplinkSets[i].Networks = make([]NetworkSummary, 0)
 
-		for ni,v := range v.NetworkUris {
-			lig.UplinkSets[i].Networks[ni].Name = v.N
-
+		for _, v := range v.NetworkUris {
+			vlanname := networkMap[v].Name
+			vlanid := networkMap[v].VlanId
+			lig.UplinkSets[i].Networks = append(lig.UplinkSets[i].Networks, NetworkSummary{vlanname, vlanid})
 		}
 
-	// }
+		sort.Slice(lig.UplinkSets[i].Networks, func(x, y int) bool { return lig.UplinkSets[i].Networks[x].Name < lig.UplinkSets[i].Networks[y].Name })
 
-	// lig.IOBayList = make([]IOBay, 0)
-
-	// for _, v := range lig.InterconnectMapTemplate.InterconnectMapEntryTemplates {
-
-	// 	var e, s int
-
-	// 	for _, v := range v.LogicalLocation.LocationEntries {
-	// 		switch v.Type {
-	// 		case "Enclosure":
-	// 			e = v.RelativeValue
-	// 		case "Bay":
-	// 			s = v.RelativeValue
-	// 		}
-	// 	}
-
-	// 	//convert ICType list to ICType URI mapping to prepare lookup later
-	// 	ictypeMap := make(map[string]ICType)
-	// 	for _, v := range ictypeList {
-	// 		ictypeMap[v.URI] = v
-	// 	}
-
-	// 	n := ictypeMap[v.PermittedInterconnectTypeUri].Name
-	// 	m := ictypeMap[v.PermittedInterconnectTypeUri].PartNumber
-
-	// 	lig.IOBayList = append(lig.IOBayList, IOBay{e, s, n, m})
-
-	// }
-
-	// sort.Slice(lig.IOBayList, func(i, j int) bool { return lig.IOBayList.multiSort(i, j) })
-
+	}
 }
 
 //LIGGetURI to get mapping between LIG URI/name to LIG struct
@@ -524,47 +496,3 @@ func LIGGetURI(x chan []LIG) {
 	x <- list
 
 }
-
-// //LIGGetURI to get mapping between LIG URI/name to LIG struct
-// func LIGGetURI(x chan LIGMap, attri string) {
-
-// 	log.Println("Rest Get LIG")
-
-// 	defer timeTrack(time.Now(), "Rest Get LIG")
-
-// 	c := NewCLIOVClient()
-
-// 	ligMap := make(LIGMap)
-// 	pages := make([]LIGCol, 5) //create 5, feel enough for next pages
-
-// 	for i, uri := 0, LIGURL; uri != ""; i++ {
-
-// 		data, err := c.GetURI("", "", uri)
-// 		if err != nil {
-
-// 			log.Fatal(err)
-// 		}
-
-// 		err = json.Unmarshal(data, &pages[i])
-
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-
-// 		for k := range pages[i].Members {
-// 			switch attri {
-// 			case "Name":
-// 				ligMap[pages[i].Members[k].Name] = &pages[i].Members[k]
-// 			case "URI":
-// 				ligMap[pages[i].Members[k].URI] = &pages[i].Members[k]
-// 			}
-
-// 		}
-// 		//assign each Rest response page to a unique collection inside the collection slice
-// 		uri = pages[i].NextPageURI
-// 	}
-
-// 	x <- ligMap
-
-// 	//return ligMap
-// }
