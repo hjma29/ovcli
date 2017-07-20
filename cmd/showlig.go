@@ -96,37 +96,57 @@ const (
 		"{{.Name}}\t{{.State}}\n" +
 		"{{end}}"
 
-	ligShowFormatVerbose = `
-{{range .}}{{.Name}}
-{{range .UplinkSets}}  *UplinkSet: {{.Name}} 
-	- UplinkPort: 
-{{end}}
-Enclosure \t Bay Name Model
-{{range .IOBayList}}
-{{.Enclosure}}  {{.Bay}} {{.ModelName}} {{.ModelNumber}}
-{{end}}{{end}}
+		// 	ligShowFormatVerbose = `
+		// {{range .}}{{.Name}}
+		// {{range .UplinkSets}}  *UplinkSet: {{.Name}}
+		// 	- UplinkPort:
+		// {{end}}
+		// Enclosure \t Bay Name Model
+		// {{range .IOBayList}}
+		// {{.Enclosure}}  {{.Bay}} {{.ModelName}} {{.ModelNumber}}
+		// {{end}}{{end}}
 
-`
+		// `
 
-	// ligShowFormatVerbose = "" +
-	// 	//"Name\tState\n" +
-	// 	//"----\t-----\n" +
-	// 	"{{range .}}" +
-	// 	//"{{.Name}}\t{{.State}}\n" +
-	// 	"{{.Name}}\n" +
-	// 	"{{range .UplinkSets}}" +
-	// 	"  - UplinkSet: {{.Name}}\n" +
-	// 	"    * UplinkPort:\n" +
-	// 	"{{range $e, $smap := .PortPosition}}" + //range enclosure map
-	// 	"{{range $s, $plist := $smap}}" + //range slot map
-	// 	"        Enclosure: {{$e}}, Slot: {{$s}}, Port: " +
-	// 	"{{range $plist}}" +
-	// 	"{{.}} " +
-	// 	"{{end}}\n" +
-	// 	"{{end}}" +
-	// 	"{{end}}" +
-	// 	"{{end}}\n" +
-	// 	"{{end}}"
+	ligShowFormatVerbose = "" +
+		//"Name\tState\n" +
+		//"----\t-----\n" +
+		"{{range .}}" +
+		//"{{.Name}}\t{{.State}}\n" +
+		"------------------------------------------------------------------------------\n" +
+		"{{.Name}}\n" +
+		"{{range .UplinkSets}}" +
+		"  -UplinkSet: {{.Name}}\n" +
+		"       UplinkPort:\n" +
+		"{{range .UplinkPorts}}" + //range enclosure map
+		"           Enclosure: {{.Enclosure}}, Slot: {{.Bay}}, Port: {{.Port}}\n" +
+		"{{end}}" + //done with uplinkPorts
+		"{{end}}" + //done with uplinksets
+		"Enclosure\tIOBay\tModelName\tPartNumber\n" +
+		"{{range .IOBayList}}" +
+		"{{.Enclosure}}\t{{.Bay}}\t{{.ModelName}}\t{{.ModelNumber}}\n" +
+		"{{end}}\n" + //done with LIG IOBay List
+		"{{end}}" //done with LIGs
+
+		// 	ligShowFormatVerbose = "" +
+		// //"Name\tState\n" +
+		// //"----\t-----\n" +
+		// "{{range .}}" +
+		// //"{{.Name}}\t{{.State}}\n" +
+		// "{{.Name}}\n" +
+		// "{{range .UplinkSets}}" +
+		// "  - UplinkSet: {{.Name}}\n" +
+		// "    * UplinkPort:\n" +
+		// "{{range $e, $smap := .UplinkPorts}}" + //range enclosure map
+		// "{{range $s, $plist := $smap}}" + //range slot map
+		// "        Enclosure: {{$e}}, Slot: {{$s}}, Port: " +
+		// "{{range $plist}}" +
+		// "{{.}} " +
+		// "{{end}}\n" +
+		// "{{end}}" +
+		// "{{end}}" +
+		// "{{end}}\n" +
+		// "{{end}}"
 )
 
 func showLIG(cmd *cobra.Command, args []string) {

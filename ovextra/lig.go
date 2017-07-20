@@ -221,9 +221,11 @@ type LIGUplinkSet struct {
 	NetworkUris            []string                `json:"networkUris"`                   // "networkUris": ["/rest/ethernet-networks/f1e38895-721b-4204-8395-ae0caba5e163"]
 	PrimaryPort            *LogicalLocation        `json:"primaryPort,omitempty"`         // "primaryPort": {...},
 	Reachability           string                  `json:"reachability,omitempty"`        // "reachability": "Reachable",
-	//PortPosition           map[int]map[int][]int   //get final port location from LogicalLocation fields, 3 dimentional slice to sort and print
-	UplinkPorts UplinkPortList //define named type to use multisort method later
+	UplinkPorts            UplinkPortList          //define named type to use multisort method later
+	Networks               []ENetwork              //collect network name and vlanid from NetworkURI list
 }
+
+//PortPosition           map[int]map[int][]int   //get final port location from LogicalLocation fields, 3 dimentional slice to sort and print
 
 type UplinkPortList []UplinkPort
 
@@ -282,69 +284,107 @@ func GetLIGVerbose(s string) []LIG {
 
 	ligListC := make(chan []LIG)
 	ictypeListC := make(chan []ICType)
+	eNetworkListC := make(chan []ENetwork)
 
 	go LIGGetURI(ligListC)
 	go ICTypeGetURI(ictypeListC)
+	go ENetworkGetURI(eNetworkListC)
 
 	var ligList []LIG
 	var ictypeList []ICType
+	var eNetworkList []ENetwork
 
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 3; i++ {
 		select {
 		case ligList = <-ligListC:
 			//fmt.Println("received ligList")
 		case ictypeList = <-ictypeListC:
 			//fmt.Println("received ictypeList")
+		case eNetworkList = <-eNetworkListC:
 		}
 	}
 
-	for i1 := range ligList {
-		for i2 := range ligList[i1].UplinkSets {
-			ligUs := &ligList[i1].UplinkSets[i2]
+	for i := range ligList {
 
-			ligUs.getUplinkPort()
-		}
-
-		lig := &ligList[i1]
+		lig := &ligList[i]
 		lig.getIOBay(ictypeList)
-
+		lig.getUplinkPort(ictypeList)
+		lig.getNetwork(eNetworkList)
 	}
 
 	return ligList
 
 }
 
-func (ligUs *LIGUplinkSet) getUplinkPort() {
+func (lig *LIG) getUplinkPort(ictypeList []ICType) {
 
-	portmap := make(map[int]map[int][]int)
-
-	for _, v := range ligUs.LogicalPortConfigInfos {
-
-		var e, s, p int
-
-		for _, v := range v.LogicalLocation.LocationEntries {
-
-			switch v.Type {
-			case "Enclosure":
-				e = v.RelativeValue
-			case "Bay":
-				s = v.RelativeValue
-			case "Port":
-				p = v.RelativeValue
-			}
-
-		}
-
-		if _, ok := portmap[e][s]; !ok {
-			ms := make(map[int][]int)
-			portmap[e] = ms
-		}
-
-		portmap[e][s] = append(portmap[e][s], p)
-
+	//prepare enc/bay lookup map to find out model number, 1st step loopup to convert port from "83" to "Q4:1"
+	slotModel := make(map[struct{ enc, slot int }]string)
+	for _, v := range lig.IOBayList {
+		slotModel[struct{ enc, slot int }{v.Enclosure, v.Bay}] = v.ModelNumber
 	}
 
-	ligUs.PortPosition = portmap
+	//prepare modelnumber/portnumber lookup map to find out portname, 1st step loopup to convert port from "83" to "Q4:1"
+	type ModelPort struct {
+		model string
+		port  int
+	}
+	modelPort := make(map[ModelPort]string)
+	for _, t := range ictypeList {
+		for _, p := range t.PortInfos {
+			modelPort[ModelPort{t.PartNumber, p.PortNumber}] = p.PortName
+		}
+	}
+
+	//get all uplinkport list for all uplinksets, like []{UplinkPort{1,2,67},{2,3,72}}
+	for i, v := range lig.UplinkSets {
+
+		lig.UplinkSets[i].UplinkPorts = make(UplinkPortList, 0)
+
+		for _, v := range v.LogicalPortConfigInfos {
+
+			var e, s, p int
+
+			for _, v := range v.LogicalLocation.LocationEntries {
+				switch v.Type {
+				case "Enclosure":
+					e = v.RelativeValue
+				case "Bay":
+					s = v.RelativeValue
+				case "Port":
+					p = v.RelativeValue
+				}
+			}
+
+			//use above 2-step map lookups to convert final port number from "67" to "Q3:1"
+			model := slotModel[struct{ enc, slot int }{e, s}]
+			port := modelPort[ModelPort{model, p}]
+
+			//update lig uplinkset uplink port list
+			lig.UplinkSets[i].UplinkPorts = append(lig.UplinkSets[i].UplinkPorts, UplinkPort{e, s, port})
+
+		}
+
+		//use x,y to avoice conflict with existing i.
+		sort.Slice(lig.UplinkSets[i].UplinkPorts, func(x, y int) bool { return lig.UplinkSets[i].UplinkPorts.multiSort(x, y) })
+
+	}
+}
+
+func (x UplinkPortList) multiSort(i, j int) bool {
+	switch {
+	case x[i].Enclosure < x[j].Enclosure:
+		return true
+	case x[i].Enclosure > x[j].Enclosure:
+		return false
+	case x[i].Bay < x[j].Bay:
+		return true
+	case x[i].Bay > x[j].Bay:
+		return false
+	case x[i].Port < x[j].Port:
+		return true
+	}
+	return false
 }
 
 func (lig *LIG) getIOBay(ictypeList []ICType) {
@@ -395,6 +435,55 @@ func (x ioBayList) multiSort(i, j int) bool {
 		// 	return true
 	}
 	return false
+}
+
+func (lig *LIG) getNetwork(networkList []ENetwork) {
+
+	networkMap := make(map[string]ENetwork)
+	for _, v := range networkList {
+		networkMap[v.URI] = v
+	}
+
+	for i, v := range lig.UplinkSets {
+		lig.UplinkSets[i].Networks = make([]ENetwork, 0)
+
+		for ni,v := range v.NetworkUris {
+			lig.UplinkSets[i].Networks[ni].Name = v.N
+
+		}
+
+	// }
+
+	// lig.IOBayList = make([]IOBay, 0)
+
+	// for _, v := range lig.InterconnectMapTemplate.InterconnectMapEntryTemplates {
+
+	// 	var e, s int
+
+	// 	for _, v := range v.LogicalLocation.LocationEntries {
+	// 		switch v.Type {
+	// 		case "Enclosure":
+	// 			e = v.RelativeValue
+	// 		case "Bay":
+	// 			s = v.RelativeValue
+	// 		}
+	// 	}
+
+	// 	//convert ICType list to ICType URI mapping to prepare lookup later
+	// 	ictypeMap := make(map[string]ICType)
+	// 	for _, v := range ictypeList {
+	// 		ictypeMap[v.URI] = v
+	// 	}
+
+	// 	n := ictypeMap[v.PermittedInterconnectTypeUri].Name
+	// 	m := ictypeMap[v.PermittedInterconnectTypeUri].PartNumber
+
+	// 	lig.IOBayList = append(lig.IOBayList, IOBay{e, s, n, m})
+
+	// }
+
+	// sort.Slice(lig.IOBayList, func(i, j int) bool { return lig.IOBayList.multiSort(i, j) })
+
 }
 
 //LIGGetURI to get mapping between LIG URI/name to LIG struct
