@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+type LIGList []LIG
+
 type LIG struct {
 	Category                string                   `json:"category,omitempty"`               // "category": "logical-interconnect-groups",
 	Created                 string                   `json:"created,omitempty"`                // "created": "20150831T154835.250Z",
@@ -262,18 +264,18 @@ type LocationEntry struct {
 // }
 
 type LIGCol struct {
-	Total       int    `json:"total,omitempty"`       // "total": 1,
-	Count       int    `json:"count,omitempty"`       // "count": 1,
-	Start       int    `json:"start,omitempty"`       // "start": 0,
-	PrevPageURI string `json:"prevPageUri,omitempty"` // "prevPageUri": null,
-	NextPageURI string `json:"nextPageUri,omitempty"` // "nextPageUri": null,
-	URI         string `json:"uri,omitempty"`         // "uri": "/rest/server-profiles?filter=connectionTemplateUri%20matches%7769cae0-b680-435b-9b87-9b864c81657fsort=name:asc"
-	Members     []LIG  `json:"members,omitempty"`     // "members":[]
+	Total       int     `json:"total,omitempty"`       // "total": 1,
+	Count       int     `json:"count,omitempty"`       // "count": 1,
+	Start       int     `json:"start,omitempty"`       // "start": 0,
+	PrevPageURI string  `json:"prevPageUri,omitempty"` // "prevPageUri": null,
+	NextPageURI string  `json:"nextPageUri,omitempty"` // "nextPageUri": null,
+	URI         string  `json:"uri,omitempty"`         // "uri": "/rest/server-profiles?filter=connectionTemplateUri%20matches%7769cae0-b680-435b-9b87-9b864c81657fsort=name:asc"
+	Members     LIGList `json:"members,omitempty"`     // "members":[]
 }
 
-func GetLIG() []LIG {
+func GetLIG() LIGList {
 
-	ligListC := make(chan []LIG)
+	ligListC := make(chan LIGList)
 
 	go LIGGetURI(ligListC)
 	ligList := <-ligListC
@@ -282,9 +284,9 @@ func GetLIG() []LIG {
 
 }
 
-func GetLIGVerbose(s string) []LIG {
+func GetLIGVerbose(ligname string) LIGList {
 
-	ligListC := make(chan []LIG)
+	ligListC := make(chan LIGList)
 	ictypeListC := make(chan []ICType)
 	eNetworkListC := make(chan []ENetwork)
 
@@ -292,16 +294,15 @@ func GetLIGVerbose(s string) []LIG {
 	go ICTypeGetURI(ictypeListC)
 	go ENetworkGetURI(eNetworkListC)
 
-	var ligList []LIG
+	var ligList LIGList
 	var ictypeList []ICType
 	var eNetworkList []ENetwork
 
 	for i := 0; i < 3; i++ {
 		select {
 		case ligList = <-ligListC:
-			//fmt.Println("received ligList")
+			(&ligList).validateLigName(ligname)
 		case ictypeList = <-ictypeListC:
-			//fmt.Println("received ictypeList")
 		case eNetworkList = <-eNetworkListC:
 		}
 	}
@@ -315,6 +316,25 @@ func GetLIGVerbose(s string) []LIG {
 	}
 
 	return ligList
+
+}
+
+//pass pointer to slice so we can move original slice pointer to point to one element or all
+func (list *LIGList) validateLigName(name string) {
+
+	if name == "all" {
+		return
+	}
+
+	for i, v := range *list {
+		if name == v.Name {
+			*list = (*list)[i : i+1]
+			return
+		}
+	}
+
+	fmt.Println("no matching LIG found, valid syntax \"show lig --name lig1\" ")
+	os.Exit(0)
 
 }
 
@@ -342,6 +362,7 @@ func (lig *LIG) getUplinkPort(ictypeList []ICType) {
 	for i, v := range lig.UplinkSets {
 
 		lig.UplinkSets[i].UplinkPorts = make(UplinkPortList, 0)
+		uplinkports := lig.UplinkSets[i].UplinkPorts
 
 		for _, v := range v.LogicalPortConfigInfos {
 
@@ -363,12 +384,13 @@ func (lig *LIG) getUplinkPort(ictypeList []ICType) {
 			port := modelPort[ModelPort{model, p}]
 
 			//update lig uplinkset uplink port list
-			lig.UplinkSets[i].UplinkPorts = append(lig.UplinkSets[i].UplinkPorts, UplinkPort{e, s, port})
+			uplinkports = append(uplinkports, UplinkPort{e, s, port})
+			lig.UplinkSets[i].UplinkPorts = uplinkports
 
 		}
 
 		//use x,y to avoice conflict with existing i.
-		sort.Slice(lig.UplinkSets[i].UplinkPorts, func(x, y int) bool { return lig.UplinkSets[i].UplinkPorts.multiSort(x, y) })
+		sort.Slice(uplinkports, func(x, y int) bool { return uplinkports.multiSort(x, y) })
 
 	}
 }
@@ -446,20 +468,24 @@ func (lig *LIG) getNetwork(networkList []ENetwork) {
 
 	for i, v := range lig.UplinkSets {
 		lig.UplinkSets[i].Networks = make([]NetworkSummary, 0)
+		networklist := lig.UplinkSets[i].Networks
 
 		for _, v := range v.NetworkUris {
 			vlanname := networkMap[v].Name
 			vlanid := networkMap[v].VlanId
-			lig.UplinkSets[i].Networks = append(lig.UplinkSets[i].Networks, NetworkSummary{vlanname, vlanid})
+			//lig.UplinkSets[i].Networks = append(lig.UplinkSets[i].Networks, NetworkSummary{vlanname, vlanid})
+			networklist = append(networklist, NetworkSummary{vlanname, vlanid})
 		}
 
-		sort.Slice(lig.UplinkSets[i].Networks, func(x, y int) bool { return lig.UplinkSets[i].Networks[x].Name < lig.UplinkSets[i].Networks[y].Name })
+		sort.Slice(networklist, func(i, j int) bool { return networklist[i].Name < networklist[j].Name })
+		lig.UplinkSets[i].Networks = networklist
+		//sort.Slice(lig.UplinkSets[i].Networks, func(x, y int) bool { return lig.UplinkSets[i].Networks[x].Name < lig.UplinkSets[i].Networks[y].Name })
 
 	}
 }
 
 //LIGGetURI to get mapping between LIG URI/name to LIG struct
-func LIGGetURI(x chan []LIG) {
+func LIGGetURI(x chan LIGList) {
 
 	log.Println("Rest Get LIG")
 
@@ -467,7 +493,7 @@ func LIGGetURI(x chan []LIG) {
 
 	c := NewCLIOVClient()
 
-	var list []LIG
+	var list LIGList
 	uri := LIGURL
 
 	for uri != "" {

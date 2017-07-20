@@ -99,13 +99,15 @@ const (
 		"{{range .UplinkSets}}" +
 		"  -UplinkSet: {{.Name}}\n" +
 		"       UplinkPort:\n" +
+		"            Logical Enclosure\tLogical IOBay\tPort\n" +
 		"{{range .UplinkPorts}}" + //range enclosure map
-		"           Enclosure: {{.Enclosure}}, Slot: {{.Bay}}, Port: {{.Port}}\n" +
+		"            {{.Enclosure}}\t{{.Bay}}\t{{.Port}}\n" +
 		"{{end}}" + //done with uplinkPorts
 		"       Networks:\n" +
+		"            Network Name\tVlanID\n" +
 		"{{range .Networks}}" +
-		"           {{.Name}}\t{{.Vlanid}}\n" +
-		"{{end}}" + //done with networks
+		"            {{.Name}}\t{{.Vlanid}}\n" +
+		"{{end}}\n" + //done with networks
 		"{{end}}" + //done with uplinksets
 		"Enclosure\tIOBay\tModelName\tPartNumber\n" +
 		"{{range .IOBayList}}" +
@@ -140,6 +142,6 @@ func showLIG(cmd *cobra.Command, args []string) {
 
 func init() {
 
-	showLIGCmd.Flags().StringVarP(&ligName, "name", "n", "all", "LIG Name: all, <name>")
+	showLIGCmd.Flags().StringVarP(&ligName, "name", "n", "", "LIG Name: all, <name>")
 
 }
