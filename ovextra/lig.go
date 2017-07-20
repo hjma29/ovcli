@@ -323,12 +323,15 @@ func GetLIGVerbose(ligname string) LIGList {
 func (list *LIGList) validateLigName(name string) {
 
 	if name == "all" {
-		return
+		return //if name is all, don't touch *list, directly return
 	}
 
-	for i, v := range *list {
+	localslice := *list //define a localslice to avoid too many *list in the following
+
+	for i, v := range localslice {
 		if name == v.Name {
-			*list = (*list)[i : i+1]
+			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
+			*list = localslice               //update list pointer to point to new shortened slice
 			return
 		}
 	}
