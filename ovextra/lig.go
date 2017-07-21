@@ -336,7 +336,7 @@ func (list *LIGList) validateLigName(name string) {
 		}
 	}
 
-	fmt.Println("no matching LIG found, valid syntax \"show lig --name lig1\" ")
+	fmt.Println("no LIG matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show lig --name lig1\" ")
 	os.Exit(0)
 
 }

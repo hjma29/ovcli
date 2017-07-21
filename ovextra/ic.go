@@ -233,13 +233,13 @@ type SFP struct {
 func GetIC() []IC {
 
 	icListC := make(chan []IC)
-	liListC := make(chan []LI)
+	liListC := make(chan LIList)
 
 	go ICGetURI(icListC)
 	go LIGetURI(liListC)
 
 	var icList []IC
-	var liList []LI
+	var liList LIList
 
 	for i := 0; i < 2; i++ {
 		select {

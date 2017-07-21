@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"time"
 )
 
 type LICol struct {
 	Type        string      `json:"type"`
-	Members     []LI        `json:"members"`
+	Members     LIList      `json:"members"`
 	NextPageURI string      `json:"nextPageUri"`
 	Start       int         `json:"start"`
 	PrevPageURI interface{} `json:"prevPageUri"`
@@ -22,6 +23,8 @@ type LICol struct {
 	Category    string      `json:"category"`
 	URI         string      `json:"uri"`
 }
+
+type LIList []LI
 
 type LI struct {
 	Type                        string `json:"type"`
@@ -172,37 +175,40 @@ type LI struct {
 }
 
 //GetLI is the function called from ovcli cmd package to get information on "show li", it in turn calls RestGet
-func GetLI() LIMap {
+func GetLI() LIList {
 
-	// liMapC := make(chan LIMap)
-	// go LIGetURI(liMapC, "Name")
-	// //liMap := <-liMapC
+	liListC := make(chan LIList)
+	ligListC := make(chan LIGList)
 
-	// ligMapC := make(chan LIGMap)
-	// go LIGGetURI(ligMapC, "URI")
-	// //ligMap := <-ligMapC
+	go LIGetURI(liListC)
+	go LIGGetURI(ligListC)
 
-	var liMap LIMap
-	// var ligMap LIGMap
+	var liList LIList
+	var ligList LIGList
 
-	// for i := 0; i < 2; i++ {
-	// 	select {
-	// 	case ligMap = <-ligMapC:
-	// 	case liMap = <-liMapC:
-	// 	}
-	// }
+	for i := 0; i < 2; i++ {
+		select {
+		case liList = <-liListC:
+		case ligList = <-ligListC:
+		}
+	}
 
-	// //Save LIG value to LI entrie field, LIGName is manually added in JSON struct. use LI's LIG URI as index to find among LIG Map
-	// for k := range liMap {
-	// 	liMap[k].LIGName = ligMap[liMap[k].LogicalInterconnectGroupURI].Name
-	// }
+	ligMap := make(map[string]LIG)
 
-	return liMap
+	for _, v := range ligList {
+		ligMap[v.URI] = v
+	}
+
+	for i, v := range liList {
+		liList[i].LIGName = ligMap[v.LogicalInterconnectGroupURI].Name
+	}
+
+	return liList
 
 }
 
 //LIGetURI is the function to get raw structs from all json next pages
-func LIGetURI(x chan []LI) {
+func LIGetURI(x chan LIList) {
 
 	log.Println("Rest Get LI")
 
@@ -210,7 +216,7 @@ func LIGetURI(x chan []LI) {
 
 	c := NewCLIOVClient()
 
-	var list []LI
+	var list LIList
 
 	for i, uri := 0, LIURL; uri != ""; i++ {
 
@@ -231,6 +237,8 @@ func LIGetURI(x chan []LI) {
 
 		uri = page.NextPageURI
 	}
+
+	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
 	x <- list
 

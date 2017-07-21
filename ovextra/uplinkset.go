@@ -86,13 +86,13 @@ const (
 func GetUplinkSet() []UplinkSet {
 
 	usListC := make(chan []UplinkSet)
-	liListC := make(chan []LI)
+	liListC := make(chan LIList)
 
 	go UplinkSetGetURI(usListC)
 	go LIGetURI(liListC)
 
 	var usList []UplinkSet
-	var liList []LI
+	var liList LIList
 
 	for i := 0; i < 2; i++ {
 		select {

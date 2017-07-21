@@ -46,13 +46,13 @@ const (
 
 func showLI(cmd *cobra.Command, args []string) {
 
-	liMap := ovextra.GetLI()
+	liList := ovextra.GetLI()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
 	t := template.Must(template.New("").Parse(liShowFormat))
-	t.Execute(tw, liMap)
+	t.Execute(tw, liList)
 
 }
 
