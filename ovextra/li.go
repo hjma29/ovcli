@@ -207,6 +207,40 @@ func GetLI() LIList {
 
 }
 
+func GetLIVerbose(liname string) LIList {
+
+	liListC := make(chan LIList)
+	// ictypeListC := make(chan []ICType)
+	// eNetworkListC := make(chan []ENetwork)
+
+	go LIGetURI(liListC)
+	// go ICTypeGetURI(ictypeListC)
+	// go ENetworkGetURI(eNetworkListC)
+
+	var liList LIList
+	// var ictypeList []ICType
+	// var eNetworkList []ENetwork
+
+	for i := 0; i < 3; i++ {
+		select {
+		case liList = <-liListC:
+			// 	(&liList).validateLigName(liname)
+			// case ictypeList = <-ictypeListC:
+			// case eNetworkList = <-eNetworkListC:
+		}
+	}
+
+	// for i := range ligList {
+
+	// 	lig := &ligList[i]
+	// 	lig.getIOBay(ictypeList)
+	// 	lig.getUplinkPort(ictypeList)
+	// 	lig.getNetwork(eNetworkList)
+	// }
+
+	return liList
+}
+
 //LIGetURI is the function to get raw structs from all json next pages
 func LIGetURI(x chan LIList) {
 
