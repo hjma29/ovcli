@@ -51,6 +51,7 @@ const (
 	SFPURL       = "/rest/interconnects/pluggableModuleInformation/"
 	ICTypeURL    = "/rest/interconnect-types"
 	ENetworkURL  = "/rest/ethernet-networks"
+	EnclosureURL = "/rest/enclosures"
 )
 
 type OVCol interface {

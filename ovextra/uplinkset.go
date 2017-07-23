@@ -121,26 +121,41 @@ func GetUplinkSet() []UplinkSet {
 func GetUplinkSetVerbose() []UplinkSet {
 
 	usListC := make(chan []UplinkSet)
-	liListC := make(chan LIList)
+	encListC := make(chan EncList)
 
 	go UplinkSetGetURI(usListC)
-	go LIGetURI(liListC)
+	go EncGetURI(encListC)
 
 	var usList []UplinkSet
-	var liList LIList
+	var encList EncList
 
 	for i := 0; i < 2; i++ {
 		select {
 		case usList = <-usListC:
-		case liList = <-liListC:
+		case encList = <-encListC:
 		}
 	}
 
-	liMap := make(map[string]LI)
+	encMap := make(map[string]Enclosure)
 
-	for _, v := range liList {
-		liMap[v.URI] = v
+	for _, v := range encList {
+		encMap[v.URI] = v
 	}
+
+
+				var e, b, p int
+
+			for _, v := range v.LogicalLocation.LocationEntries {
+				switch v.Type {
+				case "Enclosure":
+					e = v.RelativeValue
+				case "Bay":
+					b = v.RelativeValue
+				case "Port":
+					p = v.RelativeValue
+				}
+
+
 
 	for i, v := range usList {
 		usList[i].LIName = liMap[v.LogicalInterconnectURI].Name
@@ -150,28 +165,33 @@ func GetUplinkSetVerbose() []UplinkSet {
 
 }
 
-func (u *UplinkSet) getUplinkPort(ictypeList []ICType) {
+func (us *UplinkSet) getUplinkPort(encList EncList) {
 
-	//prepare enc/bay lookup map to find out model number, 1st step loopup to convert port from "83" to "Q4:1"
-	slotModel := make(map[struct{ enc, slot int }]string)
-	for _, v := range lig.IOBayList {
-		slotModel[struct{ enc, slot int }{v.Enclosure, v.Bay}] = v.ModelNumber
-	}
 
-	//prepare modelnumber/portnumber lookup map to find out portname, 1st step loopup to convert port from "83" to "Q4:1"
-	type ModelPort struct {
-		model string
-		port  int
-	}
-	modelPort := make(map[ModelPort]string)
-	for _, t := range ictypeList {
-		for _, p := range t.PortInfos {
-			modelPort[ModelPort{t.PartNumber, p.PortNumber}] = p.PortName
-		}
-	}
+
+	// var c []ICType
+	// return c
+
+	// //prepare enc/bay lookup map to find out model number, 1st step loopup to convert port from "83" to "Q4:1"
+	// slotModel := make(map[struct{ enc, slot int }]string)
+	// for _, v := range lig.IOBayList {
+	// 	slotModel[struct{ enc, slot int }{v.Enclosure, v.Bay}] = v.ModelNumber
+	// }
+
+	// //prepare modelnumber/portnumber lookup map to find out portname, 1st step loopup to convert port from "83" to "Q4:1"
+	// type ModelPort struct {
+	// 	model string
+	// 	port  int
+	// }
+	// modelPort := make(map[ModelPort]string)
+	// for _, t := range ictypeList {
+	// 	for _, p := range t.PortInfos {
+	// 		modelPort[ModelPort{t.PartNumber, p.PortNumber}] = p.PortName
+	// 	}
+	// }
 
 	//get all uplinkport list for all uplinksets, like []{UplinkPort{1,2,67},{2,3,72}}
-	for i, v := range lig.UplinkSets {
+	for i, v := range us.UplinkSets {
 
 		lig.UplinkSets[i].UplinkPorts = make(UplinkPortList, 0)
 		uplinkports := lig.UplinkSets[i].UplinkPorts
@@ -191,22 +211,21 @@ func (u *UplinkSet) getUplinkPort(ictypeList []ICType) {
 				}
 			}
 
-			//use above 2-step map lookups to convert final port number from "67" to "Q3:1"
-			model := slotModel[struct{ enc, slot int }{e, b}]
-			port := modelPort[ModelPort{model, p}]
+	// 		//use above 2-step map lookups to convert final port number from "67" to "Q3:1"
+	// 		model := slotModel[struct{ enc, slot int }{e, b}]
+	// 		port := modelPort[ModelPort{model, p}]
 
-			//update lig uplinkset uplink port list
-			uplinkports = append(uplinkports, UplinkPort{Enclosure: e, Bay: b, Port: port})
-			lig.UplinkSets[i].UplinkPorts = uplinkports
+	// 		//update lig uplinkset uplink port list
+	// 		uplinkports = append(uplinkports, UplinkPort{Enclosure: e, Bay: b, Port: port})
+	// 		lig.UplinkSets[i].UplinkPorts = uplinkports
 
-		}
+	// 	}
 
-		//use x,y to avoice conflict with existing i.
-		sort.Slice(uplinkports, func(x, y int) bool { return uplinkports.multiSort(x, y) })
+	// 	//use x,y to avoice conflict with existing i.
+	// 	sort.Slice(uplinkports, func(x, y int) bool { return uplinkports.multiSort(x, y) })
 
-	}
+	// }
 }
-
 
 //UplinkSetGetURI is the function to get raw structs from all json next pages
 func UplinkSetGetURI(x chan []UplinkSet) {
