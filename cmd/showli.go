@@ -42,21 +42,65 @@ const (
 		"{{range .}}" +
 		"{{.Name}}\t{{.ConsistencyStatus}}\t{{.StackingHealth}}\t{{.LIGName}}\n" +
 		"{{end}}"
+
+	liShowFormatVerbose = "" +
+
+		"{{range .}}" +
+		"------------------------------------------------------------------------------\n" +
+		"{{.Name}}\n" +
+		"{{range .UplinkSets}}" +
+		"  UplinkSet: {{.Name}}\n" +
+		"       Networks:\n" +
+		"            Network Name\tVlanID\n" +
+		"            ------------\t------\n" +
+		"{{range .Networks}}" +
+		"            {{.Name}}\t{{.Vlanid}}\n" +
+		"{{end}}\n" + //done with networks
+		"       UplinkPort:\n" +
+		"            Enclosure\tIOBay\tPort\n" +
+		"            ---------\t-----\t----\n" +
+		"{{range .UplinkPorts}}" + //range enclosure map
+		"            {{.Enclosure}}\t{{.Bay}}\t{{.Port}}\n" +
+		"{{end}}" + //done with uplinkPorts
+		"{{end}}" + //done with UplinkSets
+		// "       Networks:\n" +
+		// "            Network Name\tVlanID\n" +
+		// "{{range .Networks}}" +
+		// "            {{.Name}}\t{{.Vlanid}}\n" +
+		// "{{end}}\n" + //done with networks
+		// "Enclosure\tIOBay\tModelName\tPartNumber\n" +
+		// "{{range .IOBayList}}" +
+		// "{{.Enclosure}}\t{{.Bay}}\t{{.ModelName}}\t{{.ModelNumber}}\n" +
+		// "{{end}}\n" + //done with LIG IOBay List
+		"{{end}}" //done with LIGs
 )
 
 func showLI(cmd *cobra.Command, args []string) {
 
-	liList := ovextra.GetLI()
+	var liList ovextra.LIList
+	var showFormat string
+
+	if liName != "" {
+		liList = ovextra.GetLIVerbose(liName)
+		showFormat = liShowFormatVerbose
+
+	} else {
+		liList = ovextra.GetLI()
+		showFormat = liShowFormat
+
+	}
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
-	t := template.Must(template.New("").Parse(liShowFormat))
+	t := template.Must(template.New("").Parse(showFormat))
 	t.Execute(tw, liList)
 
 }
 
 func init() {
+
+	showLICmd.Flags().StringVarP(&liName, "name", "n", "", "Logical Interconnect Name: all, <name>")
 
 	// showICCmd.AddCommand(showICPortCmd)
 	// showICPortCmd.AddCommand(showSFPCmd)

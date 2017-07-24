@@ -29,6 +29,7 @@ type uplinkPortListType []UplinkPort
 var (
 	profileNamePtr          *string
 	ligName                 string
+	liName                  string
 	usName                  string
 	createNetworkNamePtr    *string
 	createNetworkTypePtr    *string

@@ -172,6 +172,7 @@ type LI struct {
 	Category    string        `json:"category"`
 	URI         string        `json:"uri"`
 	LIGName     string
+	UplinkSets  UplinkSetList
 }
 
 //GetLI is the function called from ovcli cmd package to get information on "show li", it in turn calls RestGet
@@ -207,36 +208,47 @@ func GetLI() LIList {
 
 }
 
-func GetLIVerbose(liname string) LIList {
+func GetLIVerbose(liName string) LIList {
 
+	usListC := make(chan UplinkSetList)
+	encListC := make(chan EncList)
+	netListC := make(chan []ENetwork)
 	liListC := make(chan LIList)
-	// ictypeListC := make(chan []ICType)
-	// eNetworkListC := make(chan []ENetwork)
 
+	go UplinkSetGetURI(usListC)
+	go EncGetURI(encListC)
+	go ENetworkGetURI(netListC)
 	go LIGetURI(liListC)
-	// go ICTypeGetURI(ictypeListC)
-	// go ENetworkGetURI(eNetworkListC)
 
+	var usList UplinkSetList
+	var encList EncList
+	var netList []ENetwork
 	var liList LIList
-	// var ictypeList []ICType
-	// var eNetworkList []ENetwork
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 4; i++ {
 		select {
+		case usList = <-usListC:
+		case encList = <-encListC:
+		case netList = <-netListC:
 		case liList = <-liListC:
-			// 	(&liList).validateLigName(liname)
-			// case ictypeList = <-ictypeListC:
-			// case eNetworkList = <-eNetworkListC:
+			(&liList).validateName(liName)
 		}
 	}
 
-	// for i := range ligList {
+	usList.genList(liList, netList, encList)
 
-	// 	lig := &ligList[i]
-	// 	lig.getIOBay(ictypeList)
-	// 	lig.getUplinkPort(ictypeList)
-	// 	lig.getNetwork(eNetworkList)
-	// }
+	for i, lv := range liList {
+		list := make(UplinkSetList, 0)
+
+		for _, uv := range usList {
+			if lv.URI == uv.LogicalInterconnectURI {
+				list = append(list, uv)
+			}
+		}
+		liList[i].UplinkSets = list
+		//fmt.Println(len(usList))
+
+	}
 
 	return liList
 }
@@ -275,5 +287,26 @@ func LIGetURI(x chan LIList) {
 	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
 	x <- list
+
+}
+
+func (list *LIList) validateName(name string) {
+
+	if name == "all" {
+		return //if name is all, don't touch *list, directly return
+	}
+
+	localslice := *list //define a localslice to avoid too many *list in the following
+
+	for i, v := range localslice {
+		if name == v.Name {
+			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
+			*list = localslice               //update list pointer to point to new shortened slice
+			return
+		}
+	}
+
+	fmt.Println("no Logical Interconnect matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show li --name us1\" ")
+	os.Exit(0)
 
 }

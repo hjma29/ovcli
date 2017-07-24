@@ -52,9 +52,16 @@ const (
 
 		"{{range .}}" +
 		"------------------------------------------------------------------------------\n" +
-		"{{.Name}}\n" +
+		"{{.Name}}   LogicalUplink: {{.LIName}}\n" +
+		"       Networks:\n" +
+		"            Network Name\tVlanID\n" +
+		"            ------------\t------\n" +
+		"{{range .Networks}}" +
+		"            {{.Name}}\t{{.Vlanid}}\n" +
+		"{{end}}\n" + //done with networks
 		"       UplinkPort:\n" +
 		"            Enclosure\tIOBay\tPort\n" +
+		"            ---------\t-----\t----\n" +
 		"{{range .UplinkPorts}}" + //range enclosure map
 		"            {{.Enclosure}}\t{{.Bay}}\t{{.Port}}\n" +
 		"{{end}}" + //done with uplinkPorts

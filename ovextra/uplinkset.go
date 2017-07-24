@@ -50,8 +50,8 @@ type UplinkSet struct {
 	Created                        string           `json:"created"`
 	URI                            string           `json:"uri"`
 	LIName                         string           //manually add to be get LI name from LogicalInterconnectURI
-	UplinkPorts                    UplinkPortList   //type defined under LIG
-
+	UplinkPorts                    UplinkPortList
+	Networks                       []NetworkSummary
 }
 
 type UplinkPortList []UplinkPort
@@ -131,30 +131,64 @@ func GetUplinkSetVerbose(usName string) UplinkSetList {
 
 	usListC := make(chan UplinkSetList)
 	encListC := make(chan EncList)
+	netListC := make(chan []ENetwork)
+	liListC := make(chan LIList)
 
 	go UplinkSetGetURI(usListC)
 	go EncGetURI(encListC)
+	go ENetworkGetURI(netListC)
+	go LIGetURI(liListC)
 
 	var usList UplinkSetList
 	var encList EncList
+	var netList []ENetwork
+	var liList LIList
 
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 4; i++ {
 		select {
 		case usList = <-usListC:
 			(&usList).validateName(usName)
 		case encList = <-encListC:
+		case netList = <-netListC:
+		case liList = <-liListC:
 		}
 	}
 
-	for i := range usList {
-		(&usList[i]).getUplinkPort(encList)
-	}
-
-	// for i, v := range usList {
-	// 	usList[i].LIName = liMap[v.LogicalInterconnectURI].Name
-	// }
+	usList.genList(liList, netList, encList)
 
 	return usList
+
+}
+
+func (usList UplinkSetList) genList(liList LIList, netList []ENetwork, encList EncList) {
+
+	for i := range usList {
+		(&usList[i]).getUplinkPort(encList)
+		(&usList[i]).getNetwork(netList)
+		(&usList[i]).getLI(liList)
+
+	}
+}
+
+func (us *UplinkSet) getNetwork(networkList []ENetwork) {
+
+	networkMap := make(map[string]ENetwork)
+	for _, v := range networkList {
+		networkMap[v.URI] = v
+	}
+
+	networklist := make([]NetworkSummary, 0)
+
+	for _, v := range us.NetworkUris {
+		vlanname := networkMap[v].Name
+		vlanid := networkMap[v].VlanId
+		//lig.UplinkSets[i].Networks = append(lig.UplinkSets[i].Networks, NetworkSummary{vlanname, vlanid})
+		networklist = append(networklist, NetworkSummary{vlanname, vlanid})
+	}
+
+	sort.Slice(networklist, func(i, j int) bool { return networklist[i].Name < networklist[j].Name })
+	(*us).Networks = networklist
+	//sort.Slice(lig.UplinkSets[i].Networks, func(x, y int) bool { return lig.UplinkSets[i].Networks[x].Name < lig.UplinkSets[i].Networks[y].Name })
 
 }
 
@@ -185,6 +219,17 @@ func (us *UplinkSet) getUplinkPort(encList EncList) {
 		sort.Slice(portlist, func(i, j int) bool { return portlist.multiSort(i, j) })
 	}
 	(*us).UplinkPorts = portlist
+
+}
+
+func (us *UplinkSet) getLI(liList LIList) {
+
+	liMap := make(map[string]LI)
+	for _, v := range liList {
+		liMap[v.URI] = v
+	}
+
+	(*us).LIName = liMap[us.LogicalInterconnectURI].Name
 
 }
 
