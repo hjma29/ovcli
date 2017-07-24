@@ -110,7 +110,7 @@ const (
 		"{{end}}\n" + //done with networks
 		"{{end}}" + //done with uplinksets
 		"Enclosure\tIOBay\tModelName\tPartNumber\n" +
-		"{{range .IOBayList}}" +
+		"{{range .IOBays}}" +
 		"{{.Enclosure}}\t{{.Bay}}\t{{.ModelName}}\t{{.ModelNumber}}\n" +
 		"{{end}}\n" + //done with LIG IOBay List
 		"{{end}}" //done with LIGs

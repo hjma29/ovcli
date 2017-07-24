@@ -96,7 +96,7 @@ type LI struct {
 	// 	URI                      interface{} `json:"uri"`
 	// } `json:"qosConfiguration"`
 	InternalNetworkUris []string `json:"internalNetworkUris"`
-	ICMap               struct {
+	InterconnectMap     struct {
 		InterconnectMapEntries []struct {
 			InterconnectURI              string `json:"interconnectUri"`
 			EnclosureIndex               int    `json:"enclosureIndex"`
@@ -109,7 +109,7 @@ type LI struct {
 				} `json:"locationEntries"`
 			} `json:"location"`
 		} `json:"interconnectMapEntries"`
-	} `json:"ICMap"`
+	} `json:"InterconnectMap"`
 	IcmLicenses struct {
 		License []struct {
 			RequiredCount int         `json:"requiredCount"`
@@ -173,6 +173,16 @@ type LI struct {
 	URI         string        `json:"uri"`
 	LIGName     string
 	UplinkSets  UplinkSetList
+	IOBays      IOBayList
+}
+
+type IOBayList []IOBay
+type IOBay struct {
+	EncIndex    int
+	Enclosure   string
+	Bay         string
+	ModelName   string
+	ModelNumber string
 }
 
 //GetLI is the function called from ovcli cmd package to get information on "show li", it in turn calls RestGet
@@ -214,28 +224,34 @@ func GetLIVerbose(liName string) LIList {
 	encListC := make(chan EncList)
 	netListC := make(chan []ENetwork)
 	liListC := make(chan LIList)
+	ictypeListC := make(chan []ICType)
 
 	go UplinkSetGetURI(usListC)
 	go EncGetURI(encListC)
 	go ENetworkGetURI(netListC)
 	go LIGetURI(liListC)
+	go ICTypeGetURI(ictypeListC)
 
 	var usList UplinkSetList
 	var encList EncList
 	var netList []ENetwork
 	var liList LIList
+	var ictypeList []ICType
 
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 5; i++ {
 		select {
 		case usList = <-usListC:
 		case encList = <-encListC:
 		case netList = <-netListC:
+		case ictypeList = <-ictypeListC:
 		case liList = <-liListC:
 			(&liList).validateName(liName)
 		}
 	}
 
 	usList.genList(liList, netList, encList)
+
+	fmt.Println(len(liList))
 
 	for i, lv := range liList {
 		list := make(UplinkSetList, 0)
@@ -246,7 +262,7 @@ func GetLIVerbose(liName string) LIList {
 			}
 		}
 		liList[i].UplinkSets = list
-		//fmt.Println(len(usList))
+		liList[i].getIOBay(ictypeList, encList)
 
 	}
 
@@ -290,6 +306,50 @@ func LIGetURI(x chan LIList) {
 
 }
 
+func (li *LI) getIOBay(ictypeList []ICType, encList EncList) {
+
+	li.IOBays = make([]IOBay, 0)
+
+	encMap := make(map[string]Enclosure)
+	for _, v := range encList {
+		encMap[v.URI] = v
+	}
+
+	//fmt.Println(li.InterconnectMap.InterconnectMapEntries)
+	for _, v := range li.InterconnectMap.InterconnectMapEntries {
+		//fmt.Println("a port")
+
+		ei := v.EnclosureIndex
+		var e, s string
+
+		for _, v := range v.Location.LocationEntries {
+			switch v.Type {
+			case "Enclosure":
+				e = encMap[v.Value].Name
+				fmt.Println(e)
+			case "Bay":
+				s = v.Value
+			}
+		}
+
+		//convert ICType list to ICType URI mapping to prepare lookup later
+		ictypeMap := make(map[string]ICType)
+		for _, v := range ictypeList {
+			ictypeMap[v.URI] = v
+		}
+
+		n := ictypeMap[v.PermittedInterconnectTypeURI].Name
+		m := ictypeMap[v.PermittedInterconnectTypeURI].PartNumber
+
+		li.IOBays = append(li.IOBays, IOBay{ei, e, s, n, m})
+
+	}
+
+	sort.Slice(li.IOBays, func(i, j int) bool { return li.IOBays.multiSort(i, j) })
+	fmt.Println(len(li.IOBays))
+
+}
+
 func (list *LIList) validateName(name string) {
 
 	if name == "all" {
@@ -309,4 +369,18 @@ func (list *LIList) validateName(name string) {
 	fmt.Println("no Logical Interconnect matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show li --name us1\" ")
 	os.Exit(0)
 
+}
+
+func (x IOBayList) multiSort(i, j int) bool {
+	switch {
+	case x[i].EncIndex < x[j].EncIndex:
+		return true
+	case x[i].EncIndex > x[j].EncIndex:
+		return false
+	case x[i].Bay < x[j].Bay:
+		return true
+	case x[i].Bay > x[j].Bay:
+		return false
+	}
+	return false
 }

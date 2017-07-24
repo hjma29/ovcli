@@ -3,24 +3,6 @@
     "members": [
         {
             "type": "logical-interconnectV300",
-            "logicalInterconnectGroupUri": "/rest/logical-interconnect-groups/fbd14e2a-b86b-4048-bfdf-1b0e94042d36",
-            "snmpConfiguration": {
-                "type": "snmp-configuration",
-                "readCommunity": "public",
-                "trapDestinations": [],
-                "systemContact": "",
-                "snmpAccess": [],
-                "enabled": true,
-                "description": null,
-                "status": null,
-                "name": null,
-                "state": null,
-                "created": "2017-03-22T20:17:02.946Z",
-                "eTag": null,
-                "modified": "2017-03-22T20:17:02.946Z",
-                "category": "snmp-configuration",
-                "uri": null
-            },
             "telemetryConfiguration": {
                 "type": "telemetry-configuration",
                 "sampleCount": 12,
@@ -28,21 +10,39 @@
                 "enableTelemetry": true,
                 "description": null,
                 "status": null,
-                "name": "name972131330-1490213822944",
+                "name": "name-372371651-1499951596972",
                 "state": null,
                 "created": null,
                 "eTag": null,
                 "modified": null,
                 "category": "telemetry-configurations",
-                "uri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc/telemetry-configurations/be2ca3b5-9f94-4394-af32-80d6a83c2efe"
+                "uri": "/rest/logical-interconnects/ea5ab9aa-4b10-4228-a67a-737adfa3d42b/telemetry-configurations/74ef2c04-8d8b-4cca-b8e7-ca7a47a30b63"
             },
+            "snmpConfiguration": {
+                "type": "snmp-configuration",
+                "readCommunity": "public",
+                "systemContact": "",
+                "trapDestinations": [],
+                "snmpAccess": [],
+                "enabled": true,
+                "description": null,
+                "status": null,
+                "name": null,
+                "state": null,
+                "created": "2017-07-13T13:13:16.975Z",
+                "eTag": null,
+                "modified": "2017-07-13T13:13:16.975Z",
+                "category": "snmp-configuration",
+                "uri": null
+            },
+            "logicalInterconnectGroupUri": "/rest/logical-interconnect-groups/f08d5ecf-6385-4578-ae4e-84f038fe1708",
+            "stackingHealth": "BiConnected",
             "enclosureUris": [
                 "/rest/enclosures/000000CN7515010J",
                 "/rest/enclosures/000000CN75150484",
                 "/rest/enclosures/000000CN7515048Q"
             ],
             "enclosureType": "SY12000",
-            "stackingHealth": "BiConnected",
             "interconnects": [
                 "/rest/interconnects/7b677464-8db6-403a-9d2f-f563a9d9358f",
                 "/rest/interconnects/0624af45-1a3b-4c6b-a059-51a71c0fb157",
@@ -56,8 +56,8 @@
                 "activeQosConfig": {
                     "type": "QosConfiguration",
                     "configType": "Passthrough",
-                    "downlinkClassificationType": null,
                     "uplinkClassificationType": null,
+                    "downlinkClassificationType": null,
                     "qosTrafficClassifiers": [],
                     "description": null,
                     "status": null,
@@ -75,12 +75,192 @@
                 "status": null,
                 "name": null,
                 "state": null,
-                "created": "2017-03-22T20:17:02.948Z",
+                "created": "2017-07-13T13:13:16.977Z",
                 "eTag": null,
-                "modified": "2017-03-22T20:17:02.948Z",
+                "modified": "2017-07-13T13:13:16.977Z",
                 "category": "qos-aggregated-configuration",
                 "uri": null
             },
+            "icmLicenses": {
+                "license": [
+                    {
+                        "licenseType": "Synergy 8Gb FC Upgrade",
+                        "consumedCount": 0,
+                        "requiredCount": 0,
+                        "state": null
+                    }
+                ]
+            },
+            "fabricUri": "/rest/fabrics/bbd1a99d-b495-4042-9194-30e7687aa764",
+            "interconnectMap": {
+                "interconnectMapEntries": [
+                    {
+                        "interconnectUri": "/rest/interconnects/0624af45-1a3b-4c6b-a059-51a71c0fb157",
+                        "enclosureIndex": 3,
+                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
+                        "logicalDownlinkUri": "/rest/logical-downlinks/0a7f9b40-f2fe-42c0-a47b-0f5757caff0f",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "3",
+                                    "type": "Bay"
+                                },
+                                {
+                                    "value": "/rest/enclosures/000000CN7515048Q",
+                                    "type": "Enclosure"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "interconnectUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
+                        "enclosureIndex": 1,
+                        "permittedInterconnectTypeUri": "/rest/interconnect-types/1b8f70bb-507b-493c-b1ae-f748dbd0d3ae",
+                        "logicalDownlinkUri": "/rest/logical-downlinks/0a7f9b40-f2fe-42c0-a47b-0f5757caff0f",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "0",
+                                    "type": "StackingMemberId"
+                                },
+                                {
+                                    "value": "3",
+                                    "type": "Bay"
+                                },
+                                {
+                                    "value": "3",
+                                    "type": "StackingDomainId"
+                                },
+                                {
+                                    "value": "/rest/enclosures/000000CN7515010J",
+                                    "type": "Enclosure"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "interconnectUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
+                        "enclosureIndex": 2,
+                        "permittedInterconnectTypeUri": "/rest/interconnect-types/1b8f70bb-507b-493c-b1ae-f748dbd0d3ae",
+                        "logicalDownlinkUri": "/rest/logical-downlinks/dcbb08f0-f8d5-4554-afea-7cff5fb08468",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "/rest/enclosures/000000CN75150484",
+                                    "type": "Enclosure"
+                                },
+                                {
+                                    "value": "1",
+                                    "type": "StackingMemberId"
+                                },
+                                {
+                                    "value": "6",
+                                    "type": "Bay"
+                                },
+                                {
+                                    "value": "3",
+                                    "type": "StackingDomainId"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "interconnectUri": "/rest/interconnects/eabd1c7e-e0cd-4f48-90ab-a40c46420e53",
+                        "enclosureIndex": 2,
+                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
+                        "logicalDownlinkUri": "/rest/logical-downlinks/0a7f9b40-f2fe-42c0-a47b-0f5757caff0f",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "3",
+                                    "type": "Bay"
+                                },
+                                {
+                                    "value": "/rest/enclosures/000000CN75150484",
+                                    "type": "Enclosure"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "interconnectUri": "/rest/interconnects/7b677464-8db6-403a-9d2f-f563a9d9358f",
+                        "enclosureIndex": 1,
+                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
+                        "logicalDownlinkUri": "/rest/logical-downlinks/dcbb08f0-f8d5-4554-afea-7cff5fb08468",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "6",
+                                    "type": "Bay"
+                                },
+                                {
+                                    "value": "/rest/enclosures/000000CN7515010J",
+                                    "type": "Enclosure"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "interconnectUri": "/rest/interconnects/babddb33-dad3-446c-a11a-32992ac8ba3f",
+                        "enclosureIndex": 3,
+                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
+                        "logicalDownlinkUri": "/rest/logical-downlinks/dcbb08f0-f8d5-4554-afea-7cff5fb08468",
+                        "location": {
+                            "locationEntries": [
+                                {
+                                    "value": "/rest/enclosures/000000CN7515048Q",
+                                    "type": "Enclosure"
+                                },
+                                {
+                                    "value": "6",
+                                    "type": "Bay"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "portMonitor": {
+                "type": "port-monitor",
+                "analyzerPort": null,
+                "monitoredPorts": [],
+                "enablePortMonitor": false,
+                "description": null,
+                "status": null,
+                "name": "name1664630162-1499951587090",
+                "state": null,
+                "created": null,
+                "eTag": "1ea7dec8-3aae-416b-b944-c6e1e0185726",
+                "modified": null,
+                "category": "port-monitor",
+                "uri": "/rest/logical-interconnects/ea5ab9aa-4b10-4228-a67a-737adfa3d42b/port-monitor"
+            },
+            "ethernetSettings": {
+                "type": "EthernetInterconnectSettingsV201",
+                "interconnectType": "Ethernet",
+                "lldpIpv4Address": "10.16.44.127",
+                "lldpIpv6Address": "fe80::1201:2ff:fe03:401",
+                "enableIgmpSnooping": false,
+                "igmpIdleTimeoutInterval": 260,
+                "enableFastMacCacheFailover": true,
+                "macRefreshInterval": 5,
+                "enableNetworkLoopProtection": true,
+                "enablePauseFloodProtection": true,
+                "enableRichTLV": false,
+                "enableTaggedLldp": true,
+                "dependentResourceUri": "/rest/logical-interconnects/ea5ab9aa-4b10-4228-a67a-737adfa3d42b",
+                "name": "ES1066328696",
+                "id": "9a69c9ce-18bb-4b7c-96d0-43033f8e357c",
+                "description": null,
+                "status": null,
+                "state": null,
+                "created": "2017-07-13T13:13:16.919Z",
+                "eTag": null,
+                "modified": "2017-07-13T13:33:28.786Z",
+                "category": null,
+                "uri": "/rest/logical-interconnects/ea5ab9aa-4b10-4228-a67a-737adfa3d42b/ethernetSettings"
+            },
+            "consistencyStatus": "CONSISTENT",
             "internalNetworkUris": [
                 "/rest/ethernet-networks/3212ff45-d85a-4b78-a2ee-50143f848475",
                 "/rest/ethernet-networks/4f8ce984-7cd8-4471-a233-9f63deed3645",
@@ -99,197 +279,18 @@
                 "/rest/ethernet-networks/70e2cc00-ee47-49fd-8978-4c4cb966e29f",
                 "/rest/ethernet-networks/7360528c-14b2-4396-89f4-080bdca0196c"
             ],
-            "ICMap": {
-                "interconnectMapEntries": [
-                    {
-                        "interconnectUri": "/rest/interconnects/7b677464-8db6-403a-9d2f-f563a9d9358f",
-                        "enclosureIndex": 1,
-                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
-                        "logicalDownlinkUri": "/rest/logical-downlinks/b000706c-08c0-4767-b327-d43ebc11edc7",
-                        "location": {
-                            "locationEntries": [
-                                {
-                                    "value": "/rest/enclosures/000000CN7515010J",
-                                    "type": "Enclosure"
-                                },
-                                {
-                                    "value": "6",
-                                    "type": "Bay"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "interconnectUri": "/rest/interconnects/80aa9e67-0724-4df6-a8a4-90d68e2e1bf4",
-                        "enclosureIndex": 2,
-                        "permittedInterconnectTypeUri": "/rest/interconnect-types/1b8f70bb-507b-493c-b1ae-f748dbd0d3ae",
-                        "logicalDownlinkUri": "/rest/logical-downlinks/b000706c-08c0-4767-b327-d43ebc11edc7",
-                        "location": {
-                            "locationEntries": [
-                                {
-                                    "value": "6",
-                                    "type": "Bay"
-                                },
-                                {
-                                    "value": "1",
-                                    "type": "StackingMemberId"
-                                },
-                                {
-                                    "value": "2",
-                                    "type": "StackingDomainId"
-                                },
-                                {
-                                    "value": "/rest/enclosures/000000CN75150484",
-                                    "type": "Enclosure"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "interconnectUri": "/rest/interconnects/babddb33-dad3-446c-a11a-32992ac8ba3f",
-                        "enclosureIndex": 3,
-                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
-                        "logicalDownlinkUri": "/rest/logical-downlinks/b000706c-08c0-4767-b327-d43ebc11edc7",
-                        "location": {
-                            "locationEntries": [
-                                {
-                                    "value": "6",
-                                    "type": "Bay"
-                                },
-                                {
-                                    "value": "/rest/enclosures/000000CN7515048Q",
-                                    "type": "Enclosure"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "interconnectUri": "/rest/interconnects/7453d533-bb98-49e1-81de-bd782a2beb06",
-                        "enclosureIndex": 1,
-                        "permittedInterconnectTypeUri": "/rest/interconnect-types/1b8f70bb-507b-493c-b1ae-f748dbd0d3ae",
-                        "logicalDownlinkUri": "/rest/logical-downlinks/07010ab8-8710-42ad-959d-149ab5337ef7",
-                        "location": {
-                            "locationEntries": [
-                                {
-                                    "value": "3",
-                                    "type": "Bay"
-                                },
-                                {
-                                    "value": "/rest/enclosures/000000CN7515010J",
-                                    "type": "Enclosure"
-                                },
-                                {
-                                    "value": "0",
-                                    "type": "StackingMemberId"
-                                },
-                                {
-                                    "value": "2",
-                                    "type": "StackingDomainId"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "interconnectUri": "/rest/interconnects/0624af45-1a3b-4c6b-a059-51a71c0fb157",
-                        "enclosureIndex": 3,
-                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
-                        "logicalDownlinkUri": "/rest/logical-downlinks/07010ab8-8710-42ad-959d-149ab5337ef7",
-                        "location": {
-                            "locationEntries": [
-                                {
-                                    "value": "3",
-                                    "type": "Bay"
-                                },
-                                {
-                                    "value": "/rest/enclosures/000000CN7515048Q",
-                                    "type": "Enclosure"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "interconnectUri": "/rest/interconnects/eabd1c7e-e0cd-4f48-90ab-a40c46420e53",
-                        "enclosureIndex": 2,
-                        "permittedInterconnectTypeUri": "/rest/interconnect-types/9392adf9-400e-4e53-8f8e-d4aec1626608",
-                        "logicalDownlinkUri": "/rest/logical-downlinks/07010ab8-8710-42ad-959d-149ab5337ef7",
-                        "location": {
-                            "locationEntries": [
-                                {
-                                    "value": "3",
-                                    "type": "Bay"
-                                },
-                                {
-                                    "value": "/rest/enclosures/000000CN75150484",
-                                    "type": "Enclosure"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "icmLicenses": {
-                "license": [
-                    {
-                        "requiredCount": 0,
-                        "licenseType": "Synergy 8Gb FC Upgrade",
-                        "consumedCount": 0,
-                        "state": null
-                    }
-                ]
-            },
-            "consistencyStatus": "CONSISTENT",
-            "ethernetSettings": {
-                "type": "EthernetInterconnectSettingsV201",
-                "interconnectType": "Ethernet",
-                "lldpIpv4Address": "10.16.44.127",
-                "lldpIpv6Address": "fe80::1201:2ff:fe03:401",
-                "enableIgmpSnooping": false,
-                "igmpIdleTimeoutInterval": 260,
-                "enableFastMacCacheFailover": true,
-                "macRefreshInterval": 5,
-                "enableNetworkLoopProtection": true,
-                "enablePauseFloodProtection": true,
-                "enableRichTLV": false,
-                "enableTaggedLldp": true,
-                "dependentResourceUri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc",
-                "name": "LS-690387321",
-                "id": "6a8e3538-5745-4077-ac91-4e762a1d3e52",
-                "description": null,
-                "status": null,
-                "state": null,
-                "created": "2017-03-30T17:10:52.447Z",
-                "eTag": null,
-                "modified": "2017-06-05T13:22:34.905Z",
-                "category": null,
-                "uri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc/ethernetSettings"
-            },
-            "fabricUri": "/rest/fabrics/bbd1a99d-b495-4042-9194-30e7687aa764",
-            "portMonitor": {
-                "type": "port-monitor",
-                "analyzerPort": null,
-                "monitoredPorts": [],
-                "enablePortMonitor": false,
-                "description": null,
-                "status": null,
-                "name": "name-1404640435-1490213810164",
-                "state": null,
-                "created": null,
-                "eTag": "deeaec29-7c8d-4476-9952-cb5206a722f8",
-                "modified": null,
-                "category": "port-monitor",
-                "uri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc/port-monitor"
-            },
             "domainUri": "/rest/domains/31dbeb98-b443-494e-9428-4a11de1a974e",
+            "securityStandardMode": null,
             "scopeUris": [],
             "description": null,
-            "status": "Critical",
-            "name": "SSA LE1-DCA-SolCenter-LIG",
+            "status": "OK",
+            "name": "SSA LE1-DCA-Solcenter-LIG-Copy",
             "state": "Unknown",
-            "created": "2017-03-22T20:16:50.164Z",
-            "eTag": "e130d0ac-e034-424e-98ab-ab8d79e10f71",
-            "modified": "2017-06-06T19:50:57.648Z",
+            "created": "2017-07-13T13:13:07.090Z",
+            "eTag": "b9b1bd55-4f7e-4468-bf4e-c08a77551528",
+            "modified": "2017-07-13T13:33:01.261Z",
             "category": "logical-interconnects",
-            "uri": "/rest/logical-interconnects/8b69ca42-4677-4f2e-9124-e61a62037dfc"
+            "uri": "/rest/logical-interconnects/ea5ab9aa-4b10-4228-a67a-737adfa3d42b"
         }
     ],
     "nextPageUri": null,

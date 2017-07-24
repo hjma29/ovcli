@@ -55,14 +55,18 @@ const (
 		"            ------------\t------\n" +
 		"{{range .Networks}}" +
 		"            {{.Name}}\t{{.Vlanid}}\n" +
-		"{{end}}\n" + //done with networks
+		"{{end}}" + //done with networks
 		"       UplinkPort:\n" +
 		"            Enclosure\tIOBay\tPort\n" +
 		"            ---------\t-----\t----\n" +
 		"{{range .UplinkPorts}}" + //range enclosure map
 		"            {{.Enclosure}}\t{{.Bay}}\t{{.Port}}\n" +
-		"{{end}}" + //done with uplinkPorts
-		"{{end}}" + //done with UplinkSets
+		"{{end}}\n" + //done with uplinkPorts
+		"{{end}}\n" + //done with UplinkSets
+		"Index\tEnclosure\tIOBay\tModelName\tPartNumber\n" +
+		"{{range .IOBays}}" +
+		"{{.EncIndex}}\t{{.Enclosure}}\t{{.Bay}}\t{{.ModelName}}\t{{.ModelNumber}}\n" +
+		"{{end}}\n" + //done with LIG IOBay List
 		// "       Networks:\n" +
 		// "            Network Name\tVlanID\n" +
 		// "{{range .Networks}}" +

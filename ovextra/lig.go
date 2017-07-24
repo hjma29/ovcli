@@ -45,12 +45,12 @@ type LIG struct {
 	Type                    string                   `json:"type"`                             // "type": "logical-interconnect-groupsV3",
 	UplinkSets              []LIGUplinkSet           `json:"uplinkSets,omitempty"`             // "uplinkSets": {...},
 	URI                     string                   `json:"uri,omitempty"`                    // "uri": "/rest/logical-interconnect-groups/e2f0031b-52bd-4223-9ac1-d91cb519d548",
-	IOBayList               ioBayList                //define []IOBay as named type to use multisort method later
+	IOBays                  LIGIOBayList             //define []IOBay as named type to use multisort method later
 }
 
-type ioBayList []IOBay
+type LIGIOBayList []LIGIOBay
 
-type IOBay struct {
+type LIGIOBay struct {
 	Enclosure   int
 	Bay         int
 	ModelName   string
@@ -158,7 +158,7 @@ func GetLIGVerbose(ligName string) LIGList {
 
 func (lig *LIG) getIOBay(ictypeList []ICType) {
 
-	lig.IOBayList = make([]IOBay, 0)
+	lig.IOBays = make([]LIGIOBay, 0)
 
 	for _, v := range lig.InterconnectMapTemplate.InterconnectMapEntryTemplates {
 
@@ -182,11 +182,11 @@ func (lig *LIG) getIOBay(ictypeList []ICType) {
 		n := ictypeMap[v.PermittedInterconnectTypeUri].Name
 		m := ictypeMap[v.PermittedInterconnectTypeUri].PartNumber
 
-		lig.IOBayList = append(lig.IOBayList, IOBay{e, s, n, m})
+		lig.IOBays = append(lig.IOBays, LIGIOBay{e, s, n, m})
 
 	}
 
-	sort.Slice(lig.IOBayList, func(i, j int) bool { return lig.IOBayList.multiSort(i, j) })
+	sort.Slice(lig.IOBays, func(i, j int) bool { return lig.IOBays.multiSort(i, j) })
 
 }
 
@@ -194,7 +194,7 @@ func (lig *LIG) getUplinkPort(ictypeList []ICType) {
 
 	//prepare enc/bay lookup map to find out model number, 1st step loopup to convert port from "83" to "Q4:1"
 	slotModel := make(map[struct{ enc, slot int }]string)
-	for _, v := range lig.IOBayList {
+	for _, v := range lig.IOBays {
 		slotModel[struct{ enc, slot int }{v.Enclosure, v.Bay}] = v.ModelNumber
 	}
 
@@ -348,7 +348,7 @@ func (x LIGUplinkPortList) multiSort(i, j int) bool {
 	return false
 }
 
-func (x ioBayList) multiSort(i, j int) bool {
+func (x LIGIOBayList) multiSort(i, j int) bool {
 	switch {
 	case x[i].Enclosure < x[j].Enclosure:
 		return true
