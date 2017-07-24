@@ -10,20 +10,21 @@ import (
 )
 
 type UplinkSetCol struct {
-	Type        string      `json:"type"`
-	Members     []UplinkSet `json:"members"`
-	Count       int         `json:"count"`
-	Total       int         `json:"total"`
-	NextPageURI string      `json:"nextPageUri"`
-	Start       int         `json:"start"`
-	PrevPageURI string      `json:"prevPageUri"`
-	Category    string      `json:"category"`
-	Modified    string      `json:"modified"`
-	ETag        string      `json:"eTag"`
-	Created     string      `json:"created"`
-	URI         string      `json:"uri"`
+	Type        string        `json:"type"`
+	Members     UplinkSetList `json:"members"`
+	Count       int           `json:"count"`
+	Total       int           `json:"total"`
+	NextPageURI string        `json:"nextPageUri"`
+	Start       int           `json:"start"`
+	PrevPageURI string        `json:"prevPageUri"`
+	Category    string        `json:"category"`
+	Modified    string        `json:"modified"`
+	ETag        string        `json:"eTag"`
+	Created     string        `json:"created"`
+	URI         string        `json:"uri"`
 }
 
+type UplinkSetList []UplinkSet
 type UplinkSet struct {
 	Type                           string           `json:"type"`
 	ConnectionMode                 string           `json:"connectionMode"`
@@ -51,6 +52,14 @@ type UplinkSet struct {
 	LIName                         string           //manually add to be get LI name from LogicalInterconnectURI
 	UplinkPorts                    UplinkPortList   //type defined under LIG
 
+}
+
+type UplinkPortList []UplinkPort
+
+type UplinkPort struct {
+	Enclosure string
+	Bay       string
+	Port      string
 }
 
 type PortConfigInfo struct {
@@ -85,15 +94,15 @@ const (
 )
 
 //GetUplinkSet is to retrive uplinkset information
-func GetUplinkSet() []UplinkSet {
+func GetUplinkSet() UplinkSetList {
 
-	usListC := make(chan []UplinkSet)
+	usListC := make(chan UplinkSetList)
 	liListC := make(chan LIList)
 
 	go UplinkSetGetURI(usListC)
 	go LIGetURI(liListC)
 
-	var usList []UplinkSet
+	var usList UplinkSetList
 	var liList LIList
 
 	for i := 0; i < 2; i++ {
@@ -118,48 +127,32 @@ func GetUplinkSet() []UplinkSet {
 }
 
 //GetUplinkSet is to retrive uplinkset information
-func GetUplinkSetVerbose() []UplinkSet {
+func GetUplinkSetVerbose(usName string) UplinkSetList {
 
-	usListC := make(chan []UplinkSet)
+	usListC := make(chan UplinkSetList)
 	encListC := make(chan EncList)
 
 	go UplinkSetGetURI(usListC)
 	go EncGetURI(encListC)
 
-	var usList []UplinkSet
+	var usList UplinkSetList
 	var encList EncList
 
 	for i := 0; i < 2; i++ {
 		select {
 		case usList = <-usListC:
+			(&usList).validateName(usName)
 		case encList = <-encListC:
 		}
 	}
 
-	encMap := make(map[string]Enclosure)
-
-	for _, v := range encList {
-		encMap[v.URI] = v
+	for i := range usList {
+		(&usList[i]).getUplinkPort(encList)
 	}
 
-
-				var e, b, p int
-
-			for _, v := range v.LogicalLocation.LocationEntries {
-				switch v.Type {
-				case "Enclosure":
-					e = v.RelativeValue
-				case "Bay":
-					b = v.RelativeValue
-				case "Port":
-					p = v.RelativeValue
-				}
-
-
-
-	for i, v := range usList {
-		usList[i].LIName = liMap[v.LogicalInterconnectURI].Name
-	}
+	// for i, v := range usList {
+	// 	usList[i].LIName = liMap[v.LogicalInterconnectURI].Name
+	// }
 
 	return usList
 
@@ -167,68 +160,36 @@ func GetUplinkSetVerbose() []UplinkSet {
 
 func (us *UplinkSet) getUplinkPort(encList EncList) {
 
+	encMap := make(map[string]Enclosure)
 
+	for _, v := range encList {
+		encMap[v.URI] = v
+	}
 
-	// var c []ICType
-	// return c
+	portlist := make(UplinkPortList, 0)
+	for _, v := range us.PortConfigInfos {
+		var e, b, p string
 
-	// //prepare enc/bay lookup map to find out model number, 1st step loopup to convert port from "83" to "Q4:1"
-	// slotModel := make(map[struct{ enc, slot int }]string)
-	// for _, v := range lig.IOBayList {
-	// 	slotModel[struct{ enc, slot int }{v.Enclosure, v.Bay}] = v.ModelNumber
-	// }
+		for _, v := range v.Location.LocationEntries {
+			switch v.Type {
+			case "Enclosure":
+				e = encMap[v.Value].Name
+			case "Bay":
+				b = v.Value
+			case "Port":
+				p = v.Value
 
-	// //prepare modelnumber/portnumber lookup map to find out portname, 1st step loopup to convert port from "83" to "Q4:1"
-	// type ModelPort struct {
-	// 	model string
-	// 	port  int
-	// }
-	// modelPort := make(map[ModelPort]string)
-	// for _, t := range ictypeList {
-	// 	for _, p := range t.PortInfos {
-	// 		modelPort[ModelPort{t.PartNumber, p.PortNumber}] = p.PortName
-	// 	}
-	// }
-
-	//get all uplinkport list for all uplinksets, like []{UplinkPort{1,2,67},{2,3,72}}
-	for i, v := range us.UplinkSets {
-
-		lig.UplinkSets[i].UplinkPorts = make(UplinkPortList, 0)
-		uplinkports := lig.UplinkSets[i].UplinkPorts
-
-		for _, v := range v.LogicalPortConfigInfos {
-
-			var e, b, p int
-
-			for _, v := range v.LogicalLocation.LocationEntries {
-				switch v.Type {
-				case "Enclosure":
-					e = v.RelativeValue
-				case "Bay":
-					b = v.RelativeValue
-				case "Port":
-					p = v.RelativeValue
-				}
 			}
+		}
+		portlist = append(portlist, UplinkPort{e, b, p})
+		sort.Slice(portlist, func(i, j int) bool { return portlist.multiSort(i, j) })
+	}
+	(*us).UplinkPorts = portlist
 
-	// 		//use above 2-step map lookups to convert final port number from "67" to "Q3:1"
-	// 		model := slotModel[struct{ enc, slot int }{e, b}]
-	// 		port := modelPort[ModelPort{model, p}]
-
-	// 		//update lig uplinkset uplink port list
-	// 		uplinkports = append(uplinkports, UplinkPort{Enclosure: e, Bay: b, Port: port})
-	// 		lig.UplinkSets[i].UplinkPorts = uplinkports
-
-	// 	}
-
-	// 	//use x,y to avoice conflict with existing i.
-	// 	sort.Slice(uplinkports, func(x, y int) bool { return uplinkports.multiSort(x, y) })
-
-	// }
 }
 
 //UplinkSetGetURI is the function to get raw structs from all json next pages
-func UplinkSetGetURI(x chan []UplinkSet) {
+func UplinkSetGetURI(x chan UplinkSetList) {
 
 	log.Println("Fetch UplinkSet")
 
@@ -236,7 +197,7 @@ func UplinkSetGetURI(x chan []UplinkSet) {
 
 	c := NewCLIOVClient()
 
-	var list []UplinkSet
+	var list UplinkSetList
 	uri := UplinkSetURL
 
 	for uri != "" {
@@ -263,4 +224,41 @@ func UplinkSetGetURI(x chan []UplinkSet) {
 
 	x <- list
 
+}
+
+func (list *UplinkSetList) validateName(name string) {
+
+	if name == "all" {
+		return //if name is all, don't touch *list, directly return
+	}
+
+	localslice := *list //define a localslice to avoid too many *list in the following
+
+	for i, v := range localslice {
+		if name == v.Name {
+			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
+			*list = localslice               //update list pointer to point to new shortened slice
+			return
+		}
+	}
+
+	fmt.Println("no UplinkSet matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show uplinkset --name us1\" ")
+	os.Exit(0)
+
+}
+
+func (x UplinkPortList) multiSort(i, j int) bool {
+	switch {
+	case x[i].Enclosure < x[j].Enclosure:
+		return true
+	case x[i].Enclosure > x[j].Enclosure:
+		return false
+	case x[i].Bay < x[j].Bay:
+		return true
+	case x[i].Bay > x[j].Bay:
+		return false
+	case x[i].Port < x[j].Port:
+		return true
+	}
+	return false
 }

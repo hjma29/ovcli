@@ -41,25 +41,59 @@ to quickly create a Cobra application.`,
 }
 
 const (
-	uplinkSetShowFormat = "" +
+	usShowFormat = "" +
 		"Name\tLIMap\n" +
 		//"----\t-----\n" +
 		"{{range .}}" +
 		"{{.Name}}\t{{.LIName}}\n" +
 		"{{end}}"
+
+	usShowFormatVerbose = "" +
+
+		"{{range .}}" +
+		"------------------------------------------------------------------------------\n" +
+		"{{.Name}}\n" +
+		"       UplinkPort:\n" +
+		"            Enclosure\tIOBay\tPort\n" +
+		"{{range .UplinkPorts}}" + //range enclosure map
+		"            {{.Enclosure}}\t{{.Bay}}\t{{.Port}}\n" +
+		"{{end}}" + //done with uplinkPorts
+		// "       Networks:\n" +
+		// "            Network Name\tVlanID\n" +
+		// "{{range .Networks}}" +
+		// "            {{.Name}}\t{{.Vlanid}}\n" +
+		// "{{end}}\n" + //done with networks
+		// "Enclosure\tIOBay\tModelName\tPartNumber\n" +
+		// "{{range .IOBayList}}" +
+		// "{{.Enclosure}}\t{{.Bay}}\t{{.ModelName}}\t{{.ModelNumber}}\n" +
+		// "{{end}}\n" + //done with LIG IOBay List
+		"{{end}}" //done with LIGs
 )
 
 func showUplinkSet(cmd *cobra.Command, args []string) {
-	usList := ovextra.GetUplinkSet()
+	//usList := ovextra.GetUplinkSet()
+	var usList []ovextra.UplinkSet
+	var showFormat string
+
+	if usName != "" {
+		usList = ovextra.GetUplinkSetVerbose(usName)
+		showFormat = usShowFormatVerbose
+
+	} else {
+		usList = ovextra.GetUplinkSet()
+		showFormat = usShowFormat
+
+	}
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
 
-	t := template.Must(template.New("").Parse(uplinkSetShowFormat))
+	t := template.Must(template.New("").Parse(showFormat))
 	t.Execute(tw, usList)
 
 }
 
 func init() {
+	showUplinkSetCmd.Flags().StringVarP(&usName, "name", "n", "", "UplinkSet Name: all, <name>")
 
 }

@@ -79,21 +79,21 @@ type LIGUplinkSet struct {
 	NetworkUris            []string                `json:"networkUris"`                   // "networkUris": ["/rest/ethernet-networks/f1e38895-721b-4204-8395-ae0caba5e163"]
 	PrimaryPort            *LogicalLocation        `json:"primaryPort,omitempty"`         // "primaryPort": {...},
 	Reachability           string                  `json:"reachability,omitempty"`        // "reachability": "Reachable",
-	UplinkPorts            UplinkPortList          //define named type to use multisort method later
+	UplinkPorts            LIGUplinkPortList       //define named type to use multisort method later
 	Networks               []NetworkSummary        //collect network name and vlanid from NetworkURI list
+}
+
+type LIGUplinkPortList []LIGUplinkPort
+
+type LIGUplinkPort struct {
+	Enclosure int
+	Bay       int
+	Port      string
 }
 
 type NetworkSummary struct {
 	Name   string
 	Vlanid int
-}
-type UplinkPortList []UplinkPort
-
-type UplinkPort struct {
-	Enclosure int
-	EncName   string
-	Bay       int
-	Port      string
 }
 
 type LogicalPortConfigInfo struct {
@@ -121,7 +121,7 @@ func GetLIG() LIGList {
 
 }
 
-func GetLIGVerbose(ligname string) LIGList {
+func GetLIGVerbose(ligName string) LIGList {
 
 	ligListC := make(chan LIGList)
 	ictypeListC := make(chan []ICType)
@@ -138,7 +138,7 @@ func GetLIGVerbose(ligname string) LIGList {
 	for i := 0; i < 3; i++ {
 		select {
 		case ligList = <-ligListC:
-			(&ligList).validateLigName(ligname)
+			(&ligList).validateName(ligName)
 		case ictypeList = <-ictypeListC:
 		case eNetworkList = <-eNetworkListC:
 		}
@@ -213,7 +213,7 @@ func (lig *LIG) getUplinkPort(ictypeList []ICType) {
 	//get all uplinkport list for all uplinksets, like []{UplinkPort{1,2,67},{2,3,72}}
 	for i, v := range lig.UplinkSets {
 
-		lig.UplinkSets[i].UplinkPorts = make(UplinkPortList, 0)
+		lig.UplinkSets[i].UplinkPorts = make(LIGUplinkPortList, 0)
 		uplinkports := lig.UplinkSets[i].UplinkPorts
 
 		for _, v := range v.LogicalPortConfigInfos {
@@ -236,7 +236,7 @@ func (lig *LIG) getUplinkPort(ictypeList []ICType) {
 			port := modelPort[ModelPort{model, p}]
 
 			//update lig uplinkset uplink port list
-			uplinkports = append(uplinkports, UplinkPort{Enclosure: e, Bay: b, Port: port})
+			uplinkports = append(uplinkports, LIGUplinkPort{e, b, port})
 			lig.UplinkSets[i].UplinkPorts = uplinkports
 
 		}
@@ -311,8 +311,7 @@ func LIGGetURI(x chan LIGList) {
 
 }
 
-//pass pointer to slice so we can move original slice pointer to point to one element or all
-func (list *LIGList) validateLigName(name string) {
+func (list *LIGList) validateName(name string) {
 
 	if name == "all" {
 		return //if name is all, don't touch *list, directly return
@@ -333,7 +332,7 @@ func (list *LIGList) validateLigName(name string) {
 
 }
 
-func (x UplinkPortList) multiSort(i, j int) bool {
+func (x LIGUplinkPortList) multiSort(i, j int) bool {
 	switch {
 	case x[i].Enclosure < x[j].Enclosure:
 		return true
