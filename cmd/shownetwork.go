@@ -15,11 +15,6 @@
 package cmd
 
 import (
-	//"fmt"
-	// "os"
-	// "text/tabwriter"
-	// "text/template"
-
 	"html/template"
 	"os"
 	"text/tabwriter"
@@ -28,27 +23,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var showUplinkSetCmd = &cobra.Command{
-	Use:   "uplinkset",
-	Short: "Display enclosure uplink information",
+// networkCmd represents the network command
+var showNetworkCmd = &cobra.Command{
+	Use:   "network",
+	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: showUplinkSet,
+	Run: showNetwork,
 }
 
 const (
-	usShowFormat = "" +
-		"Name\tLIMap\n" +
+	netShowFormat = "" +
+		"Name\tNetworkType\tVlanId\n" +
 		//"----\t-----\n" +
 		"{{range .}}" +
-		"{{.Name}}\t{{.LIName}}\n" +
+		"{{.Name}}\t{{.EthernetNetworkType}}\t{{.VlanId}}\n" +
 		"{{end}}"
 
-	usShowFormatVerbose = "" +
+	netShowFormatVerbose = "" +
 
 		"{{range .}}" +
 		"------------------------------------------------------------------------------\n" +
@@ -77,18 +73,18 @@ const (
 		"{{end}}" //done with LIGs
 )
 
-func showUplinkSet(cmd *cobra.Command, args []string) {
+func showNetwork(cmd *cobra.Command, args []string) {
 
-	var usList []ovextra.UplinkSet
+	var netList []ovextra.ENetwork
 	var showFormat string
 
-	if usName != "" {
-		usList = ovextra.GetUplinkSetVerbose(usName)
-		showFormat = usShowFormatVerbose
+	if netName != "" {
+		netList = ovextra.GetENetworkVerbose(netName)
+		showFormat = netShowFormatVerbose
 
 	} else {
-		usList = ovextra.GetUplinkSet()
-		showFormat = usShowFormat
+		netList = ovextra.GetENetwork()
+		showFormat = netShowFormat
 
 	}
 
@@ -96,11 +92,12 @@ func showUplinkSet(cmd *cobra.Command, args []string) {
 	defer tw.Flush()
 
 	t := template.Must(template.New("").Parse(showFormat))
-	t.Execute(tw, usList)
+	t.Execute(tw, netList)
 
 }
 
 func init() {
-	showUplinkSetCmd.Flags().StringVarP(&usName, "name", "n", "", "UplinkSet Name: all, <name>")
+
+	showNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name: all, <name>")
 
 }

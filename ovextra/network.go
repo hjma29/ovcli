@@ -15,7 +15,7 @@ type ENetwork struct {
 	Created               string `json:"created,omitempty"`               // "created": "20150831T154835.250Z",
 	Description           string `json:"description,omitempty"`           // "description": "Ethernet network 1",
 	ETAG                  string `json:"eTag,omitempty"`                  // "eTag": "1441036118675/8",
-	ENetworkType          string `json:"ethernetNetworkType,omitempty"`   // "ethernetNetworkType": "Tagged",
+	EthernetNetworkType   string `json:"ethernetNetworkType,omitempty"`   // "ethernetNetworkType": "Tagged",
 	FabricUri             string `json:"fabricUri,omitempty"`             // "fabricUri": "/rest/fabrics/9b8f7ec0-52b3-475e-84f4-c4eac51c2c20",
 	Modified              string `json:"modified,omitempty"`              // "modified": "20150831T154835.250Z",
 	Name                  string `json:"name,omitempty"`                  // "name": "Ethernet Network 1",
@@ -37,6 +37,70 @@ type ENetworkCol struct {
 	NextPageURI string     `json:"nextPageUri,omitempty"` // "nextPageUri": null,
 	URI         string     `json:"uri,omitempty"`         // "uri": "/rest/server-profiles?filter=connectionTemplateUri%20matches%7769cae0-b680-435b-9b87-9b864c81657fsort=name:asc"
 	Members     []ENetwork `json:"members,omitempty"`     // "members":[]
+}
+
+func GetENetwork() []ENetwork {
+
+	netListC := make(chan []ENetwork)
+	//liListC := make(chan LIList)
+
+	go ENetworkGetURI(netListC)
+	//go LIGetURI(liListC)
+
+	var netList []ENetwork
+	//var liList LIList
+
+	for i := 0; i < 1; i++ {
+		select {
+		case netList = <-netListC:
+			//case liList = <-liListC:
+		}
+	}
+
+	// liMap := make(map[string]LI)
+
+	// for _, v := range liList {
+	// 	liMap[v.URI] = v
+	// }
+
+	// for i, v := range netList {
+	// 	netList[i].LIName = liMap[v.LogicalInterconnectURI].Name
+	// }
+
+	return netList
+
+}
+
+func GetENetworkVerbose(name string) []ENetwork {
+
+	netListC := make(chan []ENetwork)
+	//liListC := make(chan LIList)
+
+	go ENetworkGetURI(netListC)
+	//go LIGetURI(liListC)
+
+	var netList []ENetwork
+	//var liList LIList
+
+	for i := 0; i < 1; i++ {
+		select {
+		case netList = <-netListC:
+			//case liList = <-liListC:
+		}
+	}
+
+	// liMap := make(map[string]LI)
+
+	// for _, v := range liList {
+	// 	liMap[v.URI] = v
+	// }
+
+	// for i, v := range netList {
+	// 	netList[i].LIName = liMap[v.LogicalInterconnectURI].Name
+	// }
+
+	return netList
+
 }
 
 //ENetworkGetURI to get all Ethernet Networks

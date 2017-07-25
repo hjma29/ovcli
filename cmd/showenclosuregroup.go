@@ -15,11 +15,6 @@
 package cmd
 
 import (
-	//"fmt"
-	// "os"
-	// "text/tabwriter"
-	// "text/template"
-
 	"html/template"
 	"os"
 	"text/tabwriter"
@@ -28,27 +23,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var showUplinkSetCmd = &cobra.Command{
-	Use:   "uplinkset",
-	Short: "Display enclosure uplink information",
+// enclosure-groupCmd represents the enclosure-group command
+var showEGCmd = &cobra.Command{
+	Use:   "enclosuregroup",
+	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: showUplinkSet,
+	Run: showEG,
 }
 
 const (
-	usShowFormat = "" +
-		"Name\tLIMap\n" +
+	egShowFormat = "" +
+		"Name\tLIGs\n" +
 		//"----\t-----\n" +
 		"{{range .}}" +
-		"{{.Name}}\t{{.LIName}}\n" +
+		"{{.Name}}\t{{range .LIGs}}{{.Name}}\n" +
+		"{{end}}" +
 		"{{end}}"
 
-	usShowFormatVerbose = "" +
+	egShowFormatVerbose = "" +
 
 		"{{range .}}" +
 		"------------------------------------------------------------------------------\n" +
@@ -69,7 +66,7 @@ const (
 		// "            Network Name\tVlanID\n" +
 		// "{{range .Networks}}" +
 		// "            {{.Name}}\t{{.Vlanid}}\n" +
-		// "{{end}}\n" + //done with networks
+		// "{{end}}\n" + //done with egworks
 		// "Enclosure\tIOBay\tModelName\tPartNumber\n" +
 		// "{{range .IOBayList}}" +
 		// "{{.Enclosure}}\t{{.Bay}}\t{{.ModelName}}\t{{.ModelNumber}}\n" +
@@ -77,18 +74,18 @@ const (
 		"{{end}}" //done with LIGs
 )
 
-func showUplinkSet(cmd *cobra.Command, args []string) {
+func showEG(cmd *cobra.Command, args []string) {
 
-	var usList []ovextra.UplinkSet
+	var egList []ovextra.EG
 	var showFormat string
 
-	if usName != "" {
-		usList = ovextra.GetUplinkSetVerbose(usName)
-		showFormat = usShowFormatVerbose
+	if egName != "" {
+		egList = ovextra.GetEGVerbose(egName)
+		showFormat = egShowFormatVerbose
 
 	} else {
-		usList = ovextra.GetUplinkSet()
-		showFormat = usShowFormat
+		egList = ovextra.GetEG()
+		showFormat = egShowFormat
 
 	}
 
@@ -96,11 +93,12 @@ func showUplinkSet(cmd *cobra.Command, args []string) {
 	defer tw.Flush()
 
 	t := template.Must(template.New("").Parse(showFormat))
-	t.Execute(tw, usList)
+	t.Execute(tw, egList)
 
 }
 
 func init() {
-	showUplinkSetCmd.Flags().StringVarP(&usName, "name", "n", "", "UplinkSet Name: all, <name>")
+
+	showEGCmd.Flags().StringVarP(&egName, "name", "n", "", "Enclosure Group Name: all, <name>")
 
 }

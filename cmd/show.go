@@ -44,6 +44,9 @@ func init() {
 	showCmd.AddCommand(showICCmd)
 	showCmd.AddCommand(showUplinkSetCmd)
 	showCmd.AddCommand(showEncCmd)
+	showCmd.AddCommand(showNetworkCmd)
+	showCmd.AddCommand(showEGCmd)
+	showCmd.AddCommand(showSPCmd)
 
 	// Here you will define your flags and configuration settings.
 

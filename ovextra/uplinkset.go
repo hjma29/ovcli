@@ -74,24 +74,24 @@ type PortConfigInfo struct {
 	} `json:"location"`
 }
 
-const (
-	uplinkShowFormat = "" +
-		"{{range .}}" +
-		"{{if ne .ProductName \"Synergy 20Gb Interconnect Link Module\" }}" +
-		"-------------\n" +
-		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
-		"-------------\n" +
-		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
-		"{{range .Ports}}" +
-		"{{if or (eq .PortType \"Uplink\") (eq .PortType \"Stacking\") }}" +
-		//"{{if eq .PortType Uplink }}" +
-		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
-		"{{end}}" +
-		"{{end}}" +
-		"\n" +
-		"{{end}}" +
-		"{{end}}"
-)
+// const (
+// 	uplinkShowFormat = "" +
+// 		"{{range .}}" +
+// 		"{{if ne .ProductName \"Synergy 20Gb Interconnect Link Module\" }}" +
+// 		"-------------\n" +
+// 		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
+// 		"-------------\n" +
+// 		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
+// 		"{{range .Ports}}" +
+// 		"{{if or (eq .PortType \"Uplink\") (eq .PortType \"Stacking\") }}" +
+// 		//"{{if eq .PortType Uplink }}" +
+// 		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
+// 		"{{end}}" +
+// 		"{{end}}" +
+// 		"\n" +
+// 		"{{end}}" +
+// 		"{{end}}"
+// )
 
 //GetUplinkSet is to retrive uplinkset information
 func GetUplinkSet() UplinkSetList {

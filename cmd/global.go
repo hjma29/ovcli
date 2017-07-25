@@ -31,6 +31,9 @@ var (
 	ligName                 string
 	liName                  string
 	usName                  string
+	netName                 string
+	egName                  string
+	spName                  string
 	createNetworkNamePtr    *string
 	createNetworkTypePtr    *string
 	createNetworkPurposePtr *string

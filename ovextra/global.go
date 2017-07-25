@@ -44,14 +44,20 @@ var ovPassword = os.Getenv("OneView_password")
 var OVClient = NewCLIOVClient()
 
 const (
-	LIGURL       = "/rest/logical-interconnect-groups"
-	LIURL        = "/rest/logical-interconnects"
-	UplinkSetURL = "/rest/uplink-sets"
-	ICURL        = "/rest/interconnects"
-	SFPURL       = "/rest/interconnects/pluggableModuleInformation/"
-	ICTypeURL    = "/rest/interconnect-types"
-	ENetworkURL  = "/rest/ethernet-networks"
-	EnclosureURL = "/rest/enclosures"
+	LIGURL          = "/rest/logical-interconnect-groups"
+	LIURL           = "/rest/logical-interconnects"
+	UplinkSetURL    = "/rest/uplink-sets"
+	ICURL           = "/rest/interconnects"
+	SFPURL          = "/rest/interconnects/pluggableModuleInformation/"
+	ICTypeURL       = "/rest/interconnect-types"
+	ENetworkURL     = "/rest/ethernet-networks"
+	NetSetURL       = "/rest/network-sets"
+	EnclosureURL    = "/rest/enclosures"
+	EGURL           = "/rest/enclosure-groups"
+	SPURL           = "/rest/server-profiles"
+	SPTemplateURL   = "/rest/server-profile-templates"
+	ServerHWURL     = "/rest/server-hardware"
+	ServerHWTypeURL = "/rest/server-hardware-types"
 )
 
 type OVCol interface {

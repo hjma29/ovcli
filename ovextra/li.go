@@ -251,8 +251,6 @@ func GetLIVerbose(liName string) LIList {
 
 	usList.genList(liList, netList, encList)
 
-	fmt.Println(len(liList))
-
 	for i, lv := range liList {
 		list := make(UplinkSetList, 0)
 
@@ -326,7 +324,6 @@ func (li *LI) getIOBay(ictypeList []ICType, encList EncList) {
 			switch v.Type {
 			case "Enclosure":
 				e = encMap[v.Value].Name
-				fmt.Println(e)
 			case "Bay":
 				s = v.Value
 			}
@@ -346,7 +343,6 @@ func (li *LI) getIOBay(ictypeList []ICType, encList EncList) {
 	}
 
 	sort.Slice(li.IOBays, func(i, j int) bool { return li.IOBays.multiSort(i, j) })
-	fmt.Println(len(li.IOBays))
 
 }
 
