@@ -16,10 +16,10 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
+	//"log"
 	"os"
 
+	"github.com/docker/machine/libmachine/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -55,6 +55,8 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	RootCmd.AddCommand(showCmd)
+	RootCmd.AddCommand(deleteCmd)
+	RootCmd.AddCommand(createCmd)
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 
@@ -89,14 +91,19 @@ func initConfig() {
 
 	//fmt.Println(Debugmode)
 
-	if !Debugmode {
-		//fmt.Println("setting output to discard")
-		//if viper.GetBool("debugbit") {
-		log.SetOutput(ioutil.Discard)
-	} else {
-		//fmt.Println("setting output to stdout")
+	if Debugmode {
+		log.SetDebug(true)
 
-		log.SetOutput(os.Stdout)
 	}
+
+	// if !Debugmode {
+	// 	//fmt.Println("setting output to discard")
+	// 	//if viper.GetBool("debugbit") {
+	// 	// log.SetOutput(ioutil.Discard)
+	// } else {
+	// 	//fmt.Println("setting output to stdout")
+
+	// 	// log.SetOutput(os.Stdout)
+	// }
 
 }

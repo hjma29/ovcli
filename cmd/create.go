@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/hjma29/ovcli/ovextra"
 	"github.com/spf13/cobra"
 )
 
@@ -36,8 +37,32 @@ to quickly create a Cobra application.`,
 	},
 }
 
+var createNetworkCmd = &cobra.Command{
+	Use:   "network",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: createNetwork,
+}
+
+func createNetwork(cmd *cobra.Command, args []string) {
+	ovextra.CreateNetwork(fileName)
+
+}
+
 func init() {
-	RootCmd.AddCommand(createCmd)
+
+	createCmd.AddCommand(createNetworkCmd)
+
+	createNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
+	createNetworkCmd.Flags().StringVarP(&netType, "type", "t", "", "Network Type")
+	createNetworkCmd.Flags().StringVarP(&netPurpose, "purpose", "p", "", "General or Management etc")
+	createNetworkCmd.Flags().IntVarP(&netVlanId, "vlan", "v", 777, "vlan id in number")
+	createNetworkCmd.Flags().StringVarP(&fileName, "file", "f", "", "Config YAML File path/name")
 
 	// Here you will define your flags and configuration settings.
 

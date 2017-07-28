@@ -16,28 +16,44 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/hjma29/ovcli/ovextra"
 	"github.com/spf13/cobra"
 )
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Delete Resources",
+	Long:  `Delete Resources.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Work your own magic here
 		fmt.Println("delete called")
 	},
 }
 
+var deleteNetworkCmd = &cobra.Command{
+	Use:   "network",
+	Short: "Delete Network by Name",
+	Long:  `Delete Network by Name`,
+	Run:   deleteNetwork,
+}
+
+func deleteNetwork(cmd *cobra.Command, args []string) {
+	if err := ovextra.DeleteNetwork(netName); err != nil {
+		//fmt.Println(err)
+		fmt.Println("quit:", err)
+		os.Exit(1)
+	}
+
+}
+
 func init() {
-	RootCmd.AddCommand(deleteCmd)
+
+	deleteCmd.AddCommand(deleteNetworkCmd)
+
+	deleteNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
 
 	// Here you will define your flags and configuration settings.
 

@@ -27,19 +27,19 @@ var ligModuleList []LIGModule
 type uplinkPortListType []UplinkPort
 
 var (
-	profileNamePtr          *string
-	ligName                 string
-	liName                  string
-	usName                  string
-	netName                 string
-	egName                  string
-	spName                  string
-	createNetworkNamePtr    *string
-	createNetworkTypePtr    *string
-	createNetworkPurposePtr *string
-	createNetworkVlanIDPtr  *int
-	porttype                string
-	Debugmode               = false
+	profileNamePtr *string
+	ligName        string
+	liName         string
+	usName         string
+	netName        string
+	egName         string
+	spName         string
+	netType        string
+	netPurpose     string
+	netVlanId      int
+	porttype       string
+	fileName string
+	Debugmode      = false
 )
 
 func init() {

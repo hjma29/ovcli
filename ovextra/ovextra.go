@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
+	//"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -14,7 +14,7 @@ import (
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	//"github.com/docker/machine/libmachine/log"
+	"github.com/docker/machine/libmachine/log"
 )
 
 //CLIOVClient is the ov.OVCLient with additinal commands
@@ -99,22 +99,85 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, er
 
 	return data, err
 
-	// switch {
-	// case strings.Contains(uri, InterconnectRestURL):
-	// 	//log.Debugf("Getinterconnects %s", data)
-	// 	if err := json.Unmarshal([]byte(data), &interconnects); err != nil {
-	// 		return interconnects, err
-	// 	}
-	// 	return interconnects, nil
-	// case strings.Contains(uri, LogicalInI:
-	// 	//log.Debugf("Getinterconnects %s", data)
-	// 	if err := json.Unmarshal([]byte(data), &lic); err != nil {
-	// 		return lic, err
-	// 	}
-	// 	return lic, nil
-	// default:
-	// 	return data, err
-	// }
+}
+
+func (c *CLIOVClient) PostURI(filter string, sort string, uri string) ([]byte, error) {
+	var (
+		//uri           = "/rest/interconnects"
+		q map[string]interface{}
+		//interconnects ICCol
+		//lic           LICol
+	)
+
+	q = make(map[string]interface{})
+	if len(filter) > 0 {
+		q["filter"] = filter
+	}
+
+	if sort != "" {
+		q["sort"] = sort
+	}
+
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+	// Setup query
+	if len(q) > 0 {
+		c.SetQueryString(q)
+	}
+
+	//fmt.Printf("%#v\n\n", c)
+	//fmt.Println(uri)
+
+	data, err := c.CLIRestAPICall(rest.POST, uri, nil)
+
+	//fmt.Println(data, err)
+
+	if err != nil {
+		return data, err
+	}
+
+	return data, err
+
+}
+
+func (c *CLIOVClient) DeleteURI(filter string, sort string, uri string) ([]byte, error) {
+	var (
+		//uri           = "/rest/interconnects"
+		q map[string]interface{}
+		//interconnects ICCol
+		//lic           LICol
+	)
+
+	q = make(map[string]interface{})
+	if len(filter) > 0 {
+		q["filter"] = filter
+	}
+
+	if sort != "" {
+		q["sort"] = sort
+	}
+
+	// refresh login
+	c.RefreshLogin()
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+	// Setup query
+	if len(q) > 0 {
+		c.SetQueryString(q)
+	}
+
+	//fmt.Printf("%#v\n\n", c)
+	//fmt.Println(uri)
+
+	data, err := c.CLIRestAPICall(rest.DELETE, uri, nil)
+
+	//fmt.Println(data, err)
+
+	if err != nil {
+		return data, err
+	}
+
+	return data, err
 
 }
 
@@ -196,11 +259,13 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 	// req.SetBasicAuth(c.User, c.APIKey)
 	req.Method = fmt.Sprintf("%s", method.String())
 
+	log.Debugf("about to run: %+v\n", method.String())
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
+	log.Debugf("finish run: %#v\n", resp.StatusCode)
 
 	// TODO: CLeanup Later
 	// DEBUGGING WHILE WE WORK
@@ -214,12 +279,26 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 	data, err := ioutil.ReadAll(resp.Body)
 
 	if !c.isOkStatus(resp.StatusCode) {
+		// 	{
+		//     "details": "",
+		//     "errorSource": "ethernet-networks",
+		//     "recommendedActions": [
+		//         ""
+		//     ],
+		//     "nestedErrors": [],
+		//     "errorCode": "CRM_DUPLICATE_NETWORK_NAME",
+		//     "data": {},
+		//     "message": "A network with the name hj-test1 already exists."
+		// }
 		type apiErr struct {
-			Err string `json:"details"`
+			ErrorCode          string      `json:"errorCode"`
+			Message            string      `json:"message"`
+			Details            string      `json:"details"`
+			RecommendedActions interface{} `json:"recommendedActions"`
 		}
-		var outErr apiErr
-		json.Unmarshal(data, &outErr)
-		return nil, fmt.Errorf("Error in response: %s\n Response Status: %s", outErr.Err, resp.Status)
+		var e apiErr
+		json.Unmarshal(data, &e)
+		return nil, fmt.Errorf("error in response: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
 	}
 
 	if err != nil {
@@ -235,5 +314,5 @@ func (c *CLIOVClient) isOkStatus(code int) bool {
 
 func timeTrack(start time.Time, name string) {
 	elapsed := time.Since(start)
-	log.Printf("%s took %s\n", name, elapsed)
+	log.Infof("%s took %s\n", name, elapsed)
 }
