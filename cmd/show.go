@@ -47,6 +47,7 @@ func init() {
 	showCmd.AddCommand(showNetworkCmd)
 	showCmd.AddCommand(showEGCmd)
 	showCmd.AddCommand(showSPCmd)
+	showCmd.AddCommand(showSPTemplateCmd)
 
 	// Here you will define your flags and configuration settings.
 

@@ -38,8 +38,9 @@ var (
 	netPurpose     string
 	netVlanId      int
 	porttype       string
-	fileName string
+	fileName       string
 	Debugmode      = false
+	flagName       string
 )
 
 func init() {

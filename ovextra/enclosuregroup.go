@@ -3,7 +3,8 @@ package ovextra
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"github.com/docker/machine/libmachine/log"
+
 	"os"
 	"sort"
 	"time"
@@ -124,7 +125,7 @@ func GetEGVerbose(name string) []EG {
 
 func EGGetURI(x chan []EG) {
 
-	log.Println("Rest Get Enclosure Group")
+	log.Debugf("Rest Get Enclosure Group")
 
 	defer timeTrack(time.Now(), "Rest Get Enclosure Group")
 

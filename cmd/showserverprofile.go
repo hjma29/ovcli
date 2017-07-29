@@ -36,6 +36,18 @@ to quickly create a Cobra application.`,
 	Run: showSP,
 }
 
+var showSPTemplateCmd = &cobra.Command{
+	Use:   "sptemplate",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: showSPTemplate,
+}
+
 const (
 	spShowFormat = "" +
 		"Name\tTemplate\tHardware\tHardware Type\n" +
@@ -60,6 +72,30 @@ const (
 		"{{.ID}}\t{{.Name}}\t{{.NetworkName}}\t{{.NetworkVlan}}\t{{.Mac}}\t{{.PortID}}\t{{.ICName}}\t{{.Boot.Priority}}\n" +
 		"{{end}}" +
 		"{{end}}"
+
+	sptShowFormat = "" +
+		"Name\tEnclosure Group\tHardware Type\n" +
+		"{{range .}}" +
+		"{{.Name}}\t{{.EG}}\t{{.ServerHWType}}\n" +
+		"{{end}}"
+
+	sptShowFormatVerbose = "" +
+		"{{range .}}" +
+		"------------------------------------------------------------------------------\n" +
+		"Name:\t{{ .Name }}\n" +
+		"Description:\t{{ .Description }}\n" +
+		"ProfileTemplate:\t{{ .SPTemplate }}\n" +
+		"TemplateCompliance:\t{{ .TemplateCompliance }}\n" +
+		"ServerHardware:\t{{ .ServerHW}}\n" +
+		"ServerPower:\t{{ .PowerState}}\n" +
+		"ServerHardwareType:\t{{ .ServerHWType}}\n" +
+		// "EnclosureGroup:\t{{ .EnclosureGroup}}\n" +
+		"\nConnections\n" +
+		"ID\tName\tNetwork\tVLAN\tMAC\tPort\tInterconnect\tBoot\n" +
+		"{{range .Connections}}" +
+		"{{.ID}}\t{{.Name}}\t{{.NetworkName}}\t{{.NetworkVlan}}\t{{.Mac}}\t{{.PortID}}\t{{.ICName}}\t{{.Boot.Priority}}\n" +
+		"{{end}}" +
+		"{{end}}"
 )
 
 func showSP(cmd *cobra.Command, args []string) {
@@ -67,8 +103,8 @@ func showSP(cmd *cobra.Command, args []string) {
 	var spList []ovextra.SP
 	var showFormat string
 
-	if spName != "" {
-		spList = ovextra.GetSPVerbose(spName)
+	if flagName != "" {
+		spList = ovextra.GetSPVerbose(flagName)
 		showFormat = spShowFormatVerbose
 
 	} else {
@@ -85,9 +121,33 @@ func showSP(cmd *cobra.Command, args []string) {
 
 }
 
+func showSPTemplate(cmd *cobra.Command, args []string) {
+
+	var sptList []ovextra.SPTemplate
+	var showFormat string
+
+	if flagName != "" {
+		sptList = ovextra.GetSPTemplateVerbose(flagName)
+		showFormat = sptShowFormatVerbose
+
+	} else {
+		sptList = ovextra.GetSPTemplate()
+		showFormat = sptShowFormat
+
+	}
+
+	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	defer tw.Flush()
+
+	t := template.Must(template.New("").Parse(showFormat))
+	t.Execute(tw, sptList)
+
+}
+
 func init() {
 
-	showSPCmd.Flags().StringVarP(&spName, "name", "n", "", "Server Profile name: all, <name>")
+	showSPCmd.Flags().StringVarP(&flagName, "name", "n", "", "Server Profile name: all, <name>")
+	showSPTemplateCmd.Flags().StringVarP(&flagName, "name", "n", "", "Server Profile name: all, <name>")
 
 	//fmt.Println("this is profile module init")
 

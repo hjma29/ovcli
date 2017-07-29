@@ -54,7 +54,7 @@ func NewCLIOVClient() *CLIOVClient {
 				Password:   ovPassword,
 				Domain:     "Local",
 				SSLVerify:  false,
-				APIVersion: 300,
+				APIVersion: 500,
 				APIKey:     "none",
 			},
 		},
@@ -299,6 +299,7 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 		var e apiErr
 		json.Unmarshal(data, &e)
 		return nil, fmt.Errorf("error in response: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
+
 	}
 
 	if err != nil {
@@ -314,5 +315,5 @@ func (c *CLIOVClient) isOkStatus(code int) bool {
 
 func timeTrack(start time.Time, name string) {
 	elapsed := time.Since(start)
-	log.Infof("%s took %s\n", name, elapsed)
+	log.Debugf("%s took %s\n", name, elapsed)
 }

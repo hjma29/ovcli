@@ -3,10 +3,11 @@ package ovextra
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"sort"
 	"time"
+
+	"github.com/docker/machine/libmachine/log"
 )
 
 type ServerHWTypeCol struct {
@@ -107,7 +108,7 @@ type StorageCapability struct {
 
 func ServerHWTypeGetURI(x chan []ServerHWType) {
 
-	log.Println("Rest Get Server Hardware Type")
+	log.Debugf("Rest Get Server Hardware Type")
 
 	defer timeTrack(time.Now(), "Rest Get Server Hardware Type")
 

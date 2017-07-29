@@ -50,7 +50,7 @@ to quickly create a Cobra application.`,
 }
 
 func createNetwork(cmd *cobra.Command, args []string) {
-	ovextra.CreateNetwork(fileName)
+	ovextra.CreateNetworkConfigParse(fileName)
 
 }
 
