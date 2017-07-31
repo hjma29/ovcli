@@ -41,7 +41,23 @@ var deleteNetworkCmd = &cobra.Command{
 }
 
 func deleteNetwork(cmd *cobra.Command, args []string) {
-	if err := ovextra.DeleteNetwork(netName); err != nil {
+	if err := ovextra.DeleteNetwork(name); err != nil {
+		//fmt.Println(err)
+		fmt.Println("quit:", err)
+		os.Exit(1)
+	}
+
+}
+
+var deleteSPTemplateCmd = &cobra.Command{
+	Use:   "sptemplate",
+	Short: "Delete profile Template by Name",
+	Long:  `Delete profile Template by Name`,
+	Run:   deleteSPTemplate,
+}
+
+func deleteSPTemplate(cmd *cobra.Command, args []string) {
+	if err := ovextra.DeleteSPTemplate(name); err != nil {
 		//fmt.Println(err)
 		fmt.Println("quit:", err)
 		os.Exit(1)
@@ -52,8 +68,10 @@ func deleteNetwork(cmd *cobra.Command, args []string) {
 func init() {
 
 	deleteCmd.AddCommand(deleteNetworkCmd)
+	deleteCmd.AddCommand(deleteSPTemplateCmd)
 
-	deleteNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
+	deleteNetworkCmd.Flags().StringVarP(&name, "name", "n", "", "Network Name")
+	deleteSPTemplateCmd.Flags().StringVarP(&name, "name", "n", "", "Server Profile Template Name")
 
 	// Here you will define your flags and configuration settings.
 

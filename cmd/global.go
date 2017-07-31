@@ -27,6 +27,7 @@ var ligModuleList []LIGModule
 type uplinkPortListType []UplinkPort
 
 var (
+	name           string
 	profileNamePtr *string
 	ligName        string
 	liName         string

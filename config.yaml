@@ -1,15 +1,17 @@
+serverTemplates:
+  - name: hj-sptemplate1
+    enclosuregroup: DCA-SolCenter-EG
+    serverhardwaretype: "SY 480 Gen9 3"
+
+  - name: hj-sptemplate2
+    enclosuregroup: DCA-SolCenter-EG
+    serverhardwaretype: "SY 480 Gen9 1"
+
+
 networks: 
   - name: hj-test1
     vlanId: 671
   - name: hj-test2
     vlanId: 672
 
-# networks
-#   name: hj-test1
-#   vlanId: 329
-
-serverTemplates:
-  - name: hj-sptemplate1
-    enclosureGroup: DCA-SolCenter-EG
-    serverHardwareType: SY 480 Gen9 3
     

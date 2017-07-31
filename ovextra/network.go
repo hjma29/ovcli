@@ -148,10 +148,6 @@ func ENetworkGetURI(x chan []ENetwork) {
 
 }
 
-type YamlConfig struct {
-	Networks []ENetwork //`yaml:"networks"`
-}
-
 func CreateNetworkConfigParse(fileName string) {
 
 	y := YamlConfig{}

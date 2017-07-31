@@ -306,6 +306,10 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 		return nil, err
 	}
 
+	if uri, ok := resp.Header["Location"]; ok {
+		taskuri = uri[0]
+	}
+
 	return data, nil
 }
 

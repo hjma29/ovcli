@@ -54,15 +54,35 @@ func createNetwork(cmd *cobra.Command, args []string) {
 
 }
 
+var createSPTemplateCmd = &cobra.Command{
+	Use:   "sptemplate",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: createSPTemplate,
+}
+
+func createSPTemplate(cmd *cobra.Command, args []string) {
+	ovextra.CreateSPTemplateConfigParse(fileName)
+
+}
+
 func init() {
 
 	createCmd.AddCommand(createNetworkCmd)
+	createCmd.AddCommand(createSPTemplateCmd)
 
 	createNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
 	createNetworkCmd.Flags().StringVarP(&netType, "type", "t", "", "Network Type")
 	createNetworkCmd.Flags().StringVarP(&netPurpose, "purpose", "p", "", "General or Management etc")
 	createNetworkCmd.Flags().IntVarP(&netVlanId, "vlan", "v", 777, "vlan id in number")
 	createNetworkCmd.Flags().StringVarP(&fileName, "file", "f", "", "Config YAML File path/name")
+
+	createSPTemplateCmd.Flags().StringVarP(&fileName, "file", "f", "", "Config YAML File path/name")
 
 	// Here you will define your flags and configuration settings.
 

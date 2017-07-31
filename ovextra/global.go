@@ -42,6 +42,7 @@ var ovPassword = os.Getenv("OneView_password")
 
 //OVClient is the sole OV client for all CLI commands
 var OVClient = NewCLIOVClient()
+var taskuri string
 
 const (
 	LIGURL          = "/rest/logical-interconnect-groups"
@@ -66,4 +67,9 @@ type OVCol interface {
 
 func ColToMap(x OVCol, c *CLIOVClient) {
 	x.GetMap(c)
+}
+
+type YamlConfig struct {
+	Networks        []ENetwork   //`yaml:"networks"`
+	ServerTemplates []SPTemplate //`yaml:"serverTemplates"`
 }

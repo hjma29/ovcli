@@ -3,6 +3,7 @@ package ovextra
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/docker/machine/libmachine/log"
 
 	"os"
@@ -159,4 +160,30 @@ func EGGetURI(x chan []EG) {
 
 	x <- list
 
+}
+
+func (c *CLIOVClient) GetEGByName(name string) []EG {
+
+	var col EGCol
+
+	data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", EGURL)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	if err := json.Unmarshal(data, &col); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// if col.Total == 0 {
+	// 	fmt.Println("No network matching name: ", name)
+	// }
+
+	// for _, v := range col.Members {
+	// 	fmt.Println("Found Network:", v.Name)
+	// }
+
+	return col.Members
 }
