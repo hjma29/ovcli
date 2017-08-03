@@ -51,10 +51,10 @@ const (
 		"{{range .UplinkSets}}" +
 		"  UplinkSet: {{.Name}}\n" +
 		"       Networks:\n" +
-		"            Network Name\tVlanID\n" +
-		"            ------------\t------\n" +
+		"            Network Name\tVlanID\tType\n" +
+		"            ------------\t------\t----\n" +
 		"{{range .Networks}}" +
-		"            {{.Name}}\t{{.Vlanid}}\n" +
+		"            {{.Name}}\t{{.Vlanid}}\t{{.Type}}\n" +
 		"{{end}}" + //done with networks
 		"       UplinkPort:\n" +
 		"            Enclosure\tIOBay\tPort\n" +

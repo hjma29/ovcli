@@ -94,6 +94,7 @@ type LIGUplinkPort struct {
 type NetworkSummary struct {
 	Name   string
 	Vlanid int
+	Type   string
 }
 
 type LogicalPortConfigInfo struct {
@@ -261,8 +262,9 @@ func (lig *LIG) getNetwork(networkList []ENetwork) {
 		for _, v := range v.NetworkUris {
 			vlanname := networkMap[v].Name
 			vlanid := networkMap[v].VlanId
+			vlantype := networkMap[v].EthernetNetworkType
 			//lig.UplinkSets[i].Networks = append(lig.UplinkSets[i].Networks, NetworkSummary{vlanname, vlanid})
-			networklist = append(networklist, NetworkSummary{vlanname, vlanid})
+			networklist = append(networklist, NetworkSummary{vlanname, vlanid, vlantype})
 		}
 
 		sort.Slice(networklist, func(i, j int) bool { return networklist[i].Name < networklist[j].Name })

@@ -143,13 +143,89 @@ func SPTemplateGetURI(x chan []SPTemplate) {
 
 }
 
+func GetResourceLists(x interface{}) {
+
+	// log.Debugf("Rest Get Server Profile Template")
+
+	// defer timeTrack(time.Now(), "Rest Get Server Profile Template")
+
+	var list interface{}
+	var col interface{}
+	var uri string
+
+	// c := NewCLIOVClient()
+
+	switch v := x.(type) {
+	case *[]SPTemplate:
+		list = make([]SPTemplate, 0)
+		uri = SPTemplateURL
+		col = SPTemplateCol{}
+	}
+
+	c := NewCLIOVClient()
+
+	for uri != "" {
+
+		data, err := c.GetURI("", "", uri)
+		if err != nil {
+
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		if err := json.Unmarshal(data, &col); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		list = append(list, col.Members...)
+
+		uri = page.NextPageURI
+	}
+	*x = list
+
+	log.Println("Fetch UplinkSet")
+
+	defer timeTrack(time.Now(), "Fetch UplinkSet")
+
+}
+
+// var list []SPTemplate
+// uri := SPTemplateURL
+
+// for uri != "" {
+
+// 	data, err := c.GetURI("", "", uri)
+// 	if err != nil {
+
+// 		fmt.Println(err)
+// 		os.Exit(1)
+// 	}
+
+// 	var page SPTemplateCol
+
+// 	if err := json.Unmarshal(data, &page); err != nil {
+// 		fmt.Println(err)
+// 		os.Exit(1)
+// 	}
+
+// 	list = append(list, page.Members...)
+
+// 	uri = page.NextPageURI
+// }
+
+// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+
+// x <- list
+
 func GetSPTemplate() []SPTemplate {
 
 	sptListC := make(chan []SPTemplate)
 	egListC := make(chan []EG)
 	hwtListC := make(chan []ServerHWType)
 
-	go SPTemplateGetURI(sptListC)
+	//go GetResourceLists(sptListC)
+	//go SPTemplateGetURI(sptListC)
 	go EGGetURI(egListC)
 	go ServerHWTypeGetURI(hwtListC)
 
