@@ -144,31 +144,31 @@ func SPTemplateGetURI(x chan []SPTemplate) {
 
 }
 
-type getListMap map[string]resource
-
 type resource struct {
 	listptr interface{}
-	col     interface{}
+	colptr  interface{}
 	uri     string
 	logmsg  string
 }
 
+type getListMap map[string]resource
+
 var listmap = getListMap{
 	"SPTemplate": resource{
 		listptr: &[]SPTemplate{},
-		col:     SPTemplateCol{},
+		colptr:  &SPTemplateCol{},
 		uri:     SPTemplateURL,
 		logmsg:  "get SPTemplate",
 	},
 	"EG": resource{
 		listptr: &[]EG{},
-		col:     EGCol{},
+		colptr:  &EGCol{},
 		uri:     EGURL,
 		logmsg:  "get EG",
 	},
 	"ServerHWType": resource{
 		listptr: &[]ServerHWType{},
-		col:     ServerHWTypeCol{},
+		colptr:  &ServerHWTypeCol{},
 		uri:     ServerHWTypeURL,
 		logmsg:  "get ServerHW Type",
 	},
@@ -177,17 +177,15 @@ var listmap = getListMap{
 func GetResourceLists(x string, i interface{}) {
 
 	listptr := listmap[x].listptr
-	col := listmap[x].col
+	colptr := listmap[x].colptr
 	uri := listmap[x].uri
 	logmsg := listmap[x].logmsg
-
-	log.Debugf(logmsg)
-	defer timeTrack(time.Now(), logmsg)
 
 	lvptr := reflect.ValueOf(listptr)
 	lv := lvptr.Elem()
 
-	colnew := reflect.New(reflect.TypeOf(col))
+	log.Debugf(logmsg)
+	defer timeTrack(time.Now(), logmsg)
 
 	c := NewCLIOVClient()
 
@@ -199,14 +197,14 @@ func GetResourceLists(x string, i interface{}) {
 			os.Exit(1)
 		}
 
-		if err := json.Unmarshal(data, colnew.Interface()); err != nil {
+		if err := json.Unmarshal(data, colptr); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		lv.Set(reflect.AppendSlice(lv, colnew.Elem().FieldByName("Members")))
+		lv.Set(reflect.AppendSlice(lv, reflect.ValueOf(colptr).Elem().FieldByName("Members")))
 
-		uri = colnew.Elem().FieldByName("NextPageURI").String()
+		uri = reflect.ValueOf(colptr).Elem().FieldByName("NextPageURI").String()
 	}
 
 	iv := reflect.ValueOf(i)
