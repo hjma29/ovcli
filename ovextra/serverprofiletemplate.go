@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"sort"
 	"time"
 
@@ -143,24 +144,50 @@ func SPTemplateGetURI(x chan []SPTemplate) {
 
 }
 
-func GetResourceLists(x interface{}) {
+type getListMap map[string]resource
 
-	// log.Debugf("Rest Get Server Profile Template")
+type resource struct {
+	listptr interface{}
+	col     interface{}
+	uri     string
+	logmsg  string
+}
 
-	// defer timeTrack(time.Now(), "Rest Get Server Profile Template")
+var listmap = getListMap{
+	"SPTemplate": resource{
+		listptr: &[]SPTemplate{},
+		col:     SPTemplateCol{},
+		uri:     SPTemplateURL,
+		logmsg:  "get SPTemplate",
+	},
+	"EG": resource{
+		listptr: &[]EG{},
+		col:     EGCol{},
+		uri:     EGURL,
+		logmsg:  "get EG",
+	},
+	"ServerHWType": resource{
+		listptr: &[]ServerHWType{},
+		col:     ServerHWTypeCol{},
+		uri:     ServerHWTypeURL,
+		logmsg:  "get ServerHW Type",
+	},
+}
 
-	var list interface{}
-	var col interface{}
-	var uri string
+func GetResourceLists(x string, i interface{}) {
 
-	// c := NewCLIOVClient()
+	listptr := listmap[x].listptr
+	col := listmap[x].col
+	uri := listmap[x].uri
+	logmsg := listmap[x].logmsg
 
-	switch v := x.(type) {
-	case *[]SPTemplate:
-		list = make([]SPTemplate, 0)
-		uri = SPTemplateURL
-		col = SPTemplateCol{}
-	}
+	log.Debugf(logmsg)
+	defer timeTrack(time.Now(), logmsg)
+
+	lvptr := reflect.ValueOf(listptr)
+	lv := lvptr.Elem()
+
+	colnew := reflect.New(reflect.TypeOf(col))
 
 	c := NewCLIOVClient()
 
@@ -168,55 +195,24 @@ func GetResourceLists(x interface{}) {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
-
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		if err := json.Unmarshal(data, &col); err != nil {
+		if err := json.Unmarshal(data, colnew.Interface()); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		list = append(list, col.Members...)
+		lv.Set(reflect.AppendSlice(lv, colnew.Elem().FieldByName("Members")))
 
-		uri = page.NextPageURI
+		uri = colnew.Elem().FieldByName("NextPageURI").String()
 	}
-	*x = list
 
-	log.Println("Fetch UplinkSet")
+	iv := reflect.ValueOf(i)
 
-	defer timeTrack(time.Now(), "Fetch UplinkSet")
-
+	iv.Send(lv)
 }
-
-// var list []SPTemplate
-// uri := SPTemplateURL
-
-// for uri != "" {
-
-// 	data, err := c.GetURI("", "", uri)
-// 	if err != nil {
-
-// 		fmt.Println(err)
-// 		os.Exit(1)
-// 	}
-
-// 	var page SPTemplateCol
-
-// 	if err := json.Unmarshal(data, &page); err != nil {
-// 		fmt.Println(err)
-// 		os.Exit(1)
-// 	}
-
-// 	list = append(list, page.Members...)
-
-// 	uri = page.NextPageURI
-// }
-
-// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
-
-// x <- list
 
 func GetSPTemplate() []SPTemplate {
 
@@ -224,10 +220,9 @@ func GetSPTemplate() []SPTemplate {
 	egListC := make(chan []EG)
 	hwtListC := make(chan []ServerHWType)
 
-	//go GetResourceLists(sptListC)
-	//go SPTemplateGetURI(sptListC)
-	go EGGetURI(egListC)
-	go ServerHWTypeGetURI(hwtListC)
+	go GetResourceLists("SPTemplate", sptListC)
+	go GetResourceLists("EG", egListC)
+	go GetResourceLists("ServerHWType", hwtListC)
 
 	var sptList []SPTemplate
 	var egList []EG
@@ -240,6 +235,8 @@ func GetSPTemplate() []SPTemplate {
 		case hwtList = <-hwtListC:
 		}
 	}
+
+	//fmt.Println("length is", len(sptList))
 
 	egMap := make(map[string]EG)
 
