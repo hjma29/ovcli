@@ -5,14 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
-	"reflect"
 	"sort"
+	"sync"
 	"time"
 
 	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	"github.com/docker/machine/libmachine/log"
+	//"github.com/docker/machine/libmachine/log"
 	"github.com/ghodss/yaml"
 )
 
@@ -108,7 +109,7 @@ type SPTemplate struct {
 
 func SPTemplateGetURI(x chan []SPTemplate) {
 
-	log.Debugf("Rest Get Server Profile Template")
+	//log.Debugf("Rest Get Server Profile Template")
 
 	defer timeTrack(time.Now(), "Rest Get Server Profile Template")
 
@@ -122,14 +123,14 @@ func SPTemplateGetURI(x chan []SPTemplate) {
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
 
-			fmt.Println(err)
+			log.Print(err)
 			os.Exit(1)
 		}
 
 		var page SPTemplateCol
 
 		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
+			log.Print(err)
 			os.Exit(1)
 		}
 
@@ -144,97 +145,20 @@ func SPTemplateGetURI(x chan []SPTemplate) {
 
 }
 
-type resource struct {
-	listptr interface{}
-	colptr  interface{}
-	uri     string
-	logmsg  string
-}
-
-type getListMap map[string]resource
-
-var listmap = getListMap{
-	"SPTemplate": resource{
-		listptr: &[]SPTemplate{},
-		colptr:  &SPTemplateCol{},
-		uri:     SPTemplateURL,
-		logmsg:  "get SPTemplate",
-	},
-	"EG": resource{
-		listptr: &[]EG{},
-		colptr:  &EGCol{},
-		uri:     EGURL,
-		logmsg:  "get EG",
-	},
-	"ServerHWType": resource{
-		listptr: &[]ServerHWType{},
-		colptr:  &ServerHWTypeCol{},
-		uri:     ServerHWTypeURL,
-		logmsg:  "get ServerHW Type",
-	},
-}
-
-func GetResourceLists(x string, i interface{}) {
-
-	listptr := listmap[x].listptr
-	colptr := listmap[x].colptr
-	uri := listmap[x].uri
-	logmsg := listmap[x].logmsg
-
-	lvptr := reflect.ValueOf(listptr)
-	lv := lvptr.Elem()
-
-	log.Debugf(logmsg)
-	defer timeTrack(time.Now(), logmsg)
-
-	c := NewCLIOVClient()
-
-	for uri != "" {
-
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		if err := json.Unmarshal(data, colptr); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		lv.Set(reflect.AppendSlice(lv, reflect.ValueOf(colptr).Elem().FieldByName("Members")))
-
-		uri = reflect.ValueOf(colptr).Elem().FieldByName("NextPageURI").String()
-	}
-
-	iv := reflect.ValueOf(i)
-
-	iv.Send(lv)
-}
-
 func GetSPTemplate() []SPTemplate {
 
-	sptListC := make(chan []SPTemplate)
-	egListC := make(chan []EG)
-	hwtListC := make(chan []ServerHWType)
+	var wg sync.WaitGroup
+	wg.Add(3)
 
-	go GetResourceLists("SPTemplate", sptListC)
-	go GetResourceLists("EG", egListC)
-	go GetResourceLists("ServerHWType", hwtListC)
+	go getResourceLists("SPTemplate", &wg)
+	go getResourceLists("EG", &wg)
+	go getResourceLists("ServerHWType", &wg)
 
-	var sptList []SPTemplate
-	var egList []EG
-	var hwtList []ServerHWType
+	wg.Wait()
 
-	for i := 0; i < 3; i++ {
-		select {
-		case sptList = <-sptListC:
-		case egList = <-egListC:
-		case hwtList = <-hwtListC:
-		}
-	}
-
-	//fmt.Println("length is", len(sptList))
+	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
+	egList := *(rmap["EG"].listptr.(*[]EG))
+	hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
 
 	egMap := make(map[string]EG)
 
@@ -254,6 +178,8 @@ func GetSPTemplate() []SPTemplate {
 		sptList[i].ServerHWType = hwtMap[v.ServerHardwareTypeURI].Name
 
 	}
+
+	sort.Slice(sptList, func(i, j int) bool { return sptList[i].Name < sptList[j].Name })
 
 	return sptList
 
@@ -342,38 +268,36 @@ func CreateSPTemplateConfigParse(fileName string) {
 	yamlFile, err := ioutil.ReadFile(fileName)
 
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	if err := yaml.Unmarshal(yamlFile, &y); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	c := NewCLIOVClient()
 
-	fmt.Println("EG: ", y.ServerTemplates[0].EG)
-	fmt.Println("HWT: ", y.ServerTemplates[0].ServerHWType)
+	log.Print("[DEBUG] EG: ", y.ServerTemplates[0].EG)
+	log.Print("[DEBUG] HWT: ", y.ServerTemplates[0].ServerHWType)
 
 	for _, stv := range y.ServerTemplates {
 
 		if stv.EG == "" {
-			fmt.Println("Need to specify Enclosure Group Name")
+			log.Print("Need to specify Enclosure Group Name")
 			os.Exit(1)
 		}
 		if stv.ServerHWType == "" {
-			fmt.Println("Need to specify Server HardWare Type Name")
+			log.Print("Need to specify Server HardWare Type Name")
 			os.Exit(1)
 		}
 
 		eglist := c.GetEGByName(stv.EG)
 		if len(eglist) == 0 {
-			fmt.Println("Can't find EG with the name specified")
+			log.Print("Can't find EG with the name specified")
 			os.Exit(1)
 		}
 		if len(eglist) != 1 {
-			fmt.Println("more than one EG name has been found")
+			log.Print("more than one EG name has been found")
 			os.Exit(1)
 		}
 
@@ -385,11 +309,11 @@ func CreateSPTemplateConfigParse(fileName string) {
 
 		shtlist := c.GetServerHWTypeByName(stv.ServerHWType)
 		if len(shtlist) == 0 {
-			fmt.Println("Can't find EG with the name specified")
+			log.Print("Can't find EG with the name specified")
 			os.Exit(1)
 		}
 		if len(shtlist) != 1 {
-			fmt.Println("more than one EG name has been found")
+			log.Print("more than one EG name has been found")
 			os.Exit(1)
 		}
 
@@ -404,17 +328,17 @@ func CreateSPTemplateConfigParse(fileName string) {
 		stv.ServerHWType = ""
 
 		j, _ := json.MarshalIndent(stv, "", "  ")
-		fmt.Println(string(j))
+		log.Print("[DEBUG]", string(j))
 
 		if err := c.CreateProfileTemplate(stv); err != nil {
-			fmt.Println(err)
+			log.Print(err)
 			os.Exit(1)
 		}
 	}
 }
 
 func (c *CLIOVClient) CreateProfileTemplate(spt SPTemplate) error {
-	fmt.Println("Initializing creation of server profile Template for %s.", spt.Name)
+	log.Print("Initializing creation of server profile Template for %s.", spt.Name)
 	var (
 		uri = SPTemplateURL
 		t   *Task
@@ -424,29 +348,29 @@ func (c *CLIOVClient) CreateProfileTemplate(spt SPTemplate) error {
 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
 
 	if len(c.GetSPTemplateByName(spt.Name)) != 0 {
-		fmt.Println("Profile Template: \"", spt.Name, "\" already exists, skipping Create")
+		log.Print("Profile Template: \"", spt.Name, "\" already exists, skipping Create")
 		return nil
 	}
 
 	t = t.NewProfileTask(c)
 	t.ResetTask()
-	log.Debugf("REST : %s \n %+v\n", uri, spt)
-	log.Debugf("task -> %+v", t)
+	// log.Debugf("REST : %s \n %+v\n", uri, spt)
+	// log.Debugf("task -> %+v", t)
 	data, err := c.CLIRestAPICall(rest.POST, uri, spt)
 	if err != nil {
 		t.TaskIsDone = true
-		log.Errorf("Error submitting new profile template request for Template: %v \n Error: %s", spt.Name, err)
+		//log.Errorf("Error submitting new profile template request for Template: %v \n Error: %s", spt.Name, err)
 		os.Exit(1)
 	}
 
-	log.Debugf("Response New profile template %s", data)
+	//log.Debugf("Response New profile template %s", data)
 
 	if taskuri != "" {
 		t.URI = utils.Nstring(taskuri)
 	} else {
 		if err := json.Unmarshal([]byte(data), &t); err != nil {
 			t.TaskIsDone = true
-			log.Errorf("Error with task un-marshal: %s", err)
+			//log.Errorf("Error with task un-marshal: %s", err)
 			return err
 		}
 	}
@@ -467,12 +391,12 @@ func (c *CLIOVClient) GetSPTemplateByName(name string) []SPTemplate {
 
 	data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", SPTemplateURL)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		os.Exit(1)
 	}
 
 	if err := json.Unmarshal(data, &col); err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		os.Exit(1)
 	}
 
@@ -489,7 +413,7 @@ func DeleteSPTemplate(name string) error {
 	)
 
 	if name == "" {
-		fmt.Println("Neet wo specify name")
+		log.Print("Neet wo specify name")
 		return errors.New("Error: Need to specify Name")
 	}
 
@@ -498,18 +422,18 @@ func DeleteSPTemplate(name string) error {
 	list = c.GetSPTemplateByName(name)
 
 	if len(list) == 0 {
-		fmt.Println("Can't find the network to delete")
+		log.Print("Can't find the network to delete")
 		os.Exit(1)
 	}
 
 	for _, v := range list {
 
-		fmt.Println("Deleting Network:", v.Name)
+		log.Print("Deleting Network: ", v.Name)
 
 		t = t.NewProfileTask(c)
 		t.ResetTask()
-		log.Debugf("REST : %s \n %+v\n", v.URI, v.Name)
-		log.Debugf("task -> %+v", t)
+		// log.Debugf("REST : %s \n %+v\n", v.URI, v.Name)
+		// log.Debugf("task -> %+v", t)
 		uri = v.URI
 		// if uri == "" {
 		// 	log.Warn("Unable to post delete, no uri found.")
@@ -518,19 +442,19 @@ func DeleteSPTemplate(name string) error {
 		// }
 		data, err := c.CLIRestAPICall(rest.DELETE, uri, nil)
 		if err != nil {
-			log.Errorf("Error submitting delete server profile template request: %s", err)
+			//log.Errorf("Error submitting delete server profile template request: %s", err)
 			t.TaskIsDone = true
 			return err
 		}
 
-		log.Debugf("Response delete server profile template %s", data)
+		//log.Debugf("Response delete server profile template %s", data)
 
 		if taskuri != "" {
 			t.URI = utils.Nstring(taskuri)
 		} else {
 			if err := json.Unmarshal([]byte(data), &t); err != nil {
 				t.TaskIsDone = true
-				log.Errorf("Error with task un-marshal: %s", err)
+				//log.Errorf("Error with task un-marshal: %s", err)
 				return err
 			}
 		}

@@ -7,6 +7,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -232,23 +233,16 @@ type SFP struct {
 
 func GetIC() []IC {
 
-	icListC := make(chan []IC)
-	liListC := make(chan LIList)
+	var wg sync.WaitGroup
+	wg.Add(2)
 
-	go ICGetURI(icListC)
-	go LIGetURI(liListC)
+	go getResourceLists("IC", &wg)
+	go getResourceLists("LI", &wg)
 
-	var icList []IC
-	var liList LIList
+	wg.Wait()
 
-	for i := 0; i < 2; i++ {
-		select {
-		case icList = <-icListC:
-			//fmt.Println("received icList")
-		case liList = <-liListC:
-			//fmt.Println("received liList")
-		}
-	}
+	icList := *(rmap["IC"].listptr.(*[]IC))
+	liList := *(rmap["LI"].listptr.(*[]LI))
 
 	liMap := make(map[string]LI)
 
@@ -259,6 +253,8 @@ func GetIC() []IC {
 	for i, v := range icList {
 		icList[i].LIName = liMap[v.LogicalInterconnectURI].Name
 	}
+
+	sort.Slice(icList, func(i, j int) bool { return icList[i].Name < icList[j].Name })
 
 	return icList
 }

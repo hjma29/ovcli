@@ -3,12 +3,12 @@ package ovextra
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"strings"
 	"time"
 
 	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	"github.com/docker/machine/libmachine/log"
 )
 
 // AssociatedResource associated resource
@@ -166,22 +166,22 @@ func (t *Task) ResetTask() {
 
 // GetCurrentTaskStatus - Get the current status
 func (t *Task) GetCurrentTaskStatus() error {
-	log.Debugf("Working on getting current task status")
+	log.Print("Working on getting current task status")
 	var (
 		uri = t.URI
 	)
 	if uri != "" {
-		log.Debugf(uri.String())
+		log.Print("[DEBUG]", uri.String())
 		data, err := t.Client.RestAPICall(rest.GET, uri.String(), nil)
 		if err != nil {
 			return err
 		}
-		log.Debugf("data: %s", data)
+		log.Printf("[DEBUG] data: %s", data)
 		if err := json.Unmarshal([]byte(data), &t); err != nil {
 			return err
 		}
 	} else {
-		log.Debugf("Unable to get current task, no URI found")
+		log.Printf("Unable to get current task, no URI found")
 	}
 	if len(t.TaskErrors) > 0 {
 		var errmsg string
@@ -216,12 +216,12 @@ func (t *Task) Wait() error {
 	var (
 		currenttime int
 	)
-	log.Debugf("task : %+v", t)
+	log.Printf("[DEBUG] task : %+v", t)
 	if t.Timeout < t.ExpectedDuration {
 		t.Timeout = t.ExpectedDuration
-		log.Debugf("assign timeout %d", t.Timeout)
+		log.Printf("assign timeout %d", t.Timeout)
 	}
-	log.Debugf("task timeout is : %d", t.Timeout)
+	log.Printf("[DEBUG] task timeout is : %d", t.Timeout)
 	for !t.TaskIsDone && (currenttime < t.Timeout) {
 		if err := t.GetCurrentTaskStatus(); err != nil {
 			t.TaskIsDone = true
@@ -231,11 +231,10 @@ func (t *Task) Wait() error {
 			t.TaskIsDone = true
 		}
 		if t.URI != "" {
-			log.Debugf("Waiting for task to complete, for %s ", t.Name)
-			log.Debugf("Waiting on, %s, %d%%, %s, %d, %d", t.Name, t.ComputedPercentComplete, t.GetLastStatusUpdate(), currenttime, t.ExpectedDuration)
-			log.Infof("Waiting on, %s, %d%%, %s", t.Name, t.ComputedPercentComplete, t.GetLastStatusUpdate())
+			log.Printf("Waiting for task to complete, for %s ", t.Name)
+			log.Printf("Waiting on, %s, %d%%, %s, %d, %d", t.Name, t.ComputedPercentComplete, t.GetLastStatusUpdate(), currenttime, t.ExpectedDuration)
 		} else {
-			log.Info("Waiting on task creation.")
+			log.Printf("Waiting on task creation.")
 		}
 
 		// wait time before next check
@@ -246,11 +245,11 @@ func (t *Task) Wait() error {
 		}
 	}
 	if currenttime > t.Timeout {
-		log.Warnf("Task timed out, %d.", currenttime)
+		log.Printf("Task timed out, %d.", currenttime)
 	}
 
 	if t.Name != "" {
-		log.Infof("Task, %s, completed", t.Name)
+		log.Printf("Task, %s, completed", t.Name)
 	}
 	return nil
 }

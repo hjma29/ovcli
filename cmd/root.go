@@ -16,10 +16,11 @@ package cmd
 
 import (
 	"fmt"
-	//"log"
+	"log"
 	"os"
 
-	"github.com/docker/machine/libmachine/log"
+	//"github.com/docker/machine/libmachine/log"
+	"github.com/hashicorp/logutils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -92,7 +93,21 @@ func initConfig() {
 	//fmt.Println(Debugmode)
 
 	if Debugmode {
-		log.SetDebug(true)
+		//log.SetDebug(true)
+		filter := &logutils.LevelFilter{
+			Levels:   []logutils.LogLevel{"DEBUG", "WARN", "ERROR"},
+			MinLevel: logutils.LogLevel("DEBUG"),
+			Writer:   os.Stderr,
+		}
+		log.SetOutput(filter)
+
+	} else {
+		filter := &logutils.LevelFilter{
+			Levels:   []logutils.LogLevel{"DEBUG", "WARN", "ERROR"},
+			MinLevel: logutils.LogLevel("WARN"),
+			Writer:   os.Stderr,
+		}
+		log.SetOutput(filter)
 
 	}
 

@@ -4,18 +4,6 @@ import (
 	"os"
 )
 
-//LIGMap uses ov package existing struct, LIGMap use string uri/name to map each LIG struct
-type LIGMap map[string]*LIG
-
-//LIMap use string uri/name to map each LI struct
-type LIMap map[string]*LI
-
-//ICMap use string uri/name to map each IC struct
-type ICMap map[string]*IC
-
-//SFPList is to take REST response for a slice of SFPs on a particular module
-type SFPList []SFP
-
 //SFPMap is from conversion of raw SFPList(a slice) to mapping struct with port names as keys and the pointers of SFP structs as values. Each module has its own "sfpMap" to pass to channel
 type SFPMap map[string]*SFP
 
@@ -60,6 +48,52 @@ const (
 	ServerHWURL     = "/rest/server-hardware"
 	ServerHWTypeURL = "/rest/server-hardware-types"
 )
+
+type resource struct {
+	listptr interface{}
+	colptr  interface{}
+	uri     string
+	logmsg  string
+}
+
+type resourceMap map[string]resource
+
+var rmap = resourceMap{
+	"SPTemplate": resource{
+		listptr: &[]SPTemplate{},
+		colptr:  &SPTemplateCol{},
+		uri:     SPTemplateURL,
+		logmsg:  "get SPTemplate",
+	},
+
+	"EG": resource{
+		listptr: &[]EG{},
+		colptr:  &EGCol{},
+		uri:     EGURL,
+		logmsg:  "get EG",
+	},
+
+	"ServerHWType": resource{
+		listptr: &[]ServerHWType{},
+		colptr:  &ServerHWTypeCol{},
+		uri:     ServerHWTypeURL,
+		logmsg:  "get ServerHW Type",
+	},
+
+	"IC": resource{
+		listptr: &[]IC{},
+		colptr:  &ICCol{},
+		uri:     ICURL,
+		logmsg:  "get IC",
+	},
+
+	"LI": resource{
+		listptr: &[]LI{},
+		colptr:  &LICol{},
+		uri:     LIURL,
+		logmsg:  "get LI",
+	},
+}
 
 type OVCol interface {
 	GetMap(c *CLIOVClient)

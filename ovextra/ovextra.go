@@ -6,15 +6,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	//"log"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
+	"reflect"
+	"sync"
 	"time"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	"github.com/docker/machine/libmachine/log"
+	//"github.com/docker/machine/libmachine/log"
 )
 
 //CLIOVClient is the ov.OVCLient with additinal commands
@@ -61,6 +64,49 @@ func NewCLIOVClient() *CLIOVClient {
 	}
 }
 
+func getResourceLists(x string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	listptr := rmap[x].listptr
+	uri := rmap[x].uri
+	logmsg := rmap[x].logmsg
+
+	log.Print("[DEBUG] ", logmsg)
+
+	defer timeTrack(time.Now(), logmsg)
+
+	lvptr := reflect.ValueOf(listptr)
+	lv := lvptr.Elem()
+
+	c := NewCLIOVClient()
+
+	for uri != "" {
+
+		data, err := c.GetURI("", "", uri)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		colptr := rmap[x].colptr
+
+		if err := json.Unmarshal(data, colptr); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		lv.Set(reflect.AppendSlice(lv, reflect.ValueOf(colptr).Elem().FieldByName("Members")))
+
+		uri = reflect.ValueOf(colptr).Elem().FieldByName("NextPageURI").String()
+
+		//reset collection struct back to zero, otherwise loop if multiple pages
+		col := reflect.ValueOf(colptr).Elem()
+		col.Set(reflect.Zero(col.Type()))
+	}
+
+}
+
 func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, error) {
 	var (
 		//uri           = "/rest/interconnects"
@@ -86,7 +132,7 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, er
 		c.SetQueryString(q)
 	}
 
-	//fmt.Printf("%#v\n\n", c)
+	//logf("%#v\n\n", c)
 	//fmt.Println(uri)
 
 	data, err := c.CLIRestAPICall(rest.GET, uri, nil)
@@ -259,13 +305,13 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 	// req.SetBasicAuth(c.User, c.APIKey)
 	req.Method = fmt.Sprintf("%s", method.String())
 
-	log.Debugf("about to run: %+v\n", method.String())
+	log.Printf("[DEBUG] about to run: %v, %v\n", method.String(), Url.String())
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	log.Debugf("finish run: %#v\n", resp.StatusCode)
+	log.Printf("[DEBUG] finish run: Response Code: %v\n", resp.StatusCode)
 
 	// TODO: CLeanup Later
 	// DEBUGGING WHILE WE WORK
@@ -319,5 +365,5 @@ func (c *CLIOVClient) isOkStatus(code int) bool {
 
 func timeTrack(start time.Time, name string) {
 	elapsed := time.Since(start)
-	log.Debugf("%s took %s\n", name, elapsed)
+	log.Printf("[DEBUG] %s took %s\n", name, elapsed)
 }
