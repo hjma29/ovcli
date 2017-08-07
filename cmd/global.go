@@ -39,9 +39,13 @@ var (
 	netPurpose     string
 	netVlanId      int
 	porttype       string
-	fileName       string
 	Debugmode      = false
 	flagName       string
+	flagFile       string
+)
+
+const (
+	DefaultConfigFile = "appliance-credential.yaml"
 )
 
 func init() {

@@ -1,9 +1,5 @@
 package ovextra
 
-import (
-	"os"
-)
-
 //SFPMap is from conversion of raw SFPList(a slice) to mapping struct with port names as keys and the pointers of SFP structs as values. Each module has its own "sfpMap" to pass to channel
 type SFPMap map[string]*SFP
 
@@ -24,9 +20,9 @@ type UplinkSetMap map[string]*UplinkSet
 //LIUplinkSetMap is mapping between each LI and its own Uplinkset maps
 type LIUplinkSetMap map[string]UplinkSetMap
 
-var ovAddress = os.Getenv("OneView_address")
-var ovUsername = os.Getenv("OneView_username")
-var ovPassword = os.Getenv("OneView_password")
+// var ovAddress = os.Getenv("OneView_address")
+// var ovUsername = os.Getenv("OneView_username")
+// var ovPassword = os.Getenv("OneView_password")
 
 //OVClient is the sole OV client for all CLI commands
 var OVClient = NewCLIOVClient()
@@ -47,6 +43,8 @@ const (
 	SPTemplateURL   = "/rest/server-profile-templates"
 	ServerHWURL     = "/rest/server-hardware"
 	ServerHWTypeURL = "/rest/server-hardware-types"
+
+	DefaultConfigFile = "appliance-credential.yaml"
 )
 
 type resource struct {
@@ -93,6 +91,12 @@ var rmap = resourceMap{
 		uri:     LIURL,
 		logmsg:  "get LI",
 	},
+}
+
+type cred struct {
+	Ip   string `json:"ipaddress"`
+	User string `json:"username"`
+	Pass string `json:"password"`
 }
 
 type OVCol interface {

@@ -15,10 +15,7 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
-	//"github.com/HewlettPackard/oneview-golang/ov"
 )
 
 // showCmd represents the show command
@@ -32,8 +29,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
-		fmt.Println("show called")
+		cmd.Help()
 	},
 }
 
@@ -48,16 +44,5 @@ func init() {
 	showCmd.AddCommand(showEGCmd)
 	showCmd.AddCommand(showSPCmd)
 	showCmd.AddCommand(showSPTemplateCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	//showCmd.PersistentFlags().String("foo", "", "A help for foo")
-	//showCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// showCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 }

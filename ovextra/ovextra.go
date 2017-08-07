@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,6 +14,8 @@ import (
 	"reflect"
 	"sync"
 	"time"
+
+	"github.com/ghodss/yaml"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/rest"
@@ -366,4 +369,68 @@ func (c *CLIOVClient) isOkStatus(code int) bool {
 func timeTrack(start time.Time, name string) {
 	elapsed := time.Since(start)
 	log.Printf("[DEBUG] %s took %s\n", name, elapsed)
+}
+
+var ovAddress string
+var ovUsername string
+var ovPassword string
+
+func ConnectOV(flagFile string) error {
+
+	if flagFile != "appliance-credential.yaml" {
+		fmt.Println("Copy config file to default config file \"appliance-cretential.yaml\" for connection")
+
+		srcFile, err := os.Open(flagFile)
+		if err != nil {
+			return fmt.Errorf("error opening file: %f", err)
+
+		}
+		defer srcFile.Close()
+
+		dstFile, err := os.Create(DefaultConfigFile)
+		if err != nil {
+			return fmt.Errorf("error creating file: %f", err)
+		}
+		defer dstFile.Close()
+
+		_, err = io.Copy(dstFile, srcFile)
+		if err != nil {
+			fmt.Errorf("error copying file: %v", err)
+		}
+	}
+
+	y := cred{}
+
+	yamlData, err := ioutil.ReadFile(DefaultConfigFile)
+	if err != nil {
+		log.Fatal("error reading from default config file \"", DefaultConfigFile, "\":", err)
+	}
+
+	if err := yaml.Unmarshal(yamlData, &y); err != nil {
+		log.Fatal("can't unmarshal from config file", err)
+	}
+
+	fmt.Printf("%#v\n", y)
+
+	return nil
+
+}
+
+func init() {
+
+	y := cred{}
+
+	yamlData, err := ioutil.ReadFile(DefaultConfigFile)
+	if err != nil {
+		log.Fatal("error reading from default config file \"", DefaultConfigFile, "\":", err)
+	}
+
+	if err := yaml.Unmarshal(yamlData, &y); err != nil {
+		log.Fatal("can't unmarshal from config file", err)
+	}
+
+	ovAddress = y.Ip
+	ovUsername = y.User
+	ovPassword = y.Pass
+
 }

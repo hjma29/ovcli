@@ -50,7 +50,7 @@ to quickly create a Cobra application.`,
 }
 
 func createNetwork(cmd *cobra.Command, args []string) {
-	ovextra.CreateNetworkConfigParse(fileName)
+	ovextra.CreateNetworkConfigParse(flagFile)
 
 }
 
@@ -67,7 +67,7 @@ to quickly create a Cobra application.`,
 }
 
 func createSPTemplate(cmd *cobra.Command, args []string) {
-	ovextra.CreateSPTemplateConfigParse(fileName)
+	ovextra.CreateSPTemplateConfigParse(flagFile)
 
 }
 
@@ -80,9 +80,9 @@ func init() {
 	createNetworkCmd.Flags().StringVarP(&netType, "type", "t", "", "Network Type")
 	createNetworkCmd.Flags().StringVarP(&netPurpose, "purpose", "p", "", "General or Management etc")
 	createNetworkCmd.Flags().IntVarP(&netVlanId, "vlan", "v", 777, "vlan id in number")
-	createNetworkCmd.Flags().StringVarP(&fileName, "file", "f", "", "Config YAML File path/name")
+	createNetworkCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
 
-	createSPTemplateCmd.Flags().StringVarP(&fileName, "file", "f", "", "Config YAML File path/name")
+	createSPTemplateCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
 
 	// Here you will define your flags and configuration settings.
 
