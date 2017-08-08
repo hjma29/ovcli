@@ -1,14 +1,12 @@
 package ovextra
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
-	"time"
+	"sync"
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 )
@@ -211,29 +209,26 @@ var serverHardwareTypePrintList []serverHardwareTypePrint
 
 func GetSP() SPList {
 
-	spListC := make(chan SPList)
-	sptListC := make(chan []SPTemplate)
-	hwListC := make(chan []ServerHW)
-	hwtListC := make(chan []ServerHWType)
+	var wg sync.WaitGroup
 
-	go SPGetURI(spListC)
-	go SPTemplateGetURI(sptListC)
-	go ServerHWGetURI(hwListC)
-	go ServerHWTypeGetURI(hwtListC)
+	rl := []string{"SP", "SPTemplate", "ServerHW", "ServerHWType"}
 
-	var spList SPList
-	var sptList []SPTemplate
-	var hwList []ServerHW
-	var hwtList []ServerHWType
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 4; i++ {
-		select {
-		case spList = <-spListC:
-		case sptList = <-sptListC:
-		case hwList = <-hwListC:
-		case hwtList = <-hwtListC:
-		}
+		go func() {
+			defer wg.Done()
+			getResourceLists(localv)
+		}()
 	}
+
+	wg.Wait()
+
+	spList := *(rmap["SP"].listptr.(*SPList))
+	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
+	hwList := *(rmap["ServerHW"].listptr.(*[]ServerHW))
+	hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
 
 	sptMap := make(map[string]SPTemplate)
 
@@ -255,12 +250,12 @@ func GetSP() SPList {
 
 	for i, v := range spList {
 		spList[i].SPTemplate = sptMap[v.ServerProfileTemplateURI].Name
-
 		spList[i].ServerHW = hwMap[v.ServerHardwareURI].Name
-
 		spList[i].ServerHWType = hwtMap[v.ServerHardwareTypeURI].Name
 
 	}
+
+	sort.Slice(spList, func(i, j int) bool { return spList[i].Name < spList[j].Name })
 
 	return spList
 
@@ -268,42 +263,33 @@ func GetSP() SPList {
 
 func GetSPVerbose(name string) SPList {
 
-	spListC := make(chan SPList)
-	sptListC := make(chan []SPTemplate)
-	hwListC := make(chan []ServerHW)
-	hwtListC := make(chan []ServerHWType)
-	icListC := make(chan []IC)
-	netListC := make(chan []ENetwork)
-	netsetListC := make(chan []NetSet)
+	var wg sync.WaitGroup
 
-	go SPGetURI(spListC)
-	go SPTemplateGetURI(sptListC)
-	go ServerHWGetURI(hwListC)
-	go ServerHWTypeGetURI(hwtListC)
-	go ICGetURI(icListC)
-	go ENetworkGetURI(netListC)
-	go NetSetGetURI(netsetListC)
+	rl := []string{"SP", "SPTemplate", "ServerHW", "ServerHWType", "IC", "ENetwork", "NetSet"}
 
-	var spList SPList
-	var sptList []SPTemplate
-	var hwList []ServerHW
-	var hwtList []ServerHWType
-	var icList []IC
-	var netList []ENetwork
-	var netsetList []NetSet
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 7; i++ {
-		select {
-		case spList = <-spListC:
-			(&spList).validateName(name)
-		case sptList = <-sptListC:
-		case hwList = <-hwListC:
-		case hwtList = <-hwtListC:
-		case icList = <-icListC:
-		case netList = <-netListC:
-		case netsetList = <-netsetListC:
+		go func() {
+			defer wg.Done()
+			getResourceLists(localv)
+		}()
+	}
 
-		}
+	wg.Wait()
+
+	spList := *(rmap["SP"].listptr.(*SPList))
+	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
+	hwList := *(rmap["ServerHW"].listptr.(*[]ServerHW))
+	hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
+	icList := *(rmap["IC"].listptr.(*[]IC))
+	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
+	netsetList := *(rmap["NetSet"].listptr.(*[]NetSet))
+
+	if err := (&spList).validateName(name); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	sptMap := make(map[string]SPTemplate)
@@ -326,10 +312,8 @@ func GetSPVerbose(name string) SPList {
 
 	for i, v := range spList {
 		spList[i].SPTemplate = sptMap[v.ServerProfileTemplateURI].Name
-
 		spList[i].ServerHW = hwMap[v.ServerHardwareURI].Name
 		spList[i].PowerState = hwMap[v.ServerHardwareURI].PowerState
-
 		spList[i].ServerHWType = hwtMap[v.ServerHardwareTypeURI].Name
 
 		spList[i].conns(icList, netList, netsetList)
@@ -375,48 +359,10 @@ func (sp *SP) conns(icList []IC, netList []ENetwork, netsetList []NetSet) {
 
 }
 
-func SPGetURI(x chan SPList) {
-
-	log.Println("Rest Get Server Profile")
-
-	defer timeTrack(time.Now(), "Rest Get Server Profile")
-
-	c := NewCLIOVClient()
-
-	var list SPList
-	uri := SPURL
-
-	for uri != "" {
-
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
-
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		var page SPCol
-
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		list = append(list, page.Members...)
-
-		uri = page.NextPageURI
-	}
-
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
-
-	x <- list
-
-}
-
-func (list *SPList) validateName(name string) {
+func (list *SPList) validateName(name string) error {
 
 	if name == "all" {
-		return //if name is all, don't touch *list, directly return
+		return nil //if name is all, don't touch *list, directly return
 	}
 
 	localslice := *list //define a localslice to avoid too many *list in the following
@@ -425,11 +371,10 @@ func (list *SPList) validateName(name string) {
 		if name == v.Name {
 			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
 			*list = localslice               //update list pointer to point to new shortened slice
-			return
+			return nil
 		}
 	}
 
-	fmt.Println("no profile matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ")
-	os.Exit(0)
+	return fmt.Errorf("no profile matching name: \"%v\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ", name)
 
 }

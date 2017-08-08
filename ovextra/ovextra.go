@@ -12,7 +12,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
-	"sync"
+	//"sync"
 	"text/tabwriter"
 	"time"
 
@@ -54,12 +54,15 @@ var (
 // NewCLIOVClient creates new CLIOVCLient
 func NewCLIOVClient() *CLIOVClient {
 
-	if err := readCredential(); err != nil {
+	creds, err := readCredential()
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	ver, err := setAPIVersion()
+	log.Println("[DEBUG]", creds.Ip)
+
+	ver, err := setAPIVersion(creds.Ip)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -68,9 +71,9 @@ func NewCLIOVClient() *CLIOVClient {
 	return &CLIOVClient{
 		ov.OVClient{
 			rest.Client{
-				Endpoint:   "https://" + ovAddress,
-				User:       ovUsername,
-				Password:   ovPassword,
+				Endpoint:   "https://" + creds.Ip,
+				User:       creds.User,
+				Password:   creds.Pass,
 				Domain:     "Local",
 				SSLVerify:  false,
 				APIVersion: ver,
@@ -80,9 +83,9 @@ func NewCLIOVClient() *CLIOVClient {
 	}
 }
 
-func getResourceLists(x string, wg *sync.WaitGroup) {
+func getResourceLists(x string) {
 
-	defer wg.Done()
+	//defer wg.Done()
 
 	listptr := rmap[x].listptr
 	uri := rmap[x].uri
@@ -101,15 +104,13 @@ func getResourceLists(x string, wg *sync.WaitGroup) {
 
 		data, err := c.GetURI("", "", uri)
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatal(err)
 		}
 
 		colptr := rmap[x].colptr
 
 		if err := json.Unmarshal(data, colptr); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatalf("unmarshal error for type %T, error is: %s", colptr, err)
 		}
 
 		lv.Set(reflect.AppendSlice(lv, reflect.ValueOf(colptr).Elem().FieldByName("Members")))
@@ -311,7 +312,7 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 		return nil, err
 	}
 	defer resp.Body.Close()
-	log.Printf("[DEBUG] finish run: Response Code: %v\n", resp.StatusCode)
+	log.Printf("[DEBUG] finish run: %v, %v, Response Code: %v\n", method.String(), Url.String(), resp.StatusCode)
 
 	// TODO: CLeanup Later
 	// DEBUGGING WHILE WE WORK
@@ -419,7 +420,7 @@ func ConnectOV(flagFile string) error {
 	return nil
 }
 
-func setAPIVersion() (int, error) {
+func setAPIVersion(ip string) (int, error) {
 
 	type ver struct {
 		CurrentVersion int
@@ -431,7 +432,7 @@ func setAPIVersion() (int, error) {
 	}
 	client := &http.Client{Transport: tr}
 
-	resp, err := client.Get("https://" + ovAddress + "/" + VersionURL)
+	resp, err := client.Get("https://" + ip + "/" + VersionURL)
 	if err != nil {
 		return 0, fmt.Errorf("get version failed: %v", err)
 	}
@@ -453,24 +454,19 @@ func setAPIVersion() (int, error) {
 	return v.CurrentVersion, nil
 }
 
-func readCredential() error {
+func readCredential() (cred, error) {
 	y := cred{}
 
 	yamlData, err := ioutil.ReadFile(DefaultConfigFile)
 	if err != nil {
-		return fmt.Errorf("error reading from default config file %v,", err)
+		return cred{}, fmt.Errorf("error reading from default config file %v,", err)
 	}
 
 	if err := yaml.Unmarshal(yamlData, &y); err != nil {
-		return fmt.Errorf("can't unmarshal from config file %v", err)
+		return cred{}, fmt.Errorf("can't unmarshal from config file %v", err)
 	}
 
-	ovAddress = y.Ip
-	ovUsername = y.User
-	ovPassword = y.Pass
-	log.Printf("[DEBUG]1123")
-
-	return nil
+	return y, nil
 
 }
 

@@ -9,11 +9,9 @@ import (
 	"os"
 	"sort"
 	"sync"
-	"time"
 
 	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	//"github.com/docker/machine/libmachine/log"
 	"github.com/ghodss/yaml"
 )
 
@@ -26,9 +24,9 @@ type SPTemplateCol struct {
 	Count       int          `json:"count,omitempty"`
 	Total       int          `json:"total,omitempty"`
 	Category    string       `json:"category,omitempty"`
-	Modified    time.Time    `json:"modified,omitempty"`
-	ETag        time.Time    `json:"eTag,omitempty"`
-	Created     time.Time    `json:"created,omitempty"`
+	Modified    string       `json:"modified,omitempty"`
+	ETag        string       `json:"eTag,omitempty"`
+	Created     string       `json:"created,omitempty"`
 	URI         string       `json:"uri,omitempty"`
 }
 
@@ -107,54 +105,27 @@ type SPTemplate struct {
 	ServerHWType string `json:"serverhardwaretype,omitempty"`
 }
 
-func SPTemplateGetURI(x chan []SPTemplate) {
-
-	//log.Debugf("Rest Get Server Profile Template")
-
-	defer timeTrack(time.Now(), "Rest Get Server Profile Template")
-
-	c := NewCLIOVClient()
-
-	var list []SPTemplate
-	uri := SPTemplateURL
-
-	for uri != "" {
-
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
-
-			log.Print(err)
-			os.Exit(1)
-		}
-
-		var page SPTemplateCol
-
-		if err := json.Unmarshal(data, &page); err != nil {
-			log.Print(err)
-			os.Exit(1)
-		}
-
-		list = append(list, page.Members...)
-
-		uri = page.NextPageURI
-	}
-
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
-
-	x <- list
-
-}
-
 func GetSPTemplate() []SPTemplate {
 
 	var wg sync.WaitGroup
-	wg.Add(3)
 
-	go getResourceLists("SPTemplate", &wg)
-	go getResourceLists("EG", &wg)
-	go getResourceLists("ServerHWType", &wg)
+	rl := []string{"SPTemplate", "EG", "ServerHWType"}
+
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			getResourceLists(localv)
+		}()
+	}
 
 	wg.Wait()
+
+	// go getResourceLists("SPTemplate", &wg)
+	// go getResourceLists("EG", &wg)
+	// go getResourceLists("ServerHWType", &wg)
 
 	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
 	egList := *(rmap["EG"].listptr.(*[]EG))

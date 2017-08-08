@@ -41,9 +41,9 @@ type IC struct {
 	// 	Status           interface{}   `json:"status"`
 	// 	Name             interface{}   `json:"name"`
 	// 	State            interface{}   `json:"state"`
-	// 	Created          time.Time     `json:"created"`
+	// 	Created          string     `json:"created"`
 	// 	ETag             interface{}   `json:"eTag"`
-	// 	Modified         time.Time     `json:"modified"`
+	// 	Modified         string     `json:"modified"`
 	// 	Category         string        `json:"category"`
 	// 	URI              interface{}   `json:"uri"`
 	// } `json:"snmpConfiguration"`
@@ -89,9 +89,9 @@ type IC struct {
 	// 	Status                   interface{} `json:"status"`
 	// 	Name                     interface{} `json:"name"`
 	// 	State                    interface{} `json:"state"`
-	// 	Created                  time.Time   `json:"created"`
+	// 	Created                  string   `json:"created"`
 	// 	ETag                     interface{} `json:"eTag"`
-	// 	Modified                 time.Time   `json:"modified"`
+	// 	Modified                 string   `json:"modified"`
 	// 	Category                 string      `json:"category"`
 	// 	URI                      interface{} `json:"uri"`
 	// } `json:"qosConfiguration"`
@@ -132,9 +132,9 @@ type IC struct {
 	Status                        string        `json:"status"`
 	Name                          string        `json:"name"`
 	State                         string        `json:"state"`
-	Created                       time.Time     `json:"created"`
+	Created                       string        `json:"created"`
 	ETag                          string        `json:"eTag"`
-	Modified                      time.Time     `json:"modified"`
+	Modified                      string        `json:"modified"`
 	Category                      string        `json:"category"`
 	URI                           string        `json:"uri"`
 	LIName                        string
@@ -212,32 +212,21 @@ type SFP struct {
 	VendorOui        string      `json:"vendorOui"`
 }
 
-// type UplinkPortShow struct {
-// 	Port  string
-// 	Type  string
-// 	State string
-// 	Speed string
-// }
-
-// func GetICbyName() ICMap {
-// 	icMapbyName := make(ICMap)
-
-// 	icMap := GetIC()
-
-// 	for k := range icMap {
-// 		icMapbyName[icMap[k].Name] = icMap[k]
-// 	}
-
-// 	return icMapbyName
-// }
-
 func GetIC() []IC {
 
 	var wg sync.WaitGroup
-	wg.Add(2)
 
-	go getResourceLists("IC", &wg)
-	go getResourceLists("LI", &wg)
+	resourcelist := []string{"IC", "LI"}
+
+	for _, v := range resourcelist {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			getResourceLists(localv)
+		}()
+	}
 
 	wg.Wait()
 
@@ -261,106 +250,94 @@ func GetIC() []IC {
 
 func GetICPort() []IC {
 
-	icListC := make(chan []IC)
-	//icSFPMapC := make(chan ICSFPMap)
+	var wg sync.WaitGroup
 
-	go ICGetURI(icListC)
-	icList := <-icListC
+	resourcelist := []string{"IC"}
 
-	//returned port list is in ascending order so no need to sort manually
+	for _, v := range resourcelist {
+		localv := v
+		wg.Add(1)
 
-	// for i := range icList {
-	// 	sort.Slice(icList[i].Ports, func(x, y int) bool { return icList[i].Ports[x].Name < icList[i].Ports[y].Name })
-	// }
-
-	return icList
-}
-
-//ICGetURI call GetURI func to pull IC collection
-func ICGetURI(x chan []IC) {
-
-	log.Println("Rest Get IC")
-
-	defer timeTrack(time.Now(), "Rest Get IC")
-
-	c := NewCLIOVClient()
-
-	var list []IC
-	uri := ICURL
-
-	for uri != "" {
-
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
-
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		var page ICCol
-
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		list = append(list, page.Members...)
-
-		uri = page.NextPageURI
+		go func() {
+			defer wg.Done()
+			getResourceLists(localv)
+		}()
 	}
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	wg.Wait()
 
-	x <- list
+	icList := *(rmap["IC"].listptr.(*[]IC))
 
+	return icList
 }
 
 func GetSFP() []IC {
 
-	icListC := make(chan []IC)
+	var wg sync.WaitGroup
 
-	go ICGetURI(icListC)
-	icList := <-icListC
+	resourcelist := []string{"IC"}
 
-	done := make(chan bool, len(icList))
+	for _, v := range resourcelist {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			getResourceLists(localv)
+		}()
+	}
+
+	wg.Wait()
+
+	icList := *(rmap["IC"].listptr.(*[]IC))
+
 	for i := range icList {
-		go SFPGetURI(&icList[i], done)
+		locallist := &icList[i]
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			SFPGetURI(locallist)
+		}()
 	}
 
-	for i := 0; i < len(icList); i++ {
-		<-done
-	}
+	wg.Wait()
 
 	return icList
 
 }
 
-func SFPGetURI(ic *IC, done chan bool) {
+func SFPGetURI(ic *IC) {
 
-	log.Println("Rest Get SFP", ic.Name)
+	log.Println("[DEBUG] Rest Get SFP", ic.Name)
 	defer timeTrack(time.Now(), "Rest Get SFP")
 
 	icID := strings.Replace(ic.URI, "/rest/interconnects/", "", -1)
 
 	c := NewCLIOVClient()
 
-	data, err := c.GetURI("", "", SFPURL+icID)
+	var sfpuri string
+	switch c.APIVersion {
+	case 500:
+		sfpuri = ICURL + "/" + icID + SFPURL //  /rest/interconnects/{id}/pluggableModuleInformation
+	case 300:
+		sfpuri = ICURL + SFPURL + "/" + icID //  /rest/interconnects/pluggableModuleInformation/{ID}
+	}
+
+	data, err := c.GetURI("", "", sfpuri)
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("getSFP URL err: ", err)
 		os.Exit(1)
 	}
 
 	var list []SFP
 	if err := json.Unmarshal(data, &list); err != nil {
-		fmt.Println(err)
+		fmt.Println("unmarshal SFP json err: ", err)
 		os.Exit(1)
 	}
 
 	sort.Slice(list, func(i, j int) bool { return list[i].PortName < list[j].PortName })
 
 	(*ic).SFPList = list
-
-	done <- true
 
 }

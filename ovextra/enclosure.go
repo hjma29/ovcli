@@ -17,9 +17,9 @@ type EncCol struct {
 	NextPageURI string      `json:"nextPageUri"`
 	Count       int         `json:"count"`
 	Total       int         `json:"total"`
-	Created     time.Time   `json:"created"`
-	ETag        time.Time   `json:"eTag"`
-	Modified    time.Time   `json:"modified"`
+	Created     string   `json:"created"`
+	ETag        string   `json:"eTag"`
+	Modified    string   `json:"modified"`
 	Category    string      `json:"category"`
 	URI         string      `json:"uri"`
 }
@@ -167,7 +167,7 @@ type Enclosure struct {
 		PartNumber             string      `json:"partNumber,omitempty"`
 	} `json:"interconnectBays"`
 	SerialNumber                              string      `json:"serialNumber"`
-	ETag                                      time.Time   `json:"eTag"`
+	ETag                                      string   `json:"eTag"`
 	RefreshState                              string      `json:"refreshState"`
 	Status                                    string      `json:"status"`
 	URI                                       string      `json:"uri"`
@@ -175,8 +175,8 @@ type Enclosure struct {
 	State                                     string      `json:"state"`
 	StateReason                               string      `json:"stateReason"`
 	Description                               interface{} `json:"description"`
-	Created                                   time.Time   `json:"created"`
-	Modified                                  time.Time   `json:"modified"`
+	Created                                   string   `json:"created"`
+	Modified                                  string   `json:"modified"`
 	Category                                  string      `json:"category"`
 	Version                                   string      `json:"version"`
 	FrameLinkModuleDomain                     string      `json:"frameLinkModuleDomain"`

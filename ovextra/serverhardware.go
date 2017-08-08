@@ -13,10 +13,10 @@ type ServerHWCol struct {
 	Type        string     `json:"type"`
 	Category    string     `json:"category"`
 	Count       int        `json:"count"`
-	Created     time.Time  `json:"created"`
+	Created     string  `json:"created"`
 	ETag        string     `json:"eTag"`
 	Members     []ServerHW `json:"members"`
-	Modified    time.Time  `json:"modified"`
+	Modified    string  `json:"modified"`
 	NextPageURI string     `json:"nextPageUri"`
 	PrevPageURI string     `json:"prevPageUri"`
 	Start       int        `json:"start"`
@@ -32,7 +32,7 @@ type ServerHW struct {
 	StateReason                    string    `json:"stateReason"`
 	AssetTag                       string    `json:"assetTag"`
 	Category                       string    `json:"category"`
-	Created                        time.Time `json:"created"`
+	Created                        string `json:"created"`
 	Description                    string    `json:"description"`
 	ETag                           string    `json:"eTag"`
 	FormFactor                     string    `json:"formFactor"`
@@ -43,7 +43,7 @@ type ServerHW struct {
 	MemoryMb                       int       `json:"memoryMb"`
 	MigrationState                 string    `json:"migrationState"`
 	Model                          string    `json:"model"`
-	Modified                       time.Time `json:"modified"`
+	Modified                       string `json:"modified"`
 	MpFirmwareVersion              string    `json:"mpFirmwareVersion"`
 	MpHostInfo                     struct {
 		MpHostName    string `json:"mpHostName"`
@@ -87,7 +87,7 @@ type ServerHW struct {
 	ServerProfileURI           string   `json:"serverProfileUri"`
 	ServerSettings             struct {
 		FirmwareAndDriversInstallState struct {
-			InstalledStateTimestamp time.Time `json:"installedStateTimestamp"`
+			InstalledStateTimestamp string `json:"installedStateTimestamp"`
 			InstallState            string    `json:"installState"`
 		} `json:"firmwareAndDriversInstallState"`
 		HpSmartUpdateToolStatus struct {
@@ -95,7 +95,7 @@ type ServerHW struct {
 			Version           string    `json:"version"`
 			ServiceState      string    `json:"serviceState"`
 			InstallState      string    `json:"installState"`
-			LastOperationTime time.Time `json:"lastOperationTime"`
+			LastOperationTime string `json:"lastOperationTime"`
 		} `json:"hpSmartUpdateToolStatus"`
 		FirmwareInstallSchedule struct {
 			DateTime        string `json:"dateTime"`
@@ -140,7 +140,7 @@ type PhysicalPort struct {
 
 func ServerHWGetURI(x chan []ServerHW) {
 
-	log.Println("Rest Get Server Harddware")
+	log.Println("[DEBUG] Rest Get Server Harddware")
 
 	defer timeTrack(time.Now(), "Rest Get Server Hardware")
 

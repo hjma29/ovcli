@@ -34,9 +34,9 @@ type NetSet struct {
 	Status                string    `json:"status"`
 	Name                  string    `json:"name"`
 	State                 string    `json:"state"`
-	Created               time.Time `json:"created"`
+	Created               string `json:"created"`
 	ETag                  string    `json:"eTag"`
-	Modified              time.Time `json:"modified"`
+	Modified              string `json:"modified"`
 	Category              string    `json:"category"`
 	URI                   string    `json:"uri"`
 }

@@ -40,9 +40,9 @@ type LI struct {
 	// 	Status           interface{}   `json:"status"`
 	// 	Name             interface{}   `json:"name"`
 	// 	State            interface{}   `json:"state"`
-	// 	Created          time.Time     `json:"created"`
+	// 	Created          string     `json:"created"`
 	// 	ETag             interface{}   `json:"eTag"`
-	// 	Modified         time.Time     `json:"modified"`
+	// 	Modified         string     `json:"modified"`
 	// 	Category         string        `json:"category"`
 	// 	URI              interface{}   `json:"uri"`
 	// } `json:"snmpConfiguration"`
@@ -89,9 +89,9 @@ type LI struct {
 	// 	Status                   interface{} `json:"status"`
 	// 	Name                     interface{} `json:"name"`
 	// 	State                    interface{} `json:"state"`
-	// 	Created                  time.Time   `json:"created"`
+	// 	Created                  string   `json:"created"`
 	// 	ETag                     interface{} `json:"eTag"`
-	// 	Modified                 time.Time   `json:"modified"`
+	// 	Modified                 string   `json:"modified"`
 	// 	Category                 string      `json:"category"`
 	// 	URI                      interface{} `json:"uri"`
 	// } `json:"qosConfiguration"`
@@ -138,9 +138,9 @@ type LI struct {
 		Description                 interface{} `json:"description"`
 		Status                      interface{} `json:"status"`
 		State                       interface{} `json:"state"`
-		Created                     time.Time   `json:"created"`
+		Created                     string      `json:"created"`
 		ETag                        interface{} `json:"eTag"`
-		Modified                    time.Time   `json:"modified"`
+		Modified                    string      `json:"modified"`
 		Category                    interface{} `json:"category"`
 		URI                         string      `json:"uri"`
 	} `json:"ethernetSettings"`
@@ -166,9 +166,9 @@ type LI struct {
 	Status      string        `json:"status"`
 	Name        string        `json:"name"`
 	State       string        `json:"state"`
-	Created     time.Time     `json:"created"`
+	Created     string        `json:"created"`
 	ETag        string        `json:"eTag"`
-	Modified    time.Time     `json:"modified"`
+	Modified    string        `json:"modified"`
 	Category    string        `json:"category"`
 	URI         string        `json:"uri"`
 	LIGName     string

@@ -33,7 +33,7 @@ const (
 	LIURL           = "/rest/logical-interconnects"
 	UplinkSetURL    = "/rest/uplink-sets"
 	ICURL           = "/rest/interconnects"
-	SFPURL          = "/rest/interconnects/pluggableModuleInformation/"
+	SFPURL          = "/pluggableModuleInformation"
 	ICTypeURL       = "/rest/interconnect-types"
 	ENetworkURL     = "/rest/ethernet-networks"
 	NetSetURL       = "/rest/network-sets"
@@ -65,11 +65,25 @@ var rmap = resourceMap{
 		logmsg:  "get SPTemplate",
 	},
 
+	"SP": resource{
+		listptr: &SPList{},
+		colptr:  &SPCol{},
+		uri:     SPURL,
+		logmsg:  "get Server Profile",
+	},
+
 	"EG": resource{
 		listptr: &[]EG{},
 		colptr:  &EGCol{},
 		uri:     EGURL,
 		logmsg:  "get EG",
+	},
+
+	"ServerHW": resource{
+		listptr: &[]ServerHW{},
+		colptr:  &ServerHWCol{},
+		uri:     ServerHWURL,
+		logmsg:  "get Server Hardware ",
 	},
 
 	"ServerHWType": resource{
@@ -91,6 +105,20 @@ var rmap = resourceMap{
 		colptr:  &LICol{},
 		uri:     LIURL,
 		logmsg:  "get LI",
+	},
+
+	"ENetwork": resource{
+		listptr: &[]ENetwork{},
+		colptr:  &ENetworkCol{},
+		uri:     ENetworkURL,
+		logmsg:  "get Ethernet Network",
+	},
+
+	"NetSet": resource{
+		listptr: &[]NetSet{},
+		colptr:  &NetSetCol{},
+		uri:     NetSetURL,
+		logmsg:  "get Network Set",
 	},
 }
 
