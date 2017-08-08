@@ -369,9 +369,9 @@ func timeTrack(start time.Time, name string) {
 	log.Printf("[DEBUG] %s took %s\n", name, elapsed)
 }
 
-var ovAddress string
-var ovUsername string
-var ovPassword string
+// var ovAddress string
+// var ovUsername string
+// var ovPassword string
 
 func ConnectOV(flagFile string) error {
 
@@ -403,7 +403,6 @@ func ConnectOV(flagFile string) error {
 	c := NewCLIOVClient()
 
 	log.Print("[DEBUG] c.APIVersion: ", c.APIVersion)
-	log.Print("[DEBUG] ov:", ovAddress)
 	log.Print("[DEBUG] c.Endpoint : ", c.Endpoint)
 
 	if err := c.RefreshLogin(); err != nil {
@@ -415,7 +414,7 @@ func ConnectOV(flagFile string) error {
 	defer tw.Flush()
 	fmt.Fprintf(tw, format, "Appliance Address", "Username", "Appliance Current Version")
 	fmt.Fprintf(tw, format, "-----------------", "--------", "-------------------------")
-	fmt.Fprintf(tw, format, ovAddress, ovUsername, c.APIVersion)
+	fmt.Fprintf(tw, format, c.Endpoint, c.User, c.APIVersion)
 
 	return nil
 }
