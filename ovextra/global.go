@@ -43,6 +43,7 @@ const (
 	SPTemplateURL   = "/rest/server-profile-templates"
 	ServerHWURL     = "/rest/server-hardware"
 	ServerHWTypeURL = "/rest/server-hardware-types"
+	VersionURL      = "/rest/version"
 
 	DefaultConfigFile = "appliance-credential.yaml"
 )

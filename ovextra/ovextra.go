@@ -13,6 +13,7 @@ import (
 	"os"
 	"reflect"
 	"sync"
+	"text/tabwriter"
 	"time"
 
 	"github.com/ghodss/yaml"
@@ -52,6 +53,18 @@ var (
 
 // NewCLIOVClient creates new CLIOVCLient
 func NewCLIOVClient() *CLIOVClient {
+
+	if err := readCredential(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	ver, err := setAPIVersion()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	return &CLIOVClient{
 		ov.OVClient{
 			rest.Client{
@@ -60,7 +73,7 @@ func NewCLIOVClient() *CLIOVClient {
 				Password:   ovPassword,
 				Domain:     "Local",
 				SSLVerify:  false,
-				APIVersion: 500,
+				APIVersion: ver,
 				APIKey:     "none",
 			},
 		},
@@ -112,10 +125,7 @@ func getResourceLists(x string, wg *sync.WaitGroup) {
 
 func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, error) {
 	var (
-		//uri           = "/rest/interconnects"
 		q map[string]interface{}
-		//interconnects ICCol
-		//lic           LICol
 	)
 
 	q = make(map[string]interface{})
@@ -127,8 +137,16 @@ func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, er
 		q["sort"] = sort
 	}
 
-	// refresh login
+	// if err := c.setAPIVersion(); err != nil {
+	// 	return nil, err
+
+	// }
+	// log.Print("[DEBUG] c.APIVersion: ", c.APIVersion)
+
+	// refreshov login
+
 	c.RefreshLogin()
+
 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
 	// Setup query
 	if len(q) > 0 {
@@ -232,9 +250,6 @@ func (c *CLIOVClient) DeleteURI(filter string, sort string, uri string) ([]byte,
 
 // RestAPICall - general rest method caller
 func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options interface{}) ([]byte, error) {
-	//log.SetDebug(false)
-	//fmt.Println("=================================================")
-	//log.Debugf("RestAPICall %s - %s%s", method, utils.Sanatize(c.Endpoint), path)
 
 	var (
 		Url *url.URL
@@ -242,36 +257,18 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 		req *http.Request
 	)
 
-	//fmt.Println(c.Endpoint, utils.Sanatize(c.Endpoint+path))
 	Url, err = url.Parse(utils.Sanatize(c.Endpoint + path))
-	//fmt.Println("@@@@@@@@@@@@")
-	//fmt.Printf("%#v\n", Url)
-	//fmt.Println(Url.String())
 
 	if err != nil {
 		return nil, err
 	}
-	//Url.Path += path
-	//Url.Path = url.PathEscape(Url.Path)
 
-	// Manage the query string
 	c.GetQueryString(Url)
 
-	// log.Debugf("*** url => %s", Url.String())
-	// log.Debugf("*** method => %s", method.String())
-
-	// parse url
-	//reqUrl, err := url.Parse(Url.String())
-	//reqUrl, err := url.Parse(Url.String())
 	if err != nil {
 		return nil, fmt.Errorf("Error with request: %v - %q", Url, err)
 	}
-	//fmt.Printf("%#v\n", Url)
-	//fmt.Println("---------")
-	//fmt.Println(Url.String())
-	//fmt.Println(reqUrl.String())
-	//fmt.Println(reqUrl.String())
-	// handle options
+
 	if options != nil {
 		OptionsJSON, err := json.Marshal(options)
 		if err != nil {
@@ -308,7 +305,7 @@ func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options in
 	// req.SetBasicAuth(c.User, c.APIKey)
 	req.Method = fmt.Sprintf("%s", method.String())
 
-	log.Printf("[DEBUG] about to run: %v, %v\n", method.String(), Url.String())
+	log.Printf("[DEBUG] about to run: %v, %v, request header: %#v\n", method.String(), Url.String(), req.Header)
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -378,59 +375,107 @@ var ovPassword string
 func ConnectOV(flagFile string) error {
 
 	if flagFile != "appliance-credential.yaml" {
-		fmt.Println("Copy config file to default config file \"appliance-cretential.yaml\" for connection")
+		log.Print("[DEBUG] Copy config file to default config file \"appliance-cretential.yaml\" for connection")
 
 		srcFile, err := os.Open(flagFile)
 		if err != nil {
 			return fmt.Errorf("error opening file: %f", err)
 
 		}
-		defer srcFile.Close()
 
 		dstFile, err := os.Create(DefaultConfigFile)
 		if err != nil {
 			return fmt.Errorf("error creating file: %f", err)
 		}
-		defer dstFile.Close()
 
 		_, err = io.Copy(dstFile, srcFile)
 		if err != nil {
-			fmt.Errorf("error copying file: %v", err)
+			return fmt.Errorf("error copying file: %v", err)
 		}
+		defer srcFile.Close()
+		defer dstFile.Close()
+		// log.Println("[DEBUG] file closed")
+		// d, _ := ioutil.ReadFile(DefaultConfigFile)
+		// log.Println("[DEBUG]", string(d))
+
 	}
 
+	if err := readCredential(); err != nil {
+		return err
+	}
+
+	c := NewCLIOVClient()
+
+	log.Print("[DEBUG] c.APIVersion: ", c.APIVersion)
+	log.Print("[DEBUG] ov:", ovAddress)
+	log.Print("[DEBUG] c.Endpoint : ", c.Endpoint)
+
+	if err := c.RefreshLogin(); err != nil {
+		return fmt.Errorf("login failed: %v", err)
+	}
+
+	const format = "%v\t%v\t%v\n"
+	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+	defer tw.Flush()
+	fmt.Fprintf(tw, format, "Appliance Address", "Username", "Appliance Current Version")
+	fmt.Fprintf(tw, format, "-----------------", "--------", "-------------------------")
+	fmt.Fprintf(tw, format, ovAddress, ovUsername, c.APIVersion)
+
+	return nil
+}
+
+func setAPIVersion() (int, error) {
+
+	type ver struct {
+		CurrentVersion int
+		MinimumVersion int
+	}
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+
+	resp, err := client.Get("https://" + ovAddress + "/" + VersionURL)
+	if err != nil {
+		return 0, fmt.Errorf("get version failed: %v", err)
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	v := new(ver)
+	if err := json.Unmarshal(body, v); err != nil {
+		log.Printf("%#v", string(body))
+		return 0, fmt.Errorf("unmarshall version failed: %v", err)
+	}
+
+	log.Printf("[DEBUG] %#v", string(body))
+	//log.Print("[DEBUG] c.APIVersion: ", c.APIVersion, "v.currentversion", v.CurrentVersion)
+
+	return v.CurrentVersion, nil
+}
+
+func readCredential() error {
 	y := cred{}
 
 	yamlData, err := ioutil.ReadFile(DefaultConfigFile)
 	if err != nil {
-		log.Fatal("error reading from default config file \"", DefaultConfigFile, "\":", err)
+		return fmt.Errorf("error reading from default config file %v,", err)
 	}
 
 	if err := yaml.Unmarshal(yamlData, &y); err != nil {
-		log.Fatal("can't unmarshal from config file", err)
+		return fmt.Errorf("can't unmarshal from config file %v", err)
 	}
 
-	fmt.Printf("%#v\n", y)
+	ovAddress = y.Ip
+	ovUsername = y.User
+	ovPassword = y.Pass
 
 	return nil
 
 }
 
 func init() {
-
-	y := cred{}
-
-	yamlData, err := ioutil.ReadFile(DefaultConfigFile)
-	if err != nil {
-		log.Fatal("error reading from default config file \"", DefaultConfigFile, "\":", err)
-	}
-
-	if err := yaml.Unmarshal(yamlData, &y); err != nil {
-		log.Fatal("can't unmarshal from config file", err)
-	}
-
-	ovAddress = y.Ip
-	ovUsername = y.User
-	ovPassword = y.Pass
 
 }
