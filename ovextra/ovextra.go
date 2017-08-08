@@ -379,8 +379,7 @@ func ConnectOV(flagFile string) error {
 
 		srcFile, err := os.Open(flagFile)
 		if err != nil {
-			return fmt.Errorf("error opening file: %f", err)
-
+			log.Fatal("error opening file:", err)
 		}
 
 		dstFile, err := os.Create(DefaultConfigFile)
@@ -398,10 +397,6 @@ func ConnectOV(flagFile string) error {
 		// d, _ := ioutil.ReadFile(DefaultConfigFile)
 		// log.Println("[DEBUG]", string(d))
 
-	}
-
-	if err := readCredential(); err != nil {
-		return err
 	}
 
 	c := NewCLIOVClient()
@@ -450,7 +445,9 @@ func setAPIVersion() (int, error) {
 		return 0, fmt.Errorf("unmarshall version failed: %v", err)
 	}
 
-	log.Printf("[DEBUG] %#v", string(body))
+	log.Printf("[DEBUG] %v", string(body))
+	log.Printf("[DEBUG]")
+
 	//log.Print("[DEBUG] c.APIVersion: ", c.APIVersion, "v.currentversion", v.CurrentVersion)
 
 	return v.CurrentVersion, nil
@@ -471,6 +468,7 @@ func readCredential() error {
 	ovAddress = y.Ip
 	ovUsername = y.User
 	ovPassword = y.Pass
+	log.Printf("[DEBUG]1123")
 
 	return nil
 

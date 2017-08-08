@@ -25,7 +25,7 @@ type LIUplinkSetMap map[string]UplinkSetMap
 // var ovPassword = os.Getenv("OneView_password")
 
 //OVClient is the sole OV client for all CLI commands
-var OVClient = NewCLIOVClient()
+//var OVClient = NewCLIOVClient()
 var taskuri string
 
 const (

@@ -22,7 +22,6 @@ import (
 	//"github.com/docker/machine/libmachine/log"
 	"github.com/hashicorp/logutils"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var cfgFile string
@@ -58,8 +57,7 @@ func init() {
 	RootCmd.AddCommand(showCmd)
 	RootCmd.AddCommand(deleteCmd)
 	RootCmd.AddCommand(createCmd)
-		RootCmd.AddCommand(connectCmd)
-
+	RootCmd.AddCommand(connectCmd)
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 
@@ -75,24 +73,22 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" { // enable ability to specify config file via flag
-		viper.SetConfigFile(cfgFile)
-	}
+	// if cfgFile != "" { // enable ability to specify config file via flag
+	// 	viper.SetConfigFile(cfgFile)
+	// }
 
-	viper.SetConfigName(".ovcli") // name of config file (without extension)
-	viper.AddConfigPath("$HOME")  // adding home directory as first search path
-	viper.AutomaticEnv()          // read in environment variables that match
+	// viper.SetConfigName(".ovcli") // name of config file (without extension)
+	// viper.AddConfigPath("$HOME")  // adding home directory as first search path
+	// viper.AutomaticEnv()          // read in environment variables that match
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
+	// // If a config file is found, read it in.
+	// if err := viper.ReadInConfig(); err == nil {
+	// 	fmt.Println("Using config file:", viper.ConfigFileUsed())
+	// }
 
 	//viper.BindPFlag("debugbit", RootCmd.PersistentFlags().Lookup("Debugmode"))
 
 	//fmt.Println(viper.GetBool("debugbit"))
-
-	//fmt.Println(Debugmode)
 
 	if Debugmode {
 		//log.SetDebug(true)
@@ -102,6 +98,7 @@ func initConfig() {
 			Writer:   os.Stderr,
 		}
 		log.SetOutput(filter)
+		//fmt.Println("debug mode")
 
 	} else {
 		filter := &logutils.LevelFilter{
@@ -110,6 +107,7 @@ func initConfig() {
 			Writer:   os.Stderr,
 		}
 		log.SetOutput(filter)
+		//fmt.Println("non-debug mode")
 
 	}
 
