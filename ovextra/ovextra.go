@@ -124,51 +124,6 @@ func getResourceLists(x string) {
 
 }
 
-func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, error) {
-	var (
-		q map[string]interface{}
-	)
-
-	q = make(map[string]interface{})
-	if len(filter) > 0 {
-		q["filter"] = filter
-	}
-
-	if sort != "" {
-		q["sort"] = sort
-	}
-
-	// if err := c.setAPIVersion(); err != nil {
-	// 	return nil, err
-
-	// }
-	// log.Print("[DEBUG] c.APIVersion: ", c.APIVersion)
-
-	// refreshov login
-
-	c.RefreshLogin()
-
-	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
-	// Setup query
-	if len(q) > 0 {
-		c.SetQueryString(q)
-	}
-
-	//logf("%#v\n\n", c)
-	//fmt.Println(uri)
-
-	data, err := c.CLIRestAPICall(rest.GET, uri, nil)
-
-	//fmt.Println(data, err)
-
-	if err != nil {
-		return data, err
-	}
-
-	return data, err
-
-}
-
 func (c *CLIOVClient) PostURI(filter string, sort string, uri string) ([]byte, error) {
 	var (
 		//uri           = "/rest/interconnects"
@@ -247,6 +202,37 @@ func (c *CLIOVClient) DeleteURI(filter string, sort string, uri string) ([]byte,
 
 	return data, err
 
+}
+
+func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, error) {
+	var (
+		q map[string]interface{}
+	)
+
+	q = make(map[string]interface{})
+	if len(filter) > 0 {
+		q["filter"] = filter
+	}
+
+	if sort != "" {
+		q["sort"] = sort
+	}
+
+	c.RefreshLogin()
+
+	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+	// Setup query
+	if len(q) > 0 {
+		c.SetQueryString(q)
+	}
+
+	data, err := c.CLIRestAPICall(rest.GET, uri, nil)
+
+	if err != nil {
+		return data, err
+	}
+
+	return data, err
 }
 
 // RestAPICall - general rest method caller
@@ -369,10 +355,6 @@ func timeTrack(start time.Time, name string) {
 	log.Printf("[DEBUG] %s took %s\n", name, elapsed)
 }
 
-// var ovAddress string
-// var ovUsername string
-// var ovPassword string
-
 func ConnectOV(flagFile string) error {
 
 	if flagFile != "appliance-credential.yaml" {
@@ -394,10 +376,6 @@ func ConnectOV(flagFile string) error {
 		}
 		defer srcFile.Close()
 		defer dstFile.Close()
-		// log.Println("[DEBUG] file closed")
-		// d, _ := ioutil.ReadFile(DefaultConfigFile)
-		// log.Println("[DEBUG]", string(d))
-
 	}
 
 	c := NewCLIOVClient()
@@ -447,8 +425,6 @@ func setAPIVersion(ip string) (int, error) {
 
 	log.Printf("[DEBUG] %v", string(body))
 	log.Printf("[DEBUG]")
-
-	//log.Print("[DEBUG] c.APIVersion: ", c.APIVersion, "v.currentversion", v.CurrentVersion)
 
 	return v.CurrentVersion, nil
 }

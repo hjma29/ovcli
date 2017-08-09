@@ -1,4 +1,4 @@
-serverTemplates:
+servertemplates:
   - name: hj-sptemplate1
     enclosuregroup: DCA-SolCenter-EG
     serverhardwaretype: "SY 480 Gen9 3"

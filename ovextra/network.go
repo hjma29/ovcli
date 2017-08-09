@@ -150,7 +150,7 @@ func ENetworkGetURI(x chan []ENetwork) {
 
 func CreateNetworkConfigParse(fileName string) {
 
-	y := YamlConfig{}
+	y := YAMLConfig{}
 
 	//y := YamlConfig{}
 
@@ -168,7 +168,7 @@ func CreateNetworkConfigParse(fileName string) {
 
 	c := NewCLIOVClient()
 
-	for _, v := range y.Networks {
+	for _, v := range y.ENetworks {
 
 		if v.Type == "" {
 			v.Type = "ethernet-networkV300"
@@ -184,17 +184,6 @@ func CreateNetworkConfigParse(fileName string) {
 	}
 }
 
-//fmt.Printf("%#v", y)
-
-// 	if netName == "" {
-// 	fmt.Println("Neet wo specify name")
-// 	return
-// }
-
-// newNetwork.Name = netName
-// newNetwork.Type = netType
-// newNetwork.Purpose = netPurpose
-// newNetwork.VlanId = netVlanId
 
 func (c *CLIOVClient) CreateEthernetNetwork(eNet ENetwork) error {
 	fmt.Println("Initializing creation of ethernet network for %s.", eNet.Name)

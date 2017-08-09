@@ -136,7 +136,20 @@ func ColToMap(x OVCol, c *CLIOVClient) {
 	x.GetMap(c)
 }
 
-type YamlConfig struct {
-	Networks        []ENetwork   //`yaml:"networks"`
-	ServerTemplates []SPTemplate //`yaml:"serverTemplates"`
+type YAMLConfig struct {
+	ENetworks   []ENetwork       `json:"networks"`
+	SPTemplates []YAMLSPTemplate `json:"servertemplates"`
+}
+
+type YAMLSPTemplate struct {
+	Name            string           `json:"name,omitempty"`
+	EG              string           `json:"enclosuregroup,omitempty"`
+	ServerHWType    string           `json:"serverhardwaretype,omitempty"`
+	YAMLConnections []YAMLConnection `json:"connections,omiempty"`
+}
+
+type YAMLConnection struct {
+	ID      int    `json:"id,omiempty"`
+	Name    string `json:"name,omiempty"`
+	Network string `json:"network,omiempty"`
 }

@@ -51,20 +51,8 @@ type SPTemplate struct {
 		FirmwareActivationType string `json:"firmwareActivationType,omitempty"`
 	} `json:"firmware,omitempty"`
 	ConnectionSettings struct {
-		ManageConnections bool `json:"manageConnections,omitempty"`
-		Connections       []struct {
-			ID            int    `json:"id,omitempty"`
-			Name          string `json:"name,omitempty"`
-			FunctionType  string `json:"functionType,omitempty"`
-			NetworkURI    string `json:"networkUri,omitempty"`
-			PortID        string `json:"portId,omitempty"`
-			RequestedVFs  string `json:"requestedVFs,omitempty"`
-			RequestedMbps string `json:"requestedMbps,omitempty"`
-			Boot          struct {
-				Priority   string `json:"priority,omitempty"`
-				BootVlanID string `json:"bootVlanId,omitempty"`
-			} `json:"boot,omitempty"`
-		} `json:"connections,omitempty"`
+		ManageConnections bool            `json:"manageConnections,omitempty"`
+		Connections       []SPTConnection `json:"connections,omitempty"`
 	} `json:"connectionSettings,omitempty"`
 	BootMode struct {
 		ManageMode    bool   `json:"manageMode,omitempty"`
@@ -101,14 +89,22 @@ type SPTemplate struct {
 	Status       string `json:"status,omitempty"`
 	State        string `json:"state,omitempty"`
 	ETag         string `json:"eTag,omitempty"`
-	EG           string `json:"enclosuregroup,omitempty"`
-	ServerHWType string `json:"serverhardwaretype,omitempty"`
-	YAMLConnections []YAMLConnection `json:"connections,omiempty"`
+	EG           string `json:"-"`
+	ServerHWType string `json:"-"`
 }
 
-struct YamlConnection {
-	Id int `json:"id,omiempty"`
-	Name string `json:"name,omiempty"`
+type SPTConnection struct {
+	ID            int    `json:"id,omitempty"`
+	Name          string `json:"name,omitempty"`
+	FunctionType  string `json:"functionType,omitempty"`
+	NetworkURI    string `json:"networkUri,omitempty"`
+	PortID        string `json:"portId,omitempty"`
+	RequestedVFs  string `json:"requestedVFs,omitempty"`
+	RequestedMbps string `json:"requestedMbps,omitempty"`
+	Boot          struct {
+		Priority   string `json:"priority,omitempty"`
+		BootVlanID string `json:"bootVlanId,omitempty"`
+	} `json:"boot,omitempty"`
 }
 
 func GetSPTemplate() []SPTemplate {
@@ -128,7 +124,6 @@ func GetSPTemplate() []SPTemplate {
 	}
 
 	wg.Wait()
-
 
 	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
 	egList := *(rmap["EG"].listptr.(*[]EG))
@@ -235,7 +230,7 @@ func GetSPTemplateVerbose(name string) []SPTemplate {
 
 func CreateSPTemplateConfigParse(fileName string) {
 
-	y := YamlConfig{}
+	y := YAMLConfig{}
 
 	//y := YamlConfig{}
 
@@ -251,21 +246,25 @@ func CreateSPTemplateConfigParse(fileName string) {
 
 	c := NewCLIOVClient()
 
-	log.Print("[DEBUG] EG: ", y.ServerTemplates[0].EG)
-	log.Print("[DEBUG] HWT: ", y.ServerTemplates[0].ServerHWType)
+	log.Print("[DEBUG] SPTemplate list length: ", len(y.SPTemplates))
+	log.Print("[DEBUG] EG: ", y.SPTemplates[0].EG)
+	log.Print("[DEBUG] HWT: ", y.SPTemplates[0].ServerHWType)
 
-	for _, stv := range y.ServerTemplates {
+	for _, v := range y.SPTemplates {
+		spt := SPTemplate{}
 
-		if stv.EG == "" {
+		spt.Name = v.Name
+
+		if v.EG == "" {
 			log.Print("Need to specify Enclosure Group Name")
 			os.Exit(1)
 		}
-		if stv.ServerHWType == "" {
+		if v.ServerHWType == "" {
 			log.Print("Need to specify Server HardWare Type Name")
 			os.Exit(1)
 		}
 
-		eglist := c.GetEGByName(stv.EG)
+		eglist := c.GetEGByName(v.EG)
 		if len(eglist) == 0 {
 			log.Print("Can't find EG with the name specified")
 			os.Exit(1)
@@ -276,12 +275,10 @@ func CreateSPTemplateConfigParse(fileName string) {
 		}
 
 		for _, v := range eglist {
-			stv.EnclosureGroupURI = v.URI
+			spt.EnclosureGroupURI = v.URI
 		}
 
-		stv.EG = ""
-
-		shtlist := c.GetServerHWTypeByName(stv.ServerHWType)
+		shtlist := c.GetServerHWTypeByName(v.ServerHWType)
 		if len(shtlist) == 0 {
 			log.Print("Can't find ServerHW Type with the name specified")
 			os.Exit(1)
@@ -292,26 +289,30 @@ func CreateSPTemplateConfigParse(fileName string) {
 		}
 
 		for _, v := range shtlist {
-			stv.ServerHardwareTypeURI = v.URI
+			spt.ServerHardwareTypeURI = v.URI
 		}
 
-		if stv.Type == "" {
-			stv.Type = "ServerProfileTemplateV3"
+		if spt.Type == "" {
+			spt.Type = "ServerProfileTemplateV3"
 		}
 
-		stv.ServerHWType = ""
+		if len(v.YAMLConnections) != 0 {
+			spt.ConnectionSettings.ManageConnections = true
+			spt.ConnectionSettings.Connections = make([]SPTConnection, 0)
 
-		if len(stv.YAMLConnections) != 0{
-			stv.ConnectionSettings.ManageConnections = true
-			for _, v := range stv.YAMLConnections{
-				stv.ConnectionSettings.
+			for _, v := range v.YAMLConnections {
+
+				log.Print("[DEBUG] v.network:", v.Network)
+				log.Print("[DEBUG] len: ", c.GetEthernetNetworkByName(v.Name))
+				neturi := c.GetEthernetNetworkByName(v.Network)[0].URI
+				spt.ConnectionSettings.Connections = append(spt.ConnectionSettings.Connections, SPTConnection{ID: v.ID, Name: v.Name, NetworkURI: neturi})
 			}
 		}
 
-		j, _ := json.MarshalIndent(stv, "", "  ")
+		j, _ := json.MarshalIndent(spt, "", "  ")
 		log.Print("[DEBUG]", string(j))
 
-		if err := c.CreateProfileTemplate(stv); err != nil {
+		if err := c.CreateProfileTemplate(spt); err != nil {
 			log.Print(err)
 			os.Exit(1)
 		}
@@ -319,7 +320,7 @@ func CreateSPTemplateConfigParse(fileName string) {
 }
 
 func (c *CLIOVClient) CreateProfileTemplate(spt SPTemplate) error {
-	log.Print("Initializing creation of server profile Template for %s.", spt.Name)
+	log.Print("Initializing creation of server profile Template for: ", spt.Name)
 	var (
 		uri = SPTemplateURL
 		t   *Task
