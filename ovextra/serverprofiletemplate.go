@@ -103,6 +103,12 @@ type SPTemplate struct {
 	ETag         string `json:"eTag,omitempty"`
 	EG           string `json:"enclosuregroup,omitempty"`
 	ServerHWType string `json:"serverhardwaretype,omitempty"`
+	YAMLConnections []YAMLConnection `json:"connections,omiempty"`
+}
+
+struct YamlConnection {
+	Id int `json:"id,omiempty"`
+	Name string `json:"name,omiempty"`
 }
 
 func GetSPTemplate() []SPTemplate {
@@ -123,9 +129,6 @@ func GetSPTemplate() []SPTemplate {
 
 	wg.Wait()
 
-	// go getResourceLists("SPTemplate", &wg)
-	// go getResourceLists("EG", &wg)
-	// go getResourceLists("ServerHWType", &wg)
 
 	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
 	egList := *(rmap["EG"].listptr.(*[]EG))
@@ -280,11 +283,11 @@ func CreateSPTemplateConfigParse(fileName string) {
 
 		shtlist := c.GetServerHWTypeByName(stv.ServerHWType)
 		if len(shtlist) == 0 {
-			log.Print("Can't find EG with the name specified")
+			log.Print("Can't find ServerHW Type with the name specified")
 			os.Exit(1)
 		}
 		if len(shtlist) != 1 {
-			log.Print("more than one EG name has been found")
+			log.Print("more than one ServerHW Type name has been found")
 			os.Exit(1)
 		}
 
@@ -297,6 +300,13 @@ func CreateSPTemplateConfigParse(fileName string) {
 		}
 
 		stv.ServerHWType = ""
+
+		if len(stv.YAMLConnections) != 0{
+			stv.ConnectionSettings.ManageConnections = true
+			for _, v := range stv.YAMLConnections{
+				stv.ConnectionSettings.
+			}
+		}
 
 		j, _ := json.MarshalIndent(stv, "", "  ")
 		log.Print("[DEBUG]", string(j))
