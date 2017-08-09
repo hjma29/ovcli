@@ -166,7 +166,7 @@ func (t *Task) ResetTask() {
 
 // GetCurrentTaskStatus - Get the current status
 func (t *Task) GetCurrentTaskStatus() error {
-	log.Print("Working on getting current task status")
+	log.Print("[DEBUG] Working on getting current task status")
 	var (
 		uri = t.URI
 	)
@@ -231,10 +231,10 @@ func (t *Task) Wait() error {
 			t.TaskIsDone = true
 		}
 		if t.URI != "" {
-			log.Printf("Waiting for task to complete, for %s ", t.Name)
-			log.Printf("Waiting on, %s, %d%%, %s, %d, %d", t.Name, t.ComputedPercentComplete, t.GetLastStatusUpdate(), currenttime, t.ExpectedDuration)
+			log.Printf("[DEBUG] Waiting for task to complete, for %s ", t.Name)
+			log.Printf("[DEBUG] Waiting on, %s, %d%%, %s, %d, %d", t.Name, t.ComputedPercentComplete, t.GetLastStatusUpdate(), currenttime, t.ExpectedDuration)
 		} else {
-			log.Printf("Waiting on task creation.")
+			log.Printf("[DEBUG] Waiting on task creation.")
 		}
 
 		// wait time before next check
@@ -245,11 +245,11 @@ func (t *Task) Wait() error {
 		}
 	}
 	if currenttime > t.Timeout {
-		log.Printf("Task timed out, %d.", currenttime)
+		log.Printf("[DEBUG] Task timed out, %d.", currenttime)
 	}
 
 	if t.Name != "" {
-		log.Printf("Task, %s, completed", t.Name)
+		log.Printf("[DEBUG] Task, %s, completed", t.Name)
 	}
 	return nil
 }
