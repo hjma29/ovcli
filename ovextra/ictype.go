@@ -1,14 +1,5 @@
 package ovextra
 
-import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"os"
-	"sort"
-	"time"
-)
-
 type ICType struct {
 	Category                 string                 `json:"category,omitempty"`                 // "category": "interconnect-types",
 	Created                  string                 `json:"created,omitempty"`                  // "created": "20150831T154835.250Z",
@@ -73,38 +64,38 @@ type ICTypeCol struct {
 
 func ICTypeGetURI(x chan []ICType) {
 
-	log.Println("Rest Get IC Type")
+	// log.Println("Rest Get IC Type")
 
-	defer timeTrack(time.Now(), "Rest Get IC Type")
+	// defer timeTrack(time.Now(), "Rest Get IC Type")
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var list []ICType
-	uri := ICTypeURL
+	// var list []ICType
+	// uri := ICTypeURL
 
-	for uri != "" {
+	// for uri != "" {
 
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
+	// 	data, err := c.GetURI("", "", uri)
+	// 	if err != nil {
 
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page ICTypeCol
+	// 	var page ICTypeCol
 
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	x <- list
+	// x <- list
 
 }

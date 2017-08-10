@@ -2,16 +2,12 @@ package ovextra
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"sort"
 	"sync"
 
-	"github.com/HewlettPackard/oneview-golang/rest"
-	"github.com/HewlettPackard/oneview-golang/utils"
 	"github.com/ghodss/yaml"
 )
 
@@ -320,49 +316,49 @@ func CreateSPTemplateConfigParse(fileName string) {
 }
 
 func (c *CLIOVClient) CreateProfileTemplate(spt SPTemplate) error {
-	log.Print("Initializing creation of server profile Template for: ", spt.Name)
-	var (
-		uri = SPTemplateURL
-		t   *Task
-	)
-	// refresh login
-	c.RefreshLogin()
-	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+	// log.Print("Initializing creation of server profile Template for: ", spt.Name)
+	// var (
+	// 	uri = SPTemplateURL
+	// 	t   *Task
+	// )
+	// // refresh login
+	// c.RefreshLogin()
+	// c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
 
-	if len(c.GetSPTemplateByName(spt.Name)) != 0 {
-		log.Print("Profile Template: \"", spt.Name, "\" already exists, skipping Create")
-		return nil
-	}
+	// if len(c.GetSPTemplateByName(spt.Name)) != 0 {
+	// 	log.Print("Profile Template: \"", spt.Name, "\" already exists, skipping Create")
+	// 	return nil
+	// }
 
-	t = t.NewProfileTask(c)
-	t.ResetTask()
-	// log.Debugf("REST : %s \n %+v\n", uri, spt)
-	// log.Debugf("task -> %+v", t)
-	data, err := c.CLIRestAPICall(rest.POST, uri, spt)
-	if err != nil {
-		t.TaskIsDone = true
-		//log.Errorf("Error submitting new profile template request for Template: %v \n Error: %s", spt.Name, err)
-		os.Exit(1)
-	}
+	// t = t.NewProfileTask(c)
+	// t.ResetTask()
+	// // log.Debugf("REST : %s \n %+v\n", uri, spt)
+	// // log.Debugf("task -> %+v", t)
+	// data, err := c.CLIRestAPICall(rest.POST, uri, spt)
+	// if err != nil {
+	// 	t.TaskIsDone = true
+	// 	//log.Errorf("Error submitting new profile template request for Template: %v \n Error: %s", spt.Name, err)
+	// 	os.Exit(1)
+	// }
 
-	//log.Debugf("Response New profile template %s", data)
+	// //log.Debugf("Response New profile template %s", data)
 
-	if taskuri != "" {
-		t.URI = utils.Nstring(taskuri)
-	} else {
-		if err := json.Unmarshal([]byte(data), &t); err != nil {
-			t.TaskIsDone = true
-			//log.Errorf("Error with task un-marshal: %s", err)
-			return err
-		}
-	}
+	// if taskuri != "" {
+	// 	t.URI = utils.Nstring(taskuri)
+	// } else {
+	// 	if err := json.Unmarshal([]byte(data), &t); err != nil {
+	// 		t.TaskIsDone = true
+	// 		//log.Errorf("Error with task un-marshal: %s", err)
+	// 		return err
+	// 	}
+	// }
 
-	err = t.Wait()
-	if err != nil {
-		return err
-	}
+	// err = t.Wait()
+	// if err != nil {
+	// 	return err
+	// }
 
-	taskuri = ""
+	// taskuri = ""
 
 	return nil
 }
@@ -371,84 +367,84 @@ func (c *CLIOVClient) GetSPTemplateByName(name string) []SPTemplate {
 
 	var col SPTemplateCol
 
-	data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", SPTemplateURL)
-	if err != nil {
-		log.Print(err)
-		os.Exit(1)
-	}
+	// data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", SPTemplateURL)
+	// if err != nil {
+	// 	log.Print(err)
+	// 	os.Exit(1)
+	// }
 
-	if err := json.Unmarshal(data, &col); err != nil {
-		log.Print(err)
-		os.Exit(1)
-	}
+	// if err := json.Unmarshal(data, &col); err != nil {
+	// 	log.Print(err)
+	// 	os.Exit(1)
+	// }
 
 	return col.Members
 }
 
 func DeleteSPTemplate(name string) error {
 
-	var (
-		list []SPTemplate
-		//err     error
-		t   *Task
-		uri string
-	)
+	// var (
+	// 	list []SPTemplate
+	// 	//err     error
+	// 	t   *Task
+	// 	uri string
+	// )
 
-	if name == "" {
-		log.Print("Neet wo specify name")
-		return errors.New("Error: Need to specify Name")
-	}
+	// if name == "" {
+	// 	log.Print("Neet wo specify name")
+	// 	return errors.New("Error: Need to specify Name")
+	// }
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	list = c.GetSPTemplateByName(name)
+	// list = c.GetSPTemplateByName(name)
 
-	if len(list) == 0 {
-		log.Print("Can't find the network to delete")
-		os.Exit(1)
-	}
+	// if len(list) == 0 {
+	// 	log.Print("Can't find the network to delete")
+	// 	os.Exit(1)
+	// }
 
-	for _, v := range list {
+	// for _, v := range list {
 
-		log.Print("Deleting Network: ", v.Name)
+	// 	log.Print("Deleting Network: ", v.Name)
 
-		t = t.NewProfileTask(c)
-		t.ResetTask()
-		// log.Debugf("REST : %s \n %+v\n", v.URI, v.Name)
-		// log.Debugf("task -> %+v", t)
-		uri = v.URI
-		// if uri == "" {
-		// 	log.Warn("Unable to post delete, no uri found.")
-		// 	t.TaskIsDone = true
-		// 	return err
-		// }
-		data, err := c.CLIRestAPICall(rest.DELETE, uri, nil)
-		if err != nil {
-			//log.Errorf("Error submitting delete server profile template request: %s", err)
-			t.TaskIsDone = true
-			return err
-		}
+	// 	t = t.NewProfileTask(c)
+	// 	t.ResetTask()
+	// 	// log.Debugf("REST : %s \n %+v\n", v.URI, v.Name)
+	// 	// log.Debugf("task -> %+v", t)
+	// 	uri = v.URI
+	// 	// if uri == "" {
+	// 	// 	log.Warn("Unable to post delete, no uri found.")
+	// 	// 	t.TaskIsDone = true
+	// 	// 	return err
+	// 	// }
+	// 	data, err := c.CLIRestAPICall(rest.DELETE, uri, nil)
+	// 	if err != nil {
+	// 		//log.Errorf("Error submitting delete server profile template request: %s", err)
+	// 		t.TaskIsDone = true
+	// 		return err
+	// 	}
 
-		//log.Debugf("Response delete server profile template %s", data)
+	// 	//log.Debugf("Response delete server profile template %s", data)
 
-		if taskuri != "" {
-			t.URI = utils.Nstring(taskuri)
-		} else {
-			if err := json.Unmarshal([]byte(data), &t); err != nil {
-				t.TaskIsDone = true
-				//log.Errorf("Error with task un-marshal: %s", err)
-				return err
-			}
-		}
+	// 	if taskuri != "" {
+	// 		t.URI = utils.Nstring(taskuri)
+	// 	} else {
+	// 		if err := json.Unmarshal([]byte(data), &t); err != nil {
+	// 			t.TaskIsDone = true
+	// 			//log.Errorf("Error with task un-marshal: %s", err)
+	// 			return err
+	// 		}
+	// 	}
 
-		err = t.Wait()
-		if err != nil {
-			return err
-		}
+	// 	err = t.Wait()
+	// 	if err != nil {
+	// 		return err
+	// 	}
 
-		taskuri = ""
+	// 	taskuri = ""
 
-	}
+	// }
 	return nil
 }
 

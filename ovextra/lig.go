@@ -1,12 +1,9 @@
 package ovextra
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"sort"
-	"time"
 )
 
 type LIGCol struct {
@@ -277,39 +274,39 @@ func (lig *LIG) getNetwork(networkList []ENetwork) {
 //LIGGetURI to get mapping between LIG URI/name to LIG struct
 func LIGGetURI(x chan LIGList) {
 
-	log.Println("Rest Get LIG")
+	// log.Println("Rest Get LIG")
 
-	defer timeTrack(time.Now(), "Rest Get LIG")
+	// defer timeTrack(time.Now(), "Rest Get LIG")
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var list LIGList
-	uri := LIGURL
+	// var list LIGList
+	// uri := LIGURL
 
-	for uri != "" {
+	// for uri != "" {
 
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
+	// 	data, err := c.GetURI("", "", uri)
+	// 	if err != nil {
 
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page LIGCol
+	// 	var page LIGCol
 
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	x <- list
+	// x <- list
 
 }
 

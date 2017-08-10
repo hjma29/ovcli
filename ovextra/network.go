@@ -1,16 +1,9 @@
 package ovextra
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"sort"
-	"time"
-
-	"github.com/HewlettPackard/oneview-golang/rest"
-	"github.com/docker/machine/libmachine/log"
 
 	"github.com/ghodss/yaml"
 )
@@ -112,39 +105,39 @@ func GetENetworkVerbose(name string) []ENetwork {
 //ENetworkGetURI to get all Ethernet Networks
 func ENetworkGetURI(x chan []ENetwork) {
 
-	log.Debug("Rest Get Ethernet Networks")
+	// log.Debug("Rest Get Ethernet Networks")
 
-	defer timeTrack(time.Now(), "Rest Get Ethernet Networks")
+	// defer timeTrack(time.Now(), "Rest Get Ethernet Networks")
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var list []ENetwork
-	uri := ENetworkURL
+	// var list []ENetwork
+	// uri := ENetworkURL
 
-	for uri != "" {
+	// for uri != "" {
 
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
+	// 	data, err := c.GetURI("", "", uri)
+	// 	if err != nil {
 
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page ENetworkCol
+	// 	var page ENetworkCol
 
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	x <- list
+	// x <- list
 
 }
 
@@ -184,44 +177,43 @@ func CreateNetworkConfigParse(fileName string) {
 	}
 }
 
-
 func (c *CLIOVClient) CreateEthernetNetwork(eNet ENetwork) error {
-	fmt.Println("Initializing creation of ethernet network for %s.", eNet.Name)
-	var (
-		uri = "/rest/ethernet-networks"
-		t   *Task
-	)
-	// refresh login
-	c.RefreshLogin()
-	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
+	// fmt.Println("Initializing creation of ethernet network for %s.", eNet.Name)
+	// var (
+	// 	uri = "/rest/ethernet-networks"
+	// 	t   *Task
+	// )
+	// // refresh login
+	// c.RefreshLogin()
+	// c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
 
-	if len(c.GetEthernetNetworkByName(eNet.Name)) != 0 {
-		fmt.Println("Network: \"", eNet.Name, "\" already exists, skipping Create")
-		return nil
-	}
+	// if len(c.GetEthernetNetworkByName(eNet.Name)) != 0 {
+	// 	fmt.Println("Network: \"", eNet.Name, "\" already exists, skipping Create")
+	// 	return nil
+	// }
 
-	t = t.NewProfileTask(c)
-	t.ResetTask()
-	log.Debugf("REST : %s \n %+v\n", uri, eNet)
-	log.Debugf("task -> %+v", t)
-	data, err := c.CLIRestAPICall(rest.POST, uri, eNet)
-	if err != nil {
-		t.TaskIsDone = true
-		log.Errorf("Error submitting new ethernet network request for Network: %v \n Error: %s", eNet.Name, err)
-		os.Exit(1)
-	}
+	// t = t.NewProfileTask(c)
+	// t.ResetTask()
+	// log.Debugf("REST : %s \n %+v\n", uri, eNet)
+	// log.Debugf("task -> %+v", t)
+	// data, err := c.CLIRestAPICall(rest.POST, uri, eNet)
+	// if err != nil {
+	// 	t.TaskIsDone = true
+	// 	log.Errorf("Error submitting new ethernet network request for Network: %v \n Error: %s", eNet.Name, err)
+	// 	os.Exit(1)
+	// }
 
-	log.Debugf("Response New EthernetNetwork %s", data)
-	if err := json.Unmarshal([]byte(data), &t); err != nil {
-		t.TaskIsDone = true
-		log.Errorf("Error with task un-marshal: %s", err)
-		return err
-	}
+	// log.Debugf("Response New EthernetNetwork %s", data)
+	// if err := json.Unmarshal([]byte(data), &t); err != nil {
+	// 	t.TaskIsDone = true
+	// 	log.Errorf("Error with task un-marshal: %s", err)
+	// 	return err
+	// }
 
-	err = t.Wait()
-	if err != nil {
-		return err
-	}
+	// err = t.Wait()
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
@@ -231,23 +223,15 @@ func (c *CLIOVClient) GetEthernetNetworkByName(name string) []ENetwork {
 	//var enet ENetwork
 	var col ENetworkCol
 
-	data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", ENetworkURL)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	if err := json.Unmarshal(data, &col); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	// if col.Total == 0 {
-	// 	fmt.Println("No network matching name: ", name)
+	// data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", ENetworkURL)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
 	// }
 
-	// for _, v := range col.Members {
-	// 	fmt.Println("Found Network:", v.Name)
+	// if err := json.Unmarshal(data, &col); err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
 	// }
 
 	return col.Members
@@ -255,60 +239,60 @@ func (c *CLIOVClient) GetEthernetNetworkByName(name string) []ENetwork {
 
 func DeleteNetwork(name string) error {
 
-	var (
-		netlist []ENetwork
-		//err     error
-		t   *Task
-		uri string
-	)
+	// var (
+	// 	netlist []ENetwork
+	// 	//err     error
+	// 	t   *Task
+	// 	uri string
+	// )
 
-	if name == "" {
-		fmt.Println("Neet wo specify name")
-		return errors.New("Error: Need to specify Name")
-	}
+	// if name == "" {
+	// 	fmt.Println("Neet wo specify name")
+	// 	return errors.New("Error: Need to specify Name")
+	// }
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	netlist = c.GetEthernetNetworkByName(name)
+	// netlist = c.GetEthernetNetworkByName(name)
 
-	if len(netlist) == 0 {
-		fmt.Println("Can't find the network to delete")
-		os.Exit(1)
-	}
+	// if len(netlist) == 0 {
+	// 	fmt.Println("Can't find the network to delete")
+	// 	os.Exit(1)
+	// }
 
-	for _, v := range netlist {
+	// for _, v := range netlist {
 
-		fmt.Println("Deleting Network:", v.Name)
+	// 	fmt.Println("Deleting Network:", v.Name)
 
-		t = t.NewProfileTask(c)
-		t.ResetTask()
-		log.Debugf("REST : %s \n %+v\n", v.URI, v.Name)
-		log.Debugf("task -> %+v", t)
-		uri = v.URI
-		// if uri == "" {
-		// 	log.Warn("Unable to post delete, no uri found.")
-		// 	t.TaskIsDone = true
-		// 	return err
-		// }
-		data, err := c.CLIRestAPICall(rest.DELETE, uri, nil)
-		if err != nil {
-			log.Errorf("Error submitting delete ethernet network request: %s", err)
-			t.TaskIsDone = true
-			return err
-		}
+	// 	t = t.NewProfileTask(c)
+	// 	t.ResetTask()
+	// 	log.Debugf("REST : %s \n %+v\n", v.URI, v.Name)
+	// 	log.Debugf("task -> %+v", t)
+	// 	uri = v.URI
+	// 	// if uri == "" {
+	// 	// 	log.Warn("Unable to post delete, no uri found.")
+	// 	// 	t.TaskIsDone = true
+	// 	// 	return err
+	// 	// }
+	// 	data, err := c.CLIRestAPICall(rest.DELETE, uri, nil)
+	// 	if err != nil {
+	// 		log.Errorf("Error submitting delete ethernet network request: %s", err)
+	// 		t.TaskIsDone = true
+	// 		return err
+	// 	}
 
-		log.Debugf("Response delete ethernet network %s", data)
-		if err := json.Unmarshal([]byte(data), &t); err != nil {
-			t.TaskIsDone = true
-			log.Errorf("Error with task un-marshal: %s", err)
-			return err
-		}
-		err = t.Wait()
-		if err != nil {
-			return err
-		}
+	// 	log.Debugf("Response delete ethernet network %s", data)
+	// 	if err := json.Unmarshal([]byte(data), &t); err != nil {
+	// 		t.TaskIsDone = true
+	// 		log.Errorf("Error with task un-marshal: %s", err)
+	// 		return err
+	// 	}
+	// 	err = t.Wait()
+	// 	if err != nil {
+	// 		return err
+	// 	}
 
-	}
+	// }
 	return nil
 }
 

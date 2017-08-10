@@ -1,12 +1,9 @@
 package ovextra
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"sort"
-	"time"
 )
 
 type LICol struct {
@@ -270,37 +267,37 @@ func GetLIVerbose(liName string) LIList {
 //LIGetURI is the function to get raw structs from all json next pages
 func LIGetURI(x chan LIList) {
 
-	log.Println("Rest Get LI")
+	// log.Println("Rest Get LI")
 
-	defer timeTrack(time.Now(), "Rest Get LI")
+	// defer timeTrack(time.Now(), "Rest Get LI")
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var list LIList
+	// var list LIList
 
-	for i, uri := 0, LIURL; uri != ""; i++ {
+	// for i, uri := 0, LIURL; uri != ""; i++ {
 
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	data, err := c.GetURI("", "", uri)
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page LICol
+	// 	var page LICol
 
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	x <- list
+	// x <- list
 
 }
 

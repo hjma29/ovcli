@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/HewlettPackard/oneview-golang/rest"
 	"github.com/HewlettPackard/oneview-golang/utils"
 )
 
@@ -127,7 +126,7 @@ type Task struct {
 	ETAG                    string             `json:"eTag,omitempty"`          // "eTag": "0",
 	Created                 string             `json:"created,omitempty"`       // "created": "2015-09-07T03:25:54.844Z",
 	Modified                string             `json:"modified,omitempty"`      // "modified": "2015-09-07T03:25:54.844Z",
-	URI                     utils.Nstring      `json:"uri,omitempty"`           // "uri": "/rest/tasks/145F808A-A8DD-4E1B-8C86-C2379C97B3B2"
+	URI                     string             `json:"uri,omitempty"`           // "uri": "/rest/tasks/145F808A-A8DD-4E1B-8C86-C2379C97B3B2"
 	TaskIsDone              bool               // when true, task are done
 	Timeout                 int                // time before timeout on Executor
 	WaitTime                time.Duration      // time between task checks
@@ -146,14 +145,15 @@ type TaskData struct {
 }
 
 // NewProfileTask - Create New Task
-func (t *Task) NewProfileTask(c *CLIOVClient) *Task {
-	return &Task{TaskIsDone: false,
-		Client:   c,
-		URI:      "",
-		Name:     "",
-		Owner:    "",
-		Timeout:  270, // default 45min
-		WaitTime: 10}  // default 10sec, impacts Timeout
+func NewTask(c *CLIOVClient) *Task {
+	return &Task{
+		TaskIsDone: false,
+		Client:     c,
+		URI:        "",
+		Name:       "",
+		Owner:      "",
+		Timeout:    270, // default 45min
+		WaitTime:   10}  // default 10sec, impacts Timeout
 }
 
 // ResetTask - reset the power task back to off
@@ -171,8 +171,8 @@ func (t *Task) GetCurrentTaskStatus() error {
 		uri = t.URI
 	)
 	if uri != "" {
-		log.Print("[DEBUG]", uri.String())
-		data, err := t.Client.RestAPICall(rest.GET, uri.String(), nil)
+		log.Print("[DEBUG]", uri)
+		data, err := t.Client.OVSendRequest("GET", uri, "", "", nil)
 		if err != nil {
 			return err
 		}

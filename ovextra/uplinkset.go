@@ -1,12 +1,9 @@
 package ovextra
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"sort"
-	"time"
 )
 
 type UplinkSetCol struct {
@@ -237,38 +234,38 @@ func (us *UplinkSet) getLI(liList LIList) {
 //UplinkSetGetURI is the function to get raw structs from all json next pages
 func UplinkSetGetURI(x chan UplinkSetList) {
 
-	log.Println("Fetch UplinkSet")
+	// log.Println("Fetch UplinkSet")
 
-	defer timeTrack(time.Now(), "Fetch UplinkSet")
+	// defer timeTrack(time.Now(), "Fetch UplinkSet")
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var list UplinkSetList
-	uri := UplinkSetURL
+	// var list UplinkSetList
+	// uri := UplinkSetURL
 
-	for uri != "" {
+	// for uri != "" {
 
-		data, err := c.GetURI("", "", uri)
+	// 	data, err := c.GetURI("", "", uri)
 
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page UplinkSetCol
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	var page UplinkSetCol
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	x <- list
+	// x <- list
 
 }
 

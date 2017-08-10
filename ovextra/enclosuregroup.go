@@ -1,16 +1,5 @@
 package ovextra
 
-import (
-	"encoding/json"
-	"fmt"
-
-	"github.com/docker/machine/libmachine/log"
-
-	"os"
-	"sort"
-	"time"
-)
-
 type EG struct {
 	AssociatedLogicalInterconnectGroups []string             `json:"associatedLogicalInterconnectGroups,omitempty"` // "associatedInterconnectGorups": [],
 	Category                            string               `json:"category,omitempty"`                            // "category": "enclosure-groups",
@@ -126,39 +115,39 @@ func GetEGVerbose(name string) []EG {
 
 func EGGetURI(x chan []EG) {
 
-	log.Debugf("Rest Get Enclosure Group")
+	// log.Debugf("Rest Get Enclosure Group")
 
-	defer timeTrack(time.Now(), "Rest Get Enclosure Group")
+	// defer timeTrack(time.Now(), "Rest Get Enclosure Group")
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var list []EG
-	uri := EGURL
+	// var list []EG
+	// uri := EGURL
 
-	for uri != "" {
+	// for uri != "" {
 
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
+	// 	data, err := c.GetURI("", "", uri)
+	// 	if err != nil {
 
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page EGCol
+	// 	var page EGCol
 
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	x <- list
+	// x <- list
 
 }
 
@@ -166,23 +155,15 @@ func (c *CLIOVClient) GetEGByName(name string) []EG {
 
 	var col EGCol
 
-	data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", EGURL)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	if err := json.Unmarshal(data, &col); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	// if col.Total == 0 {
-	// 	fmt.Println("No network matching name: ", name)
+	// data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", EGURL)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
 	// }
 
-	// for _, v := range col.Members {
-	// 	fmt.Println("Found Network:", v.Name)
+	// if err := json.Unmarshal(data, &col); err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
 	// }
 
 	return col.Members

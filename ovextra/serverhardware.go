@@ -1,22 +1,13 @@
 package ovextra
 
-import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"os"
-	"sort"
-	"time"
-)
-
 type ServerHWCol struct {
 	Type        string     `json:"type"`
 	Category    string     `json:"category"`
 	Count       int        `json:"count"`
-	Created     string  `json:"created"`
+	Created     string     `json:"created"`
 	ETag        string     `json:"eTag"`
 	Members     []ServerHW `json:"members"`
-	Modified    string  `json:"modified"`
+	Modified    string     `json:"modified"`
 	NextPageURI string     `json:"nextPageUri"`
 	PrevPageURI string     `json:"prevPageUri"`
 	Start       int        `json:"start"`
@@ -25,26 +16,26 @@ type ServerHWCol struct {
 }
 
 type ServerHW struct {
-	Type                           string    `json:"type"`
-	Name                           string    `json:"name"`
-	ServerName                     string    `json:"serverName"`
-	State                          string    `json:"state"`
-	StateReason                    string    `json:"stateReason"`
-	AssetTag                       string    `json:"assetTag"`
-	Category                       string    `json:"category"`
+	Type                           string `json:"type"`
+	Name                           string `json:"name"`
+	ServerName                     string `json:"serverName"`
+	State                          string `json:"state"`
+	StateReason                    string `json:"stateReason"`
+	AssetTag                       string `json:"assetTag"`
+	Category                       string `json:"category"`
 	Created                        string `json:"created"`
-	Description                    string    `json:"description"`
-	ETag                           string    `json:"eTag"`
-	FormFactor                     string    `json:"formFactor"`
-	HostOsType                     string    `json:"hostOsType"`
-	IntelligentProvisioningVersion string    `json:"intelligentProvisioningVersion"`
-	LicensingIntent                string    `json:"licensingIntent"`
-	LocationURI                    string    `json:"locationUri"`
-	MemoryMb                       int       `json:"memoryMb"`
-	MigrationState                 string    `json:"migrationState"`
-	Model                          string    `json:"model"`
+	Description                    string `json:"description"`
+	ETag                           string `json:"eTag"`
+	FormFactor                     string `json:"formFactor"`
+	HostOsType                     string `json:"hostOsType"`
+	IntelligentProvisioningVersion string `json:"intelligentProvisioningVersion"`
+	LicensingIntent                string `json:"licensingIntent"`
+	LocationURI                    string `json:"locationUri"`
+	MemoryMb                       int    `json:"memoryMb"`
+	MigrationState                 string `json:"migrationState"`
+	Model                          string `json:"model"`
 	Modified                       string `json:"modified"`
-	MpFirmwareVersion              string    `json:"mpFirmwareVersion"`
+	MpFirmwareVersion              string `json:"mpFirmwareVersion"`
 	MpHostInfo                     struct {
 		MpHostName    string `json:"mpHostName"`
 		MpIPAddresses []struct {
@@ -88,13 +79,13 @@ type ServerHW struct {
 	ServerSettings             struct {
 		FirmwareAndDriversInstallState struct {
 			InstalledStateTimestamp string `json:"installedStateTimestamp"`
-			InstallState            string    `json:"installState"`
+			InstallState            string `json:"installState"`
 		} `json:"firmwareAndDriversInstallState"`
 		HpSmartUpdateToolStatus struct {
-			Mode              string    `json:"mode"`
-			Version           string    `json:"version"`
-			ServiceState      string    `json:"serviceState"`
-			InstallState      string    `json:"installState"`
+			Mode              string `json:"mode"`
+			Version           string `json:"version"`
+			ServiceState      string `json:"serviceState"`
+			InstallState      string `json:"installState"`
 			LastOperationTime string `json:"lastOperationTime"`
 		} `json:"hpSmartUpdateToolStatus"`
 		FirmwareInstallSchedule struct {
@@ -140,38 +131,38 @@ type PhysicalPort struct {
 
 func ServerHWGetURI(x chan []ServerHW) {
 
-	log.Println("[DEBUG] Rest Get Server Harddware")
+	// log.Println("[DEBUG] Rest Get Server Harddware")
 
-	defer timeTrack(time.Now(), "Rest Get Server Hardware")
+	// defer timeTrack(time.Now(), "Rest Get Server Hardware")
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var list []ServerHW
-	uri := ServerHWURL
+	// var list []ServerHW
+	// uri := ServerHWURL
 
-	for uri != "" {
+	// for uri != "" {
 
-		data, err := c.GetURI("", "", uri)
-		if err != nil {
+	// 	data, err := c.GetURI("", "", uri)
+	// 	if err != nil {
 
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page ServerHWCol
+	// 	var page ServerHWCol
 
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
 
-	x <- list
+	// x <- list
 
 }

@@ -1,14 +1,8 @@
 package ovextra
 
 import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"os"
 	"sort"
-	"strings"
 	"sync"
-	"time"
 )
 
 // ICCol a list of Interconnect objects
@@ -308,36 +302,36 @@ func GetSFP() []IC {
 
 func SFPGetURI(ic *IC) {
 
-	log.Println("[DEBUG] Rest Get SFP", ic.Name)
-	defer timeTrack(time.Now(), "Rest Get SFP")
+	// log.Println("[DEBUG] Rest Get SFP", ic.Name)
+	// defer timeTrack(time.Now(), "Rest Get SFP")
 
-	icID := strings.Replace(ic.URI, "/rest/interconnects/", "", -1)
+	// icID := strings.Replace(ic.URI, "/rest/interconnects/", "", -1)
 
-	c := NewCLIOVClient()
+	// c := NewCLIOVClient()
 
-	var sfpuri string
-	switch c.APIVersion {
-	case 500:
-		sfpuri = ICURL + "/" + icID + SFPURL //  /rest/interconnects/{id}/pluggableModuleInformation
-	case 300:
-		sfpuri = ICURL + SFPURL + "/" + icID //  /rest/interconnects/pluggableModuleInformation/{ID}
-	}
+	// var sfpuri string
+	// switch c.APIVersion {
+	// case 500:
+	// 	sfpuri = ICURL + "/" + icID + SFPURL //  /rest/interconnects/{id}/pluggableModuleInformation
+	// case 300:
+	// 	sfpuri = ICURL + SFPURL + "/" + icID //  /rest/interconnects/pluggableModuleInformation/{ID}
+	// }
 
-	data, err := c.GetURI("", "", sfpuri)
+	// data, err := c.GetURI("", "", sfpuri)
 
-	if err != nil {
-		fmt.Println("getSFP URL err: ", err)
-		os.Exit(1)
-	}
+	// if err != nil {
+	// 	fmt.Println("getSFP URL err: ", err)
+	// 	os.Exit(1)
+	// }
 
-	var list []SFP
-	if err := json.Unmarshal(data, &list); err != nil {
-		fmt.Println("unmarshal SFP json err: ", err)
-		os.Exit(1)
-	}
+	// var list []SFP
+	// if err := json.Unmarshal(data, &list); err != nil {
+	// 	fmt.Println("unmarshal SFP json err: ", err)
+	// 	os.Exit(1)
+	// }
 
-	sort.Slice(list, func(i, j int) bool { return list[i].PortName < list[j].PortName })
+	// sort.Slice(list, func(i, j int) bool { return list[i].PortName < list[j].PortName })
 
-	(*ic).SFPList = list
+	// (*ic).SFPList = list
 
 }

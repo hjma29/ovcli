@@ -1,12 +1,7 @@
 package ovextra
 
 import (
-	"encoding/json"
-	"fmt"
-	"log"
-	"os"
 	"sort"
-	"time"
 )
 
 type EncCol struct {
@@ -17,9 +12,9 @@ type EncCol struct {
 	NextPageURI string      `json:"nextPageUri"`
 	Count       int         `json:"count"`
 	Total       int         `json:"total"`
-	Created     string   `json:"created"`
-	ETag        string   `json:"eTag"`
-	Modified    string   `json:"modified"`
+	Created     string      `json:"created"`
+	ETag        string      `json:"eTag"`
+	Modified    string      `json:"modified"`
 	Category    string      `json:"category"`
 	URI         string      `json:"uri"`
 }
@@ -167,7 +162,7 @@ type Enclosure struct {
 		PartNumber             string      `json:"partNumber,omitempty"`
 	} `json:"interconnectBays"`
 	SerialNumber                              string      `json:"serialNumber"`
-	ETag                                      string   `json:"eTag"`
+	ETag                                      string      `json:"eTag"`
 	RefreshState                              string      `json:"refreshState"`
 	Status                                    string      `json:"status"`
 	URI                                       string      `json:"uri"`
@@ -175,8 +170,8 @@ type Enclosure struct {
 	State                                     string      `json:"state"`
 	StateReason                               string      `json:"stateReason"`
 	Description                               interface{} `json:"description"`
-	Created                                   string   `json:"created"`
-	Modified                                  string   `json:"modified"`
+	Created                                   string      `json:"created"`
+	Modified                                  string      `json:"modified"`
 	Category                                  string      `json:"category"`
 	Version                                   string      `json:"version"`
 	FrameLinkModuleDomain                     string      `json:"frameLinkModuleDomain"`
@@ -222,36 +217,36 @@ func GetEnc() EncList {
 
 func EncGetURI(c chan EncList) {
 
-	log.Println("Rest Get Enc")
+	// log.Println("Rest Get Enc")
 
-	defer timeTrack(time.Now(), "Rest Get Enc")
+	// defer timeTrack(time.Now(), "Rest Get Enc")
 
-	ov := NewCLIOVClient()
+	// ov := NewCLIOVClient()
 
-	var list EncList
-	uri := EnclosureURL
+	// var list EncList
+	// uri := EnclosureURL
 
-	for uri != "" {
+	// for uri != "" {
 
-		data, err := ov.GetURI("", "", uri)
-		if err != nil {
+	// 	data, err := ov.GetURI("", "", uri)
+	// 	if err != nil {
 
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		var page EncCol
+	// 	var page EncCol
 
-		if err := json.Unmarshal(data, &page); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+	// 	if err := json.Unmarshal(data, &page); err != nil {
+	// 		fmt.Println(err)
+	// 		os.Exit(1)
+	// 	}
 
-		list = append(list, page.Members...)
+	// 	list = append(list, page.Members...)
 
-		uri = page.NextPageURI
-	}
+	// 	uri = page.NextPageURI
+	// }
 
-	c <- list
+	// c <- list
 
 }
