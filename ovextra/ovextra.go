@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"strconv"
 	//"sync"
 	"text/tabwriter"
 	"time"
@@ -30,6 +31,7 @@ var (
 		http.StatusNotAcceptable:       false,
 		http.StatusConflict:            false,
 		http.StatusInternalServerError: false,
+		http.StatusPreconditionFailed:  false,
 	}
 )
 
@@ -65,7 +67,7 @@ func NewCLIOVClient() *CLIOVClient {
 		os.Exit(1)
 	}
 
-	log.Println("[DEBUG]", creds.Ip)
+	//log.Println("[DEBUG]", creds.Ip)
 
 	ver, err := setAPIVersion(creds.Ip)
 	if err != nil {
@@ -74,13 +76,12 @@ func NewCLIOVClient() *CLIOVClient {
 	}
 
 	return &CLIOVClient{
-		Endpoint: "https://" + creds.Ip,
-		User:     creds.User,
-		Password: creds.Pass,
-		Domain:   "Local",
-		//SSLVerify:  false,
+		Endpoint:    "https://" + creds.Ip,
+		User:        creds.User,
+		Password:    creds.Pass,
+		Domain:      "Local",
 		APIVersion:  ver,
-		APIKey:      "none",
+		APIKey:      "",
 		ContentType: "application/json; charset=utf-8",
 	}
 }
@@ -104,7 +105,8 @@ func getResourceLists(x string) {
 
 		data, err := c.OVSendRequest("GET", uri, "", "", nil)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			os.Exit(1)
 		}
 
 		colptr := rmap[x].colptr
@@ -124,7 +126,49 @@ func getResourceLists(x string) {
 
 }
 
+func (c *CLIOVClient) setAuthKey() error {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client := &http.Client{Transport: tr}
+
+	jsonStr := `{ "userName": "` + c.User + `",
+		      "password": "` + c.Password + `"}`
+
+	resp, err := client.Post(c.Endpoint+"/rest/login-sessions", "application/json", bytes.NewBuffer([]byte(jsonStr)))
+	if err != nil {
+		return fmt.Errorf("OVCLI get initial auth key error: %v", err)
+	}
+	data, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return fmt.Errorf("OVCLI error reading init session-id response: %v", err)
+	}
+
+	type sessionID struct {
+		SessionID string
+	}
+
+	var s sessionID
+
+	//log.Println("[DEBUG]", string(data))
+
+	if err := json.Unmarshal(data, &s); err != nil {
+		return fmt.Errorf("OVCLI error unmarshal init session-id json: %v", err)
+
+	}
+
+	c.APIKey = s.SessionID
+
+	return nil
+}
+
 func (c *CLIOVClient) OVSendRequest(method, uri, filter, sort string, body interface{}) ([]byte, error) {
+
+	if err := c.setAuthKey(); err != nil {
+		return nil, err
+	}
 
 	var reqBody io.Reader
 
@@ -139,13 +183,17 @@ func (c *CLIOVClient) OVSendRequest(method, uri, filter, sort string, body inter
 	}
 
 	req, err := http.NewRequest(method, c.Endpoint+uri, reqBody)
-	req.Header.Add("ContentType", "application/json; charset=utf-8")
-	req.Header.Add("X-Api-Version", string(c.APIVersion))
+	req.Header.Add("Content-Type", "application/json; charset=utf-8")
+	req.Header.Add("X-Api-Version", strconv.Itoa(c.APIVersion))
 	req.Header.Add("Auth", c.APIKey)
 
 	q := req.URL.Query()
-	q.Add("filter", fmt.Sprintf("name regex '%s'", filter))
-	q.Add("sort", sort)
+	if filter != "" {
+		q.Add("filter", fmt.Sprintf("name regex '%s'", filter))
+	}
+	if sort != "" {
+		q.Add("sort", sort)
+	}
 	req.URL.RawQuery = q.Encode()
 
 	tr := &http.Transport{
@@ -153,20 +201,29 @@ func (c *CLIOVClient) OVSendRequest(method, uri, filter, sort string, body inter
 	}
 
 	client := &http.Client{Transport: tr}
+
 	log.Printf("[DEBUG] Send Request: %v, %v, request header: %#v\n", method, req.URL.String(), req.Header)
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("OVCLI HTTP request sent error: %v", err)
 	}
-	defer resp.Body.Close()
 	log.Printf("[DEBUG] Finish Request: %v, %v, Response Code: %v\n", method, req.URL.String(), resp.StatusCode)
 
 	data, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, fmt.Errorf("OVCLI error reading Response body: %v", err)
+	}
+
+	// log.Print("[DEBUG] resp code", resp.StatusCode)
+	// log.Print("[DEBUG] respok check result", respOK[resp.StatusCode])
 
 	if !respOK[resp.StatusCode] {
 		var e apiError
-		json.Unmarshal(data, &e)
-		return nil, fmt.Errorf("error in response: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
+		if err := json.Unmarshal(data, &e); err != nil {
+			return nil, fmt.Errorf("OVCLI error trying unmarshal bad response code: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
+		}
+		return nil, fmt.Errorf("OVCLI request get error response code: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
 
 	}
 
@@ -186,12 +243,6 @@ func (c *CLIOVClient) OVSendRequest(method, uri, filter, sort string, body inter
 
 		return nil, nil
 
-	}
-
-	//data, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		return nil, fmt.Errorf("OVCLI error reading Response body: %v", err)
 	}
 
 	return data, nil
@@ -453,7 +504,7 @@ func ConnectOV(flagFile string) error {
 	log.Print("[DEBUG] c.APIVersion: ", c.APIVersion)
 	log.Print("[DEBUG] c.Endpoint : ", c.Endpoint)
 
-	if err := c.RefreshLogin(); err != nil {
+	if err := c.setAuthKey(); err != nil {
 		return fmt.Errorf("login failed: %v", err)
 	}
 
@@ -484,8 +535,8 @@ func setAPIVersion(ip string) (int, error) {
 		return 0, fmt.Errorf("get version failed: %v", err)
 	}
 
-	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 
 	v := new(ver)
 	if err := json.Unmarshal(body, v); err != nil {
@@ -493,8 +544,7 @@ func setAPIVersion(ip string) (int, error) {
 		return 0, fmt.Errorf("unmarshall version failed: %v", err)
 	}
 
-	log.Printf("[DEBUG] %v", string(body))
-	log.Printf("[DEBUG]")
+	//log.Printf("[DEBUG] %v", string(body))
 
 	return v.CurrentVersion, nil
 }
