@@ -156,6 +156,17 @@ func NewTask(c *CLIOVClient) *Task {
 		WaitTime:   10}  // default 10sec, impacts Timeout
 }
 
+// NewProfileTask - Create New Task
+// func (t *Task) NewProfileTask(c *CLIOVClient) *Task {
+// 	return &Task{TaskIsDone: false,
+// 		Client:   c,
+// 		URI:      "",
+// 		Name:     "",
+// 		Owner:    "",
+// 		Timeout:  270, // default 45min
+// 		WaitTime: 10}  // default 10sec, impacts Timeout
+// }
+
 // ResetTask - reset the power task back to off
 func (t *Task) ResetTask() {
 	t.TaskIsDone = false
@@ -172,7 +183,7 @@ func (t *Task) GetCurrentTaskStatus() error {
 	)
 	if uri != "" {
 		log.Print("[DEBUG]", uri)
-		data, err := t.Client.OVSendRequest("GET", uri, "", "", nil)
+		data, err := t.Client.SendHTTPRequest("GET", uri, "", "", nil)
 		if err != nil {
 			return err
 		}

@@ -218,7 +218,8 @@ func GetIC() []IC {
 
 		go func() {
 			defer wg.Done()
-			getResourceLists(localv)
+			c := NewCLIOVClient()
+			c.GetResourceLists(localv, "")
 		}()
 	}
 
@@ -254,7 +255,8 @@ func GetICPort() []IC {
 
 		go func() {
 			defer wg.Done()
-			getResourceLists(localv)
+			c := NewCLIOVClient()
+			c.GetResourceLists(localv, "")
 		}()
 	}
 
@@ -277,7 +279,8 @@ func GetSFP() []IC {
 
 		go func() {
 			defer wg.Done()
-			getResourceLists(localv)
+			c := NewCLIOVClient()
+			c.GetResourceLists(localv, "")
 		}()
 	}
 

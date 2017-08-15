@@ -219,7 +219,8 @@ func GetSP() SPList {
 
 		go func() {
 			defer wg.Done()
-			getResourceLists(localv)
+			c := NewCLIOVClient()
+			c.GetResourceLists(localv, "")
 		}()
 	}
 
@@ -273,7 +274,8 @@ func GetSPVerbose(name string) SPList {
 
 		go func() {
 			defer wg.Done()
-			getResourceLists(localv)
+			c := NewCLIOVClient()
+			c.GetResourceLists(localv, "")
 		}()
 	}
 

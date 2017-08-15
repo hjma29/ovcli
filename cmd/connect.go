@@ -104,19 +104,4 @@ func init() {
 
 	connectCmd.Flags().StringVarP(&flagFile, "file", "f", "appliance-credential.yaml", "OneView Appliance Config Credential file path/name in YAML format")
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// host_input = connectCmd.PersistentFlags().String("host", "", "OneView Hostname/IP Address")
-	// username_input = connectCmd.PersistentFlags().String("username", "", "OneView Username")
-	// password_input = connectCmd.PersistentFlags().String("password", "", "OneView Password")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// connectCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	//log.SetDebug(true)
-	//fmt.Println("hello init")
-
 }

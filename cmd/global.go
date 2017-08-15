@@ -42,6 +42,7 @@ var (
 	Debugmode      = false
 	flagName       string
 	flagFile       string
+	ipv6 string
 )
 
 const (

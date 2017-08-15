@@ -58,6 +58,8 @@ func init() {
 	RootCmd.AddCommand(deleteCmd)
 	RootCmd.AddCommand(createCmd)
 	RootCmd.AddCommand(connectCmd)
+		RootCmd.AddCommand(addCmd)
+
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 
