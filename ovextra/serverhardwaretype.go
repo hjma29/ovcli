@@ -64,8 +64,8 @@ type ServerHWType struct {
 				PortNumber   int      `json:"portNumber"`
 				PortFunction string   `json:"portFunction"`
 			} `json:"virtualPorts"`
-			MaxVFsSupported       int    `json:"maxVFsSupported"`
-			SupportedFcGbps       string `json:"supportedFcGbps"`
+			MaxVFsSupported int `json:"maxVFsSupported"`
+			//SupportedFcGbps       string `json:"supportedFcGbps"`
 			PhysicalFunctionCount int    `json:"physicalFunctionCount"`
 			MaxSpeedMbps          int    `json:"maxSpeedMbps"`
 			Mapping               int    `json:"mapping"`

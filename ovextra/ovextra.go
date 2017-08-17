@@ -44,18 +44,13 @@ type apiError struct {
 
 //CLIOVClient is the OVCLient with additinal commands
 type CLIOVClient struct {
-	Endpoint   string
-	User       string
-	Password   string
-	Domain     string
-	APIKey     string
-	APIVersion int
-	//SSLVerify  bool
-	//Option      Options
+	Endpoint    string
+	User        string
+	Password    string
+	Domain      string
+	APIKey      string
+	APIVersion  int
 	ContentType string
-	// 	"Content-Type":  "application/json; charset=utf-8",
-	// "X-API-Version": strconv.Itoa(c.APIVersion),
-	// "auth":          c.APIKey,
 }
 
 // NewCLIOVClient creates new CLIOVCLient
@@ -104,14 +99,15 @@ func (c *CLIOVClient) GetResourceLists(res, name string) {
 
 		data, err := c.SendHTTPRequest("GET", uri, name, "", nil)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Printf("OVCLI: error sending HTTP GET request: %v, err: %v", uri, err)
 			os.Exit(1)
 		}
 
 		colptr := rmap[res].colptr
 
 		if err := json.Unmarshal(data, colptr); err != nil {
-			log.Fatalf("unmarshal error for type %T, error is: %s", colptr, err)
+			fmt.Printf("OVCLI: unmarshal error for type %T: %s", colptr, err)
+			os.Exit(1)
 		}
 
 		lv.Set(reflect.AppendSlice(lv, reflect.ValueOf(colptr).Elem().FieldByName("Members")))
@@ -168,12 +164,14 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 
 	client := &http.Client{Transport: tr}
 
-	log.Printf("[DEBUG] Send Request: %v, %v, request header: %#v\nrequest body: %s\n", method, req.URL.String(), req.Header, out.Bytes())
+	log.Printf("[DEBUG] OVCLI *Send Request: %v=>%v\n", method, req.URL.String())
+	log.Printf("[DEBUG] OVCLI X-Api-Version: %v,   Token: %v\n", req.Header.Get("X-Api-Version"), req.Header.Get("Auth"))
+	log.Printf("[DEBUG] OVCLI Request body: %s\n", out.Bytes())
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("OVCLI HTTP request sent error: %v", err)
 	}
-	log.Printf("[DEBUG] Finish Request: %v, %v, Response Code: %v\n", method, req.URL.String(), resp.StatusCode)
+	log.Printf("[DEBUG] OVCLI Get response Code: %v for request %v\n\n", resp.StatusCode, method+"=>"+req.URL.String())
 
 	data, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
@@ -196,10 +194,8 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	if method == "POST" || method == "DELETE" {
 		t := NewTask(c)
 		uri, ok := resp.Header["Location"]
-
 		if !ok {
 			return nil, fmt.Errorf("OVCLI Request requires to monitor task but can't get task id from response header: %v", err)
-
 		}
 		t.URI = uri[0]
 
@@ -321,6 +317,11 @@ func setAPIVersion(ip string) (int, error) {
 }
 
 func (c *CLIOVClient) setAuthKey() error {
+
+	if c.APIKey != "" {
+		return nil
+	}
+
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -345,8 +346,6 @@ func (c *CLIOVClient) setAuthKey() error {
 	}
 
 	var s sessionID
-
-	//log.Println("[DEBUG]", string(data))
 
 	if err := json.Unmarshal(data, &s); err != nil {
 		return fmt.Errorf("OVCLI error unmarshal init session-id json: %v", err)

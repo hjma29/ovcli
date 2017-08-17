@@ -1,7 +1,7 @@
 package ovextra
 
 import (
-	"encoding/json"
+
 	//"errors"
 	"fmt"
 	"io/ioutil"
@@ -241,9 +241,9 @@ func CreateSPTemplateConfigParse(fileName string) {
 		log.Fatal(err)
 	}
 
-	log.Print("[DEBUG] SPTemplate list length: ", len(y.SPTemplates))
-	log.Print("[DEBUG] EG: ", y.SPTemplates[0].EG)
-	log.Print("[DEBUG] HWT: ", y.SPTemplates[0].ServerHWType)
+	// log.Print("[DEBUG] SPTemplate list length: ", len(y.SPTemplates))
+	// log.Print("[DEBUG] EG: ", y.SPTemplates[0].EG)
+	// log.Print("[DEBUG] HWT: ", y.SPTemplates[0].ServerHWType)
 
 	c := NewCLIOVClient()
 
@@ -269,14 +269,14 @@ func CreateSPTemplateConfigParse(fileName string) {
 				netlist := *(rmap["ENetwork"].listptr.(*[]ENetwork))
 				//we assume netlist only contains one element, better to do extra check here
 				neturi := netlist[0].URI
-				log.Printf("[DEBUG] v.network: %v", v.Network)
-				log.Printf("[DEBUG] len: %v", len(neturi))
+				// log.Printf("[DEBUG] v.network: %v", v.Network)
+				// log.Printf("[DEBUG] len: %v", len(neturi))
 				spt.ConnectionSettings.Connections = append(spt.ConnectionSettings.Connections, SPTConnection{ID: v.ID, Name: v.Name, NetworkURI: neturi})
 			}
 		}
 
-		j, _ := json.MarshalIndent(spt, "", "  ")
-		log.Printf("[DEBUG] SP Template Json Body: %s", j)
+		// j, _ := json.MarshalIndent(spt, "", "  ")
+		// log.Printf("[DEBUG] SP Template Json Body: %s", j)
 
 		_, err := c.SendHTTPRequest("POST", SPTemplateURL, "", "", spt)
 		if err != nil {

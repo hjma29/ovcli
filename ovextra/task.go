@@ -3,7 +3,9 @@ package ovextra
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -152,20 +154,10 @@ func NewTask(c *CLIOVClient) *Task {
 		URI:        "",
 		Name:       "",
 		Owner:      "",
-		Timeout:    270, // default 45min
-		WaitTime:   10}  // default 10sec, impacts Timeout
+		Timeout:    270,  // default 45min
+		WaitTime:   2000, // default 2sec, impacts Timeout
+	}
 }
-
-// NewProfileTask - Create New Task
-// func (t *Task) NewProfileTask(c *CLIOVClient) *Task {
-// 	return &Task{TaskIsDone: false,
-// 		Client:   c,
-// 		URI:      "",
-// 		Name:     "",
-// 		Owner:    "",
-// 		Timeout:  270, // default 45min
-// 		WaitTime: 10}  // default 10sec, impacts Timeout
-// }
 
 // ResetTask - reset the power task back to off
 func (t *Task) ResetTask() {
@@ -224,43 +216,81 @@ func (t *Task) GetLastStatusUpdate() string {
 
 // Wait - wait on task to complete
 func (t *Task) Wait() error {
-	var (
-		currenttime int
-	)
-	log.Printf("[DEBUG] task : %+v", t)
-	if t.Timeout < t.ExpectedDuration {
-		t.Timeout = t.ExpectedDuration
-		log.Printf("assign timeout %d", t.Timeout)
-	}
-	log.Printf("[DEBUG] task timeout is : %d", t.Timeout)
-	for !t.TaskIsDone && (currenttime < t.Timeout) {
-		if err := t.GetCurrentTaskStatus(); err != nil {
-			t.TaskIsDone = true
-			return err
-		}
-		if t.URI != "" && T_COMPLETED.Equal(t.TaskState) {
-			t.TaskIsDone = true
-		}
-		if t.URI != "" {
-			log.Printf("[DEBUG] Waiting for task to complete, for %s ", t.Name)
-			log.Printf("[DEBUG] Waiting on, %s, %d%%, %s, %d, %d", t.Name, t.ComputedPercentComplete, t.GetLastStatusUpdate(), currenttime, t.ExpectedDuration)
-		} else {
-			log.Printf("[DEBUG] Waiting on task creation.")
-		}
 
-		// wait time before next check
-		time.Sleep(time.Millisecond * (1000 * t.WaitTime)) // wait 10sec before checking the status again
-		currenttime++
-		if t.Timeout < t.ExpectedDuration {
-			t.Timeout = t.ExpectedDuration
-		}
-	}
-	if currenttime > t.Timeout {
-		log.Printf("[DEBUG] Task timed out, %d.", currenttime)
+	fmt.Printf("*** Monitoring task for the above request, task ID: %v\n", t.URI)
+
+	for t.PercentComplete != 100 {
+		t.checkStatus()
+		time.Sleep(time.Millisecond * t.WaitTime)
 	}
 
-	if t.Name != "" {
-		log.Printf("[DEBUG] Task, %s, completed", t.Name)
+	fmt.Printf("*** Task final State: %v, Status: %v\n\n", t.TaskState, t.TaskStatus)
+	if len(t.TaskErrors) != 0 {
+		fmt.Printf("Error Code: %v\n", t.TaskErrors[0].ErrorCode)
+		fmt.Printf("Message: %v\n", t.TaskErrors[0].Message)
+		fmt.Printf("Recommendation: %v\n", t.TaskErrors[0].RecommendedActions)
+		fmt.Printf("Details: %v\n", t.TaskErrors[0].Details)
+
+		os.Exit(1)
 	}
+
 	return nil
 }
+
+func (t *Task) checkStatus() error {
+	data, err := t.Client.SendHTTPRequest("GET", t.URI, "", "", nil)
+	if err != nil {
+		fmt.Printf("OVCLI task wait failure to get task data from task URI: %v", err)
+		os.Exit(1)
+	}
+	if err := json.Unmarshal(data, &t); err != nil {
+		fmt.Printf("OVCLI task wait failure to get task json data decoded: %v", err)
+		os.Exit(1)
+	}
+
+	log.Printf("[DEBUG] state: %v, status: %v\n", t.TaskState, t.TaskStatus)
+	log.Printf("[DEBUG] expectedDuration: %v, completedSteps: %v, percentComplete: %v, computedPercentCompute: %v\n\n", t.ExpectedDuration, t.CompletedSteps, t.PercentComplete, t.ComputedPercentComplete)
+
+	return nil
+}
+
+// var (
+// 	currenttime int
+// )
+// log.Printf("[DEBUG] task : %+v", t)
+// if t.Timeout < t.ExpectedDuration {
+// 	t.Timeout = t.ExpectedDuration
+// 	log.Printf("[DEBUG] OVCLI increase task timeout to the replied ExpectedDuration %d", t.Timeout)
+// }
+// log.Printf("[DEBUG] task timeout is : %d", t.Timeout)
+// for !t.TaskIsDone && (currenttime < t.Timeout) {
+// 	if err := t.GetCurrentTaskStatus(); err != nil {
+// 		t.TaskIsDone = true
+// 		return err
+// 	}
+// 	if t.URI != "" && T_COMPLETED.Equal(t.TaskState) {
+// 		t.TaskIsDone = true
+// 	}
+// 	if t.URI != "" {
+// 		log.Printf("[DEBUG] Waiting for task to complete, for %s ", t.Name)
+// 		log.Printf("[DEBUG] Waiting on, %s, %d%%, %s, %d, %d", t.Name, t.ComputedPercentComplete, t.GetLastStatusUpdate(), currenttime, t.ExpectedDuration)
+// 	} else {
+// 		log.Printf("[DEBUG] Waiting on task creation.")
+// 	}
+
+// 	// wait time before next check
+// 	time.Sleep(time.Millisecond * (1000 * t.WaitTime)) // wait 10sec before checking the status again
+// 	currenttime++
+// 	if t.Timeout < t.ExpectedDuration {
+// 		t.Timeout = t.ExpectedDuration
+// 	}
+// }
+// if currenttime > t.Timeout {
+// 	log.Printf("[DEBUG] Task timed out, %d.", currenttime)
+// }
+
+// if t.Name != "" {
+// 	log.Printf("[DEBUG] Task, %s, completed", t.Name)
+// }
+// return nil
+// }
