@@ -42,11 +42,11 @@ var (
 	Debugmode      = false
 	flagName       string
 	flagFile       string
-	ipv6 string
+	ipv6           string
 )
 
 const (
-	DefaultConfigFile = "appliance-credential.yaml"
+	DefaultConfigFile = "appliance-credential.yml"
 )
 
 func init() {

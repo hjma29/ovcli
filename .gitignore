@@ -1,4 +1,4 @@
-*.yaml
 *.yml
-! appliance-credential-sample.yaml
-! config.yaml
+! appliance-credential-sample.yml
+! config.yml
+! .travis.yml

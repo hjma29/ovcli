@@ -209,7 +209,7 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 
 func ConnectOV(flagFile string) error {
 
-	if flagFile != "appliance-credential.yaml" {
+	if flagFile != "appliance-credential.yml" {
 		log.Print("[DEBUG] Copy config file to default config file \"appliance-cretential.yaml\" for connection")
 
 		srcFile, err := os.Open(flagFile)

@@ -45,7 +45,7 @@ const (
 	ServerHWTypeURL = "/rest/server-hardware-types"
 	VersionURL      = "/rest/version"
 
-	DefaultConfigFile = "appliance-credential.yaml"
+	DefaultConfigFile = "appliance-credential.yml"
 )
 
 type resource struct {
