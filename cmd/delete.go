@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -41,7 +41,7 @@ var deleteNetworkCmd = &cobra.Command{
 }
 
 func deleteNetwork(cmd *cobra.Command, args []string) {
-	if err := ovextra.DeleteNetwork(name); err != nil {
+	if err := oneview.DeleteNetwork(name); err != nil {
 		//fmt.Println(err)
 		fmt.Println("quit:", err)
 		os.Exit(1)
@@ -57,7 +57,7 @@ var deleteSPTemplateCmd = &cobra.Command{
 }
 
 func deleteSPTemplate(cmd *cobra.Command, args []string) {
-	if err := ovextra.DeleteSPTemplate(name); err != nil {
+	if err := oneview.DeleteSPTemplate(name); err != nil {
 		//fmt.Println(err)
 		fmt.Println("quit:", err)
 		os.Exit(1)

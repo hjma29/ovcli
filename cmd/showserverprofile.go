@@ -19,7 +19,7 @@ import (
 	"text/tabwriter"
 	"text/template"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -100,15 +100,15 @@ const (
 
 func showSP(cmd *cobra.Command, args []string) {
 
-	var spList []ovextra.SP
+	var spList []oneview.SP
 	var showFormat string
 
 	if flagName != "" {
-		spList = ovextra.GetSPVerbose(flagName)
+		spList = oneview.GetSPVerbose(flagName)
 		showFormat = spShowFormatVerbose
 
 	} else {
-		spList = ovextra.GetSP()
+		spList = oneview.GetSP()
 		showFormat = spShowFormat
 
 	}
@@ -123,15 +123,15 @@ func showSP(cmd *cobra.Command, args []string) {
 
 func showSPTemplate(cmd *cobra.Command, args []string) {
 
-	var sptList []ovextra.SPTemplate
+	var sptList []oneview.SPTemplate
 	var showFormat string
 
 	if flagName != "" {
-		sptList = ovextra.GetSPTemplateVerbose(flagName)
+		sptList = oneview.GetSPTemplateVerbose(flagName)
 		showFormat = sptShowFormatVerbose
 
 	} else {
-		sptList = ovextra.GetSPTemplate()
+		sptList = oneview.GetSPTemplate()
 		showFormat = sptShowFormat
 
 	}

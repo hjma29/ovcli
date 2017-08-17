@@ -17,7 +17,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -50,7 +50,7 @@ to quickly create a Cobra application.`,
 }
 
 func createNetwork(cmd *cobra.Command, args []string) {
-	ovextra.CreateNetworkConfigParse(flagFile)
+	oneview.CreateNetworkConfigParse(flagFile)
 
 }
 
@@ -67,7 +67,7 @@ to quickly create a Cobra application.`,
 }
 
 func createSPTemplate(cmd *cobra.Command, args []string) {
-	ovextra.CreateSPTemplateConfigParse(flagFile)
+	oneview.CreateSPTemplateConfigParse(flagFile)
 
 }
 

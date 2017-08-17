@@ -1,4 +1,4 @@
-package ovextra
+package oneview
 
 type ICType struct {
 	Category                 string                 `json:"category,omitempty"`                 // "category": "interconnect-types",

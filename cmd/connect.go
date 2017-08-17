@@ -20,7 +20,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 
 	"github.com/spf13/cobra"
 )
@@ -53,7 +53,7 @@ func ConnectOV(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	if err := ovextra.ConnectOV(flagFile); err != nil {
+	if err := oneview.ConnectOV(flagFile); err != nil {
 		log.Fatal(err)
 	}
 

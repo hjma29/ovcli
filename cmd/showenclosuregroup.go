@@ -19,7 +19,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -76,15 +76,15 @@ const (
 
 func showEG(cmd *cobra.Command, args []string) {
 
-	var egList []ovextra.EG
+	var egList []oneview.EG
 	var showFormat string
 
 	if egName != "" {
-		egList = ovextra.GetEGVerbose(egName)
+		egList = oneview.GetEGVerbose(egName)
 		showFormat = egShowFormatVerbose
 
 	} else {
-		egList = ovextra.GetEG()
+		egList = oneview.GetEG()
 		showFormat = egShowFormat
 
 	}

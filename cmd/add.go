@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 
 	"github.com/spf13/cobra"
 )
@@ -40,7 +40,7 @@ func addenc(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	ovextra.AddRemoteEnc(ipv6)
+	oneview.AddRemoteEnc(ipv6)
 }
 
 func init() {

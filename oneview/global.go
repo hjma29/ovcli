@@ -1,4 +1,4 @@
-package ovextra
+package oneview
 
 //SFPMap is from conversion of raw SFPList(a slice) to mapping struct with port names as keys and the pointers of SFP structs as values. Each module has its own "sfpMap" to pass to channel
 type SFPMap map[string]*SFP

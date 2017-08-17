@@ -20,7 +20,7 @@ import (
 	"text/tabwriter"
 	"text/template"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -117,7 +117,7 @@ const (
 
 func showIC(cmd *cobra.Command, args []string) {
 
-	icList := ovextra.GetIC()
+	icList := oneview.GetIC()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()
@@ -134,15 +134,15 @@ func showICPort(cmd *cobra.Command, args []string) {
 	switch porttype {
 
 	case "uplink":
-		icPortMap := ovextra.GetICPort()
+		icPortMap := oneview.GetICPort()
 		showdata = icPortMap
 		showformat = uplinkShowFormat
-		// uplinkPortMap := ovextra.GetICPortUplinkShow()
+		// uplinkPortMap := oneview.GetICPortUplinkShow()
 		// showdata = uplinkPortMap
 	case "downlink":
 	case "interconnect":
 	case "all":
-		icList := ovextra.GetICPort()
+		icList := oneview.GetICPort()
 		showdata = icList
 		showformat = portShowFormat
 	default:
@@ -164,7 +164,7 @@ func showICPort(cmd *cobra.Command, args []string) {
 //func filterPort()
 
 func showSFP(cmd *cobra.Command, args []string) {
-	icList := ovextra.GetSFP()
+	icList := oneview.GetSFP()
 
 	//fmt.Println(modTransMap)
 

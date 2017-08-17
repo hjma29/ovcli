@@ -19,7 +19,7 @@ import (
 	"text/tabwriter"
 	"text/template"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -119,15 +119,15 @@ const (
 
 func showLIG(cmd *cobra.Command, args []string) {
 
-	var ligList []ovextra.LIG
+	var ligList []oneview.LIG
 	var showFormat string
 
 	if ligName != "" {
-		ligList = ovextra.GetLIGVerbose(ligName)
+		ligList = oneview.GetLIGVerbose(ligName)
 		showFormat = ligShowFormatVerbose
 
 	} else {
-		ligList = ovextra.GetLIG()
+		ligList = oneview.GetLIG()
 		showFormat = ligShowFormat
 
 	}

@@ -1,4 +1,4 @@
-package ovextra
+package oneview
 
 import (
 	"fmt"
@@ -201,7 +201,7 @@ type serverHardwareTypePrint struct {
 	Model string
 }
 
-//var ovextra.OVClient *ov.OVClient
+//var oneview.OVClient *ov.OVClient
 
 var serverProfilePrintlist []serverProfilePrint
 var serverHardwarePrintList []serverHardwarePrint

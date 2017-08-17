@@ -24,7 +24,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -79,15 +79,15 @@ const (
 
 func showUplinkSet(cmd *cobra.Command, args []string) {
 
-	var usList []ovextra.UplinkSet
+	var usList []oneview.UplinkSet
 	var showFormat string
 
 	if usName != "" {
-		usList = ovextra.GetUplinkSetVerbose(usName)
+		usList = oneview.GetUplinkSetVerbose(usName)
 		showFormat = usShowFormatVerbose
 
 	} else {
-		usList = ovextra.GetUplinkSet()
+		usList = oneview.GetUplinkSet()
 		showFormat = usShowFormat
 
 	}

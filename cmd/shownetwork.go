@@ -19,7 +19,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -75,15 +75,15 @@ const (
 
 func showNetwork(cmd *cobra.Command, args []string) {
 
-	var netList []ovextra.ENetwork
+	var netList []oneview.ENetwork
 	var showFormat string
 
 	if netName != "" {
-		netList = ovextra.GetENetworkVerbose(netName)
+		netList = oneview.GetENetworkVerbose(netName)
 		showFormat = netShowFormatVerbose
 
 	} else {
-		netList = ovextra.GetENetwork()
+		netList = oneview.GetENetwork()
 		showFormat = netShowFormat
 
 	}

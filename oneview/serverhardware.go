@@ -1,4 +1,4 @@
-package ovextra
+package oneview
 
 type ServerHWCol struct {
 	Type        string     `json:"type"`

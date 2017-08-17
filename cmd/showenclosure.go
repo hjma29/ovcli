@@ -19,7 +19,7 @@ import (
 	"text/tabwriter"
 	"text/template"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +46,7 @@ const (
 
 func showEnc(cmd *cobra.Command, args []string) {
 
-	encList := ovextra.GetEnc()
+	encList := oneview.GetEnc()
 
 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
 	defer tw.Flush()

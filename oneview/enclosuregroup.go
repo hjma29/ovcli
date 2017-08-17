@@ -1,4 +1,4 @@
-package ovextra
+package oneview
 
 type EG struct {
 	AssociatedLogicalInterconnectGroups []string             `json:"associatedLogicalInterconnectGroups,omitempty"` // "associatedInterconnectGorups": [],

@@ -19,7 +19,7 @@ import (
 	"text/tabwriter"
 	"text/template"
 
-	"github.com/hjma29/ovcli/ovextra"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -81,15 +81,15 @@ const (
 
 func showLI(cmd *cobra.Command, args []string) {
 
-	var liList ovextra.LIList
+	var liList oneview.LIList
 	var showFormat string
 
 	if liName != "" {
-		liList = ovextra.GetLIVerbose(liName)
+		liList = oneview.GetLIVerbose(liName)
 		showFormat = liShowFormatVerbose
 
 	} else {
-		liList = ovextra.GetLI()
+		liList = oneview.GetLI()
 		showFormat = liShowFormat
 
 	}

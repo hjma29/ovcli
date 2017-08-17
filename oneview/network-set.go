@@ -1,4 +1,4 @@
-package ovextra
+package oneview
 
 type NetSetCol struct {
 	Type        string   `json:"type"`

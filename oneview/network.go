@@ -1,4 +1,4 @@
-package ovextra
+package oneview
 
 import (
 	"fmt"
