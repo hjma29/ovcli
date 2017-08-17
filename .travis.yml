@@ -4,3 +4,4 @@ go:
 script: 
   - cat /proc/1/cgroup
   - docker --version
+  - docker run hello-world
