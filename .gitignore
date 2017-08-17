@@ -1,4 +1,4 @@
-appliance-credential.yaml
-appliance1-credential.yaml
-appliance2-credential.yaml
-appliance3-credential.yaml
+*.yaml
+*.yml
+! appliance-credential-sample.yaml
+! config.yaml
