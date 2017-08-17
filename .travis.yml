@@ -2,4 +2,4 @@ language: go
 go:
 - 1.8
 script: 
-  - cat /proc/1/cgroup
+  - docker --version
