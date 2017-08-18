@@ -2,6 +2,7 @@ language: go
 go:
 - 1.8
 script: 
-  - cat /proc/1/cgroup
-  - docker --version
-  - docker run -it ubuntu bash
+#  - cat /proc/1/cgroup
+#  - docker --version
+  - pwd
+  - ls
