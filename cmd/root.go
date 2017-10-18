@@ -19,8 +19,8 @@ import (
 	"log"
 	"os"
 
-	//"github.com/docker/machine/libmachine/log"
 	"github.com/hashicorp/logutils"
+	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
 
@@ -36,14 +36,23 @@ examples and usage of using your application. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+
+	cobra.OnInitialize(initConfig)
+
+	client := oneview.NewCLIOVClient()
+	RootCmd.AddCommand(NewShowCmd(client))
+	RootCmd.AddCommand(deleteCmd)
+	RootCmd.AddCommand(createCmd)
+	RootCmd.AddCommand(connectCmd)
+	RootCmd.AddCommand(addCmd)
+
+	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
+
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
@@ -51,46 +60,33 @@ func Execute() {
 
 }
 
-func init() {
-	cobra.OnInitialize(initConfig)
+//NewShowCmd creates a cobra command with desired output destination
+func NewShowCmd(client oneview.Client) *cobra.Command {
 
-	RootCmd.AddCommand(showCmd)
-	RootCmd.AddCommand(deleteCmd)
-	RootCmd.AddCommand(createCmd)
-	RootCmd.AddCommand(connectCmd)
-		RootCmd.AddCommand(addCmd)
+	var showCmd = &cobra.Command{
+		Use:   "show",
+		Short: "shows different OneView resources",
+		Long:  `shows different OneView resources`,
+		Run: func(cmd *cobra.Command, args []string) {
+			cmd.Help()
+		},
+	}
 
+	showCmd.AddCommand(showLIGCmd)
+	showCmd.AddCommand(showLICmd)
+	showCmd.AddCommand(showICCmd)
+	showCmd.AddCommand(showUplinkSetCmd)
+	showCmd.AddCommand(showEncCmd)
+	showCmd.AddCommand(showNetworkCmd)
+	showCmd.AddCommand(showEGCmd)
+	showCmd.AddCommand(showSPCmd)
+	showCmd.AddCommand(NewShowSPTemplateCmd(client))
 
-	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports Persistent Flags, which, if defined here,
-	// will be global for your application.
-
-	// RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ovcli.yaml)")
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	return showCmd
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	// if cfgFile != "" { // enable ability to specify config file via flag
-	// 	viper.SetConfigFile(cfgFile)
-	// }
-
-	// viper.SetConfigName(".ovcli") // name of config file (without extension)
-	// viper.AddConfigPath("$HOME")  // adding home directory as first search path
-	// viper.AutomaticEnv()          // read in environment variables that match
-
-	// // If a config file is found, read it in.
-	// if err := viper.ReadInConfig(); err == nil {
-	// 	fmt.Println("Using config file:", viper.ConfigFileUsed())
-	// }
-
-	//viper.BindPFlag("debugbit", RootCmd.PersistentFlags().Lookup("Debugmode"))
-
-	//fmt.Println(viper.GetBool("debugbit"))
 
 	if Debugmode {
 		//log.SetDebug(true)
@@ -112,15 +108,5 @@ func initConfig() {
 		//fmt.Println("non-debug mode")
 
 	}
-
-	// if !Debugmode {
-	// 	//fmt.Println("setting output to discard")
-	// 	//if viper.GetBool("debugbit") {
-	// 	// log.SetOutput(ioutil.Discard)
-	// } else {
-	// 	//fmt.Println("setting output to stdout")
-
-	// 	// log.SetOutput(os.Stdout)
-	// }
 
 }

@@ -51,9 +51,37 @@ type CLIOVClient struct {
 	APIKey      string
 	APIVersion  int
 	ContentType string
+	out         io.Writer
 }
 
-// NewCLIOVClient creates new CLIOVCLient
+//FakeClient is client for testing
+type FakeClient struct {
+	endpoint string
+	APIKey   string
+	out      io.Writer
+}
+
+func NewFakeClient(url string, out io.Writer) *FakeClient {
+	return &FakeClient{
+		endpoint: url,
+		APIKey:   "1111",
+		out:      out,
+	}
+}
+
+type Client interface {
+	Out() io.Writer
+}
+
+func (c *CLIOVClient) Out() io.Writer {
+	return c.out
+}
+
+func (c *FakeClient) Out() io.Writer {
+	return c.out
+}
+
+// NewCLIOVClient first reads local default config for IP/User/Pass information, then it'll connect to server to get version without key, finally returns a client with info acquired
 func NewCLIOVClient() *CLIOVClient {
 
 	creds, err := readCredential()
@@ -76,6 +104,7 @@ func NewCLIOVClient() *CLIOVClient {
 		APIVersion:  ver,
 		APIKey:      "",
 		ContentType: "application/json; charset=utf-8",
+		out:         os.Stdout,
 	}
 }
 
@@ -249,6 +278,7 @@ func ConnectOV(flagFile string) error {
 	return nil
 }
 
+//GetResourceURL uses GetResourceLists to get resource for one item
 func (c *CLIOVClient) GetResourceURL(resource, name string) string {
 
 	c.GetResourceLists(resource, name)
@@ -269,6 +299,7 @@ func (c *CLIOVClient) GetResourceURL(resource, name string) string {
 
 }
 
+//readCredential reads local default config file "DefaultConfigFile" to get IP/User/Pass information, 1st step before func setAPIVersion to init a new CLI Client
 func readCredential() (cred, error) {
 	y := cred{}
 
@@ -285,6 +316,7 @@ func readCredential() (cred, error) {
 
 }
 
+//setAPIVersion connects to OV Server IP (without any credential key) to get server Version, 2nd step after readconfiguration to initialize a new CLI client
 func setAPIVersion(ip string) (int, error) {
 
 	type ver struct {
@@ -316,6 +348,7 @@ func setAPIVersion(ip string) (int, error) {
 	return v.CurrentVersion, nil
 }
 
+//setAuthKey connects OV server and populate OVClient's APIKey field, it's used in SendHTTPRequest and Connect method
 func (c *CLIOVClient) setAuthKey() error {
 
 	if c.APIKey != "" {
@@ -379,225 +412,3 @@ func AddRemoteEnc(ipv6 string) error {
 	return nil
 
 }
-
-// func (c *CLIOVClient) PostURI(filter string, sort string, uri string) ([]byte, error) {
-// 	var (
-// 		//uri           = "/rest/interconnects"
-// 		q map[string]interface{}
-// 		//interconnects ICCol
-// 		//lic           LICol
-// 	)
-
-// 	q = make(map[string]interface{})
-// 	if len(filter) > 0 {
-// 		q["filter"] = filter
-// 	}
-
-// 	if sort != "" {
-// 		q["sort"] = sort
-// 	}
-
-// 	// refresh login
-// 	c.RefreshLogin()
-// 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
-// 	// Setup query
-// 	if len(q) > 0 {
-// 		c.SetQueryString(q)
-// 	}
-
-// 	//fmt.Printf("%#v\n\n", c)
-// 	//fmt.Println(uri)
-
-// 	data, err := c.CLIRestAPICall(rest.POST, uri, nil)
-
-// 	//fmt.Println(data, err)
-
-// 	if err != nil {
-// 		return data, err
-// 	}
-
-// 	return data, err
-
-// }
-
-// func (c *CLIOVClient) DeleteURI(filter string, sort string, uri string) ([]byte, error) {
-// 	var (
-// 		//uri           = "/rest/interconnects"
-// 		q map[string]interface{}
-// 		//interconnects ICCol
-// 		//lic           LICol
-// 	)
-
-// 	q = make(map[string]interface{})
-// 	if len(filter) > 0 {
-// 		q["filter"] = filter
-// 	}
-
-// 	if sort != "" {
-// 		q["sort"] = sort
-// 	}
-
-// 	// refresh login
-// 	c.RefreshLogin()
-// 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
-// 	// Setup query
-// 	if len(q) > 0 {
-// 		c.SetQueryString(q)
-// 	}
-
-// 	//fmt.Printf("%#v\n\n", c)
-// 	//fmt.Println(uri)
-
-// 	data, err := c.CLIRestAPICall(rest.DELETE, uri, nil)
-
-// 	//fmt.Println(data, err)
-
-// 	if err != nil {
-// 		return data, err
-// 	}
-
-// 	return data, err
-
-// }
-
-// func (c *CLIOVClient) GetURI(filter string, sort string, uri string) ([]byte, error) {
-// 	var (
-// 		q map[string]interface{}
-// 	)
-
-// 	q = make(map[string]interface{})
-// 	if len(filter) > 0 {
-// 		q["filter"] = filter
-// 	}
-
-// 	if sort != "" {
-// 		q["sort"] = sort
-// 	}
-
-// 	c.RefreshLogin()
-
-// 	c.SetAuthHeaderOptions(c.GetAuthHeaderMap())
-// 	// Setup query
-// 	if len(q) > 0 {
-// 		c.SetQueryString(q)
-// 	}
-
-// 	data, err := c.CLIRestAPICall(rest.GET, uri, nil)
-
-// 	if err != nil {
-// 		return data, err
-// 	}
-
-// 	return data, err
-// }
-
-// RestAPICall - general rest method caller
-// func (c *CLIOVClient) CLIRestAPICall(method rest.Method, path string, options interface{}) ([]byte, error) {
-
-// 	var (
-// 		Url *url.URL
-// 		err error
-// 		req *http.Request
-// 	)
-
-// 	Url, err = url.Parse(utils.Sanatize(c.Endpoint + path))
-
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	c.GetQueryString(Url)
-
-// 	if err != nil {
-// 		return nil, fmt.Errorf("Error with request: %v - %q", Url, err)
-// 	}
-
-// 	if options != nil {
-// 		OptionsJSON, err := json.Marshal(options)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		//log.Debugf("*** options => %+v", bytes.NewBuffer(OptionsJSON))
-// 		req, err = http.NewRequest(method.String(), Url.String(), bytes.NewBuffer(OptionsJSON))
-// 		//req, err = http.NewRequest(method.String(), Url.Path, bytes.NewBuffer(OptionsJSON))
-// 	} else {
-// 		req, err = http.NewRequest(method.String(), Url.String(), nil)
-// 		//req, err = http.NewRequest(method.String(), Url.Path, nil)
-// 	}
-
-// 	if err != nil {
-// 		return nil, fmt.Errorf("Error with request: %v - %q", Url, err)
-// 	}
-
-// 	// setup proxy
-// 	proxyUrl, err := http.ProxyFromEnvironment(req)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("Error with proxy: %v - %q", proxyUrl, err)
-// 	}
-// 	if proxyUrl != nil {
-// 		tr.Proxy = http.ProxyURL(proxyUrl)
-// 		//log.Debugf("*** proxy => %+v", tr.Proxy)
-// 	}
-
-// 	// build the auth headerU
-// 	for k, v := range c.Option.Headers {
-// 		//log.Debugf("Headers -> %s -> %+v\n", k, v)
-// 		req.Header.Add(k, v)
-// 	}
-
-// 	// req.SetBasicAuth(c.User, c.APIKey)
-// 	req.Method = fmt.Sprintf("%s", method.String())
-
-// 	log.Printf("[DEBUG] about to run: %v, %v, request header: %#v\n", method.String(), Url.String(), req.Header)
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer resp.Body.Close()
-// 	log.Printf("[DEBUG] finish run: %v, %v, Response Code: %v\n", method.String(), Url.String(), resp.StatusCode)
-
-// 	// TODO: CLeanup Later
-// 	// DEBUGGING WHILE WE WORK
-// 	// DEBUGGING WHILE WE WORK
-// 	// fmt.Printf("METHOD --> %+v\n",method)
-// 	// log.Debugf("REQ    --> %+v\n", req)
-// 	// log.Debugf("RESP   --> %+v\n", resp)
-// 	// log.Debugf("ERROR  --> %+v\n", err)
-// 	// DEBUGGING WHILE WE WORK
-
-// 	data, err := ioutil.ReadAll(resp.Body)
-
-// 	if !c.isOkStatus(resp.StatusCode) {
-// 		// 	{
-// 		//     "details": "",
-// 		//     "errorSource": "ethernet-networks",
-// 		//     "recommendedActions": [
-// 		//         ""
-// 		//     ],
-// 		//     "nestedErrors": [],
-// 		//     "errorCode": "CRM_DUPLICATE_NETWORK_NAME",
-// 		//     "data": {},
-// 		//     "message": "A network with the name hj-test1 already exists."
-// 		// }
-// 		type apiErr struct {
-// 			ErrorCode          string      `json:"errorCode"`
-// 			Message            string      `json:"message"`
-// 			Details            string      `json:"details"`
-// 			RecommendedActions interface{} `json:"recommendedActions"`
-// 		}
-// 		var e apiErr
-// 		json.Unmarshal(data, &e)
-// 		return nil, fmt.Errorf("error in response: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
-
-// 	}
-
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	if uri, ok := resp.Header["Location"]; ok {
-// 		taskuri = uri[0]
-// 	}
-
-// 	return data, nil
-// }

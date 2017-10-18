@@ -36,18 +36,6 @@ to quickly create a Cobra application.`,
 	Run: showSP,
 }
 
-var showSPTemplateCmd = &cobra.Command{
-	Use:   "sptemplate",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showSPTemplate,
-}
-
 const (
 	spShowFormat = "" +
 		"Name\tTemplate\tHardware\tHardware Type\n" +
@@ -121,33 +109,66 @@ func showSP(cmd *cobra.Command, args []string) {
 
 }
 
-func showSPTemplate(cmd *cobra.Command, args []string) {
+func NewShowSPTemplateCmd(client oneview.Client) *cobra.Command {
+	var showSPTemplateCmd = &cobra.Command{
+		Use:   "sptemplate",
+		Short: "shows server template",
+		Long:  `shows server template`,
+		Run: func(cmd *cobra.Command, args []string) {
 
-	var sptList []oneview.SPTemplate
-	var showFormat string
+			var sptList []oneview.SPTemplate
+			var showFormat string
 
-	if flagName != "" {
-		sptList = oneview.GetSPTemplateVerbose(flagName)
-		showFormat = sptShowFormatVerbose
+			if flagName != "" {
+				sptList = oneview.GetSPTemplateVerbose(flagName)
+				showFormat = sptShowFormatVerbose
 
-	} else {
-		sptList = oneview.GetSPTemplate()
-		showFormat = sptShowFormat
+			} else {
+				sptList = oneview.GetSPTemplate()
+				showFormat = sptShowFormat
 
+			}
+
+			tw := tabwriter.NewWriter(client.Out(), 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(showFormat))
+			t.Execute(tw, sptList)
+
+		},
 	}
 
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
+	showSPTemplateCmd.Flags().StringVarP(&flagName, "name", "n", "", "Server Profile name: all, <name>")
 
-	t := template.Must(template.New("").Parse(showFormat))
-	t.Execute(tw, sptList)
-
+	return showSPTemplateCmd
 }
+
+// func showSPTemplate(cmd *cobra.Command, args []string) {
+
+// 	var sptList []oneview.SPTemplate
+// 	var showFormat string
+
+// 	if flagName != "" {
+// 		sptList = oneview.GetSPTemplateVerbose(flagName)
+// 		showFormat = sptShowFormatVerbose
+
+// 	} else {
+// 		sptList = oneview.GetSPTemplate()
+// 		showFormat = sptShowFormat
+
+// 	}
+
+// 	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+// 	defer tw.Flush()
+
+// 	t := template.Must(template.New("").Parse(showFormat))
+// 	t.Execute(tw, sptList)
+
+// }
 
 func init() {
 
 	showSPCmd.Flags().StringVarP(&flagName, "name", "n", "", "Server Profile name: all, <name>")
-	showSPTemplateCmd.Flags().StringVarP(&flagName, "name", "n", "", "Server Profile name: all, <name>")
 
 	//fmt.Println("this is profile module init")
 
