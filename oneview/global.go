@@ -127,6 +127,20 @@ var rmap = resourceMap{
 		uri:     NetSetURL,
 		logmsg:  "get Network Set",
 	},
+
+	"UplinkSet": resource{
+		listptr: &[]UplinkSet{},
+		colptr:  &UplinkSetCol{},
+		uri:     UplinkSetURL,
+		logmsg:  "get UplinkSet",
+	},
+
+	"Enclosure": resource{
+		listptr: &[]Enclosure{},
+		colptr:  &EnclosureCol{},
+		uri:     EnclosureURL,
+		logmsg:  "get Enclosure",
+	},
 }
 
 type cred struct {

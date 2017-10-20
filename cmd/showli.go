@@ -80,7 +80,7 @@ func NewShowLICmd(c *oneview.CLIOVClient) *cobra.Command {
 			var showFormat string
 
 			if liName != "" {
-				liList = oneview.GetLIVerbose(liName)
+				liList = c.GetLIVerbose(liName)
 				showFormat = liShowFormatVerbose
 
 			} else {

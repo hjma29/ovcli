@@ -201,12 +201,6 @@ type serverHardwareTypePrint struct {
 	Model string
 }
 
-//var oneview.OVClient *ov.OVClient
-
-var serverProfilePrintlist []serverProfilePrint
-var serverHardwarePrintList []serverHardwarePrint
-var serverHardwareTypePrintList []serverHardwareTypePrint
-
 func (c *CLIOVClient) GetSP() SPList {
 
 	var wg sync.WaitGroup

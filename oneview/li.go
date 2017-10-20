@@ -226,6 +226,22 @@ func (c *CLIOVClient) GetLI() []LI {
 
 func (c *CLIOVClient) GetLIVerbose(liName string) LIList {
 
+	var wg sync.WaitGroup
+
+	rl := []string{"LI", "LIG"}
+
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
+
+	wg.Wait()
+
 	usListC := make(chan UplinkSetList)
 	encListC := make(chan EncList)
 	netListC := make(chan []ENetwork)
