@@ -228,7 +228,7 @@ func (c *CLIOVClient) GetLIVerbose(liName string) LIList {
 
 	var wg sync.WaitGroup
 
-	rl := []string{"LI", "LIG"}
+	rl := []string{"LI", "UplinkSet", "Enclosure", "Enetwork", "ICType"}
 
 	for _, v := range rl {
 		localv := v
@@ -242,17 +242,17 @@ func (c *CLIOVClient) GetLIVerbose(liName string) LIList {
 
 	wg.Wait()
 
-	usListC := make(chan UplinkSetList)
-	encListC := make(chan EncList)
-	netListC := make(chan []ENetwork)
-	liListC := make(chan LIList)
-	ictypeListC := make(chan []ICType)
+	// usListC := make(chan UplinkSetList)
+	// encListC := make(chan EncList)
+	// netListC := make(chan []ENetwork)
+	// liListC := make(chan LIList)
+	// ictypeListC := make(chan []ICType)
 
-	go UplinkSetGetURI(usListC)
-	go EncGetURI(encListC)
-	go ENetworkGetURI(netListC)
-	go LIGetURI(liListC)
-	go ICTypeGetURI(ictypeListC)
+	// go UplinkSetGetURI(usListC)
+	// go EncGetURI(encListC)
+	// go ENetworkGetURI(netListC)
+	// go LIGetURI(liListC)
+	// go ICTypeGetURI(ictypeListC)
 
 	var usList UplinkSetList
 	var encList EncList

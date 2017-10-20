@@ -1,5 +1,15 @@
 package oneview
 
+type ICTypeCol struct {
+	Total       int      `json:"total,omitempty"`       // "total": 1,
+	Count       int      `json:"count,omitempty"`       // "count": 1,
+	Start       int      `json:"start,omitempty"`       // "start": 0,
+	PrevPageURI string   `json:"prevPageUri,omitempty"` // "prevPageUri": null,
+	NextPageURI string   `json:"nextPageUri,omitempty"` // "nextPageUri": null,
+	URI         string   `json:"uri,omitempty"`         // "uri": "/rest/server-profiles?filter=connectionTemplateUri%20matches%7769cae0-b680-435b-9b87-9b864c81657fsort=name:asc"
+	Members     []ICType `json:"members,omitempty"`     // "members":[]
+}
+
 type ICType struct {
 	Category                 string                 `json:"category,omitempty"`                 // "category": "interconnect-types",
 	Created                  string                 `json:"created,omitempty"`                  // "created": "20150831T154835.250Z",
@@ -50,16 +60,6 @@ type PortInfo struct {
 	PortName         string   `json:"portName,omitempty"`        // "portName": "4",
 	PortNumber       int      `json:"portNumber,omitempty"`      // "portNumber": 20,
 	UplinkCapable    bool     `json:"uplinkCapable,omitempty"`   // "uplinkCapable": true,
-}
-
-type ICTypeCol struct {
-	Total       int      `json:"total,omitempty"`       // "total": 1,
-	Count       int      `json:"count,omitempty"`       // "count": 1,
-	Start       int      `json:"start,omitempty"`       // "start": 0,
-	PrevPageURI string   `json:"prevPageUri,omitempty"` // "prevPageUri": null,
-	NextPageURI string   `json:"nextPageUri,omitempty"` // "nextPageUri": null,
-	URI         string   `json:"uri,omitempty"`         // "uri": "/rest/server-profiles?filter=connectionTemplateUri%20matches%7769cae0-b680-435b-9b87-9b864c81657fsort=name:asc"
-	Members     []ICType `json:"members,omitempty"`     // "members":[]
 }
 
 func ICTypeGetURI(x chan []ICType) {

@@ -100,6 +100,13 @@ var rmap = resourceMap{
 		logmsg:  "get IC",
 	},
 
+	"ICType": resource{
+		listptr: &[]ICType{},
+		colptr:  &ICTypeCol{},
+		uri:     ICTypeURL,
+		logmsg:  "get ICType",
+	},
+
 	"LI": resource{
 		listptr: &[]LI{},
 		colptr:  &LICol{},
@@ -137,7 +144,7 @@ var rmap = resourceMap{
 
 	"Enclosure": resource{
 		listptr: &[]Enclosure{},
-		colptr:  &EnclosureCol{},
+		colptr:  &EncCol{},
 		uri:     EnclosureURL,
 		logmsg:  "get Enclosure",
 	},
