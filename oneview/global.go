@@ -107,6 +107,13 @@ var rmap = resourceMap{
 		logmsg:  "get LI",
 	},
 
+	"LIG": resource{
+		listptr: &[]LIG{},
+		colptr:  &LIGCol{},
+		uri:     LIGURL,
+		logmsg:  "get LIG",
+	},
+
 	"ENetwork": resource{
 		listptr: &[]ENetwork{},
 		colptr:  &ENetworkCol{},

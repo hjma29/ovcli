@@ -2,8 +2,10 @@ package oneview
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sort"
+	"sync"
 )
 
 type LICol struct {
@@ -183,23 +185,29 @@ type IOBay struct {
 }
 
 //GetLI is the function called from ovcli cmd package to get information on "show li", it in turn calls RestGet
-func GetLI() LIList {
+func (c *CLIOVClient) GetLI() []LI {
 
-	liListC := make(chan LIList)
-	ligListC := make(chan LIGList)
+	var wg sync.WaitGroup
 
-	go LIGetURI(liListC)
-	go LIGGetURI(ligListC)
+	rl := []string{"LI", "LIG"}
 
-	var liList LIList
-	var ligList LIGList
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 2; i++ {
-		select {
-		case liList = <-liListC:
-		case ligList = <-ligListC:
-		}
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
 	}
+
+	wg.Wait()
+
+	l := *(rmap["LI"].listptr.(*[]LI))
+	ligList := *(rmap["LIG"].listptr.(*[]LIG))
+
+	log.Printf("[DEBUG] list length: %d\n", len(l))
+	log.Printf("[DEBUG] liglist length: %d\n", len(ligList))
 
 	ligMap := make(map[string]LIG)
 
@@ -207,15 +215,16 @@ func GetLI() LIList {
 		ligMap[v.URI] = v
 	}
 
-	for i, v := range liList {
-		liList[i].LIGName = ligMap[v.LogicalInterconnectGroupURI].Name
+	for i, v := range l {
+		l[i].LIGName = ligMap[v.LogicalInterconnectGroupURI].Name
 	}
 
-	return liList
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
 
+	return l
 }
 
-func GetLIVerbose(liName string) LIList {
+func (c *CLIOVClient) GetLIVerbose(liName string) LIList {
 
 	usListC := make(chan UplinkSetList)
 	encListC := make(chan EncList)

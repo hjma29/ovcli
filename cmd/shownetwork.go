@@ -16,25 +16,11 @@ package cmd
 
 import (
 	"html/template"
-	"os"
 	"text/tabwriter"
 
 	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
-
-// networkCmd represents the network command
-var showNetworkCmd = &cobra.Command{
-	Use:   "network",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showNetwork,
-}
 
 const (
 	netShowFormat = "" +
@@ -73,31 +59,37 @@ const (
 		"{{end}}" //done with LIGs
 )
 
-func showNetwork(cmd *cobra.Command, args []string) {
+func NewShowNetworkCmd(c *oneview.CLIOVClient) *cobra.Command {
 
-	var netList []oneview.ENetwork
-	var showFormat string
+	var showNetworkCmd = &cobra.Command{
+		Use:   "network",
+		Short: "show networks",
+		Long:  `show networks`,
+		Run: func(cmd *cobra.Command, args []string) {
 
-	if netName != "" {
-		netList = oneview.GetENetworkVerbose(netName)
-		showFormat = netShowFormatVerbose
+			c := verifyClient(c)
 
-	} else {
-		netList = oneview.GetENetwork()
-		showFormat = netShowFormat
+			var netList []oneview.ENetwork
+			var showFormat string
 
+			if netName != "" {
+				netList = oneview.GetENetworkVerbose(netName)
+				showFormat = netShowFormatVerbose
+
+			} else {
+				netList = c.GetENetwork()
+				showFormat = netShowFormat
+
+			}
+
+			tw := tabwriter.NewWriter(c.Out, 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(showFormat))
+			t.Execute(tw, netList)
+		},
 	}
-
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
-
-	t := template.Must(template.New("").Parse(showFormat))
-	t.Execute(tw, netList)
-
-}
-
-func init() {
-
 	showNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name: all, <name>")
 
+	return showNetworkCmd
 }

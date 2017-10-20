@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch test function",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "/Users/hongjun/go/src/github.com/hjma29/ovcli/cmd/showSPT_test.go",
+            "args": [
+                "-test.v",
+                "TestShowSPT"
+            ]
+        },
+        {
             "name": "Launch",
             "type": "go",
             "request": "launch",

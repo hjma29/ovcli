@@ -207,7 +207,7 @@ var serverProfilePrintlist []serverProfilePrint
 var serverHardwarePrintList []serverHardwarePrint
 var serverHardwareTypePrintList []serverHardwareTypePrint
 
-func GetSP() SPList {
+func (c *CLIOVClient) GetSP() SPList {
 
 	var wg sync.WaitGroup
 
@@ -262,7 +262,7 @@ func GetSP() SPList {
 
 }
 
-func GetSPVerbose(name string) SPList {
+func (c *CLIOVClient) GetSPVerbose(name string) SPList {
 
 	var wg sync.WaitGroup
 

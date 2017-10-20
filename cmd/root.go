@@ -24,28 +24,25 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
-
-// RootCmd represents the base command when called without any subcommands
-var RootCmd = &cobra.Command{
-	Use:   "ovcli",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-}
-
 // Execute adds all child commands to the root command sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 
 	cobra.OnInitialize(initConfig)
 
-	client := oneview.NewCLIOVClient()
-	RootCmd.AddCommand(NewShowCmd(client))
+	// RootCmd represents the base command when called without any subcommands
+	var RootCmd = &cobra.Command{
+		Use:   "ovcli",
+		Short: "ovcli is a Synergy OneView CLI tool",
+		Long: `ovcli is a Synergy OneView CLI tool, please use "--help" option
+to explore what are next available options`,
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Printf("Release Version: %s\n\n", version)
+			cmd.Help()
+		},
+	}
+
+	RootCmd.AddCommand(NewShowCmd())
 	RootCmd.AddCommand(deleteCmd)
 	RootCmd.AddCommand(createCmd)
 	RootCmd.AddCommand(connectCmd)
@@ -61,7 +58,7 @@ func Execute() {
 }
 
 //NewShowCmd creates a cobra command with desired output destination
-func NewShowCmd(client oneview.Client) *cobra.Command {
+func NewShowCmd() *cobra.Command {
 
 	var showCmd = &cobra.Command{
 		Use:   "show",
@@ -72,15 +69,17 @@ func NewShowCmd(client oneview.Client) *cobra.Command {
 		},
 	}
 
+	var c *oneview.CLIOVClient
+
 	showCmd.AddCommand(showLIGCmd)
-	showCmd.AddCommand(showLICmd)
+	showCmd.AddCommand(NewShowLICmd(c))
 	showCmd.AddCommand(showICCmd)
 	showCmd.AddCommand(showUplinkSetCmd)
 	showCmd.AddCommand(showEncCmd)
-	showCmd.AddCommand(showNetworkCmd)
+	showCmd.AddCommand(NewShowNetworkCmd(c))
 	showCmd.AddCommand(showEGCmd)
-	showCmd.AddCommand(showSPCmd)
-	showCmd.AddCommand(NewShowSPTemplateCmd(client))
+	showCmd.AddCommand(NewShowSPCmd(c))
+	showCmd.AddCommand(NewShowSPTemplateCmd(c))
 
 	return showCmd
 }
@@ -88,24 +87,23 @@ func NewShowCmd(client oneview.Client) *cobra.Command {
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 
+	log.SetFlags(log.Lshortfile)
+
 	if Debugmode {
-		//log.SetDebug(true)
 		filter := &logutils.LevelFilter{
 			Levels:   []logutils.LogLevel{"DEBUG", "WARN", "ERROR"},
 			MinLevel: logutils.LogLevel("DEBUG"),
-			Writer:   os.Stderr,
+			Writer:   os.Stdout,
 		}
 		log.SetOutput(filter)
-		//fmt.Println("debug mode")
 
 	} else {
 		filter := &logutils.LevelFilter{
 			Levels:   []logutils.LogLevel{"DEBUG", "WARN", "ERROR"},
 			MinLevel: logutils.LogLevel("WARN"),
-			Writer:   os.Stderr,
+			Writer:   os.Stdout,
 		}
 		log.SetOutput(filter)
-		//fmt.Println("non-debug mode")
 
 	}
 

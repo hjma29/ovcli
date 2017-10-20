@@ -3,7 +3,10 @@ package oneview
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
+	"sort"
+	"sync"
 
 	"github.com/ghodss/yaml"
 )
@@ -38,33 +41,29 @@ type ENetworkCol struct {
 	Members     []ENetwork `json:"members,omitempty"`     // "members":[]
 }
 
-func GetENetwork() []ENetwork {
+func (c *CLIOVClient) GetENetwork() []ENetwork {
 
-	netListC := make(chan []ENetwork)
-	//liListC := make(chan LIList)
+	var wg sync.WaitGroup
 
-	go ENetworkGetURI(netListC)
-	//go LIGetURI(liListC)
+	rl := []string{"ENetwork"}
 
-	var netList []ENetwork
-	//var liList LIList
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 1; i++ {
-		select {
-		case netList = <-netListC:
-			//case liList = <-liListC:
-		}
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
 	}
 
-	// liMap := make(map[string]LI)
+	wg.Wait()
 
-	// for _, v := range liList {
-	// 	liMap[v.URI] = v
-	// }
+	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
 
-	// for i, v := range netList {
-	// 	netList[i].LIName = liMap[v.LogicalInterconnectURI].Name
-	// }
+	log.Printf("[DEBUG] netlist length: %d\n", len(netList))
+
+	sort.Slice(netList, func(i, j int) bool { return netList[i].Name < netList[j].Name })
 
 	return netList
 

@@ -1,0 +1,14 @@
+Name               Enclosure Group    Hardware Type
+DCOS_RHEL          DCA-SolCenter-EG   SY 480 Gen9 1
+ESXi6 target I3s   DCA-SolCenter-EG   SY 480 Gen9 1
+S2d node copy      DCA-SolCenter-EG   SY 480 Gen9 3
+SDS iSCSI Target   DCA-SolCenter-EG   SY 480 Gen9 1
+SDS-1              DCA-SolCenter-EG   SY 480 Gen9 3
+SDS-2              DCA-SolCenter-EG   SY 480 Gen9 2
+TE-Host-Infra      DCA-SolCenter-EG   SY 480 Gen9 3
+dcos-server        DCA-SolCenter-EG   SY 480 Gen9 1
+hj-sptemplate1     DCA-SolCenter-EG   SY 480 Gen9 3
+hj-sptemplate2     DCA-SolCenter-EG   SY 480 Gen9 1
+s2d node           DCA-SolCenter-EG   SY 480 Gen9 2
+vsan profile       DCA-SolCenter-EG   SY 480 Gen9 3
+vsan profile alt   DCA-SolCenter-EG   SY 480 Gen9 2

@@ -8,6 +8,8 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/ghodss/yaml"
@@ -103,9 +105,11 @@ type SPTConnection struct {
 		Priority   string `json:"priority,omitempty"`
 		BootVlanID string `json:"bootVlanId,omitempty"`
 	} `json:"boot,omitempty"`
+	NetworkName string `json:"networkName"`
+	NetworkVlan string
 }
 
-func GetSPTemplate() []SPTemplate {
+func (c *CLIOVClient) GetSPTemplate() []SPTemplate {
 
 	var wg sync.WaitGroup
 
@@ -117,7 +121,6 @@ func GetSPTemplate() []SPTemplate {
 
 		go func() {
 			defer wg.Done()
-			c := NewCLIOVClient()
 			c.GetResourceLists(localv, "")
 		}()
 	}
@@ -127,6 +130,10 @@ func GetSPTemplate() []SPTemplate {
 	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
 	egList := *(rmap["EG"].listptr.(*[]EG))
 	hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
+
+	log.Printf("[DEBUG] sptlist length: %d\n", len(sptList))
+	log.Printf("[DEBUG] eglist length: %d\n", len(egList))
+	log.Printf("[DEBUG] hwtlist length: %d\n", len(hwtList))
 
 	egMap := make(map[string]EG)
 
@@ -153,75 +160,62 @@ func GetSPTemplate() []SPTemplate {
 
 }
 
-func GetSPTemplateVerbose(name string) []SPTemplate {
+func (c *CLIOVClient) GetSPTemplateVerbose(name string) []SPTemplate {
 
-	// spListC := make(chan SPList)
-	// sptListC := make(chan []SPTemplate)
-	// hwListC := make(chan []ServerHW)
-	// hwtListC := make(chan []ServerHWType)
-	// icListC := make(chan []IC)
-	// netListC := make(chan []ENetwork)
-	// netsetListC := make(chan []NetSet)
+	var wg sync.WaitGroup
 
-	// go SPGetURI(spListC)
-	// go SPTemplateGetURI(sptListC)
-	// go ServerHWGetURI(hwListC)
-	// go ServerHWTypeGetURI(hwtListC)
-	// go ICGetURI(icListC)
-	// go ENetworkGetURI(netListC)
-	// go NetSetGetURI(netsetListC)
+	rl := []string{"SPTemplate", "EG", "ServerHWType", "IC", "ENetwork", "NetSet"}
 
-	var sptList []SPTemplate
-	// var sptList []SPTemplate
-	// var hwList []ServerHW
-	// var hwtList []ServerHWType
-	// var icList []IC
-	// var netList []ENetwork
-	// var netsetList []NetSet
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	// for i := 0; i < 7; i++ {
-	// 	select {
-	// 	case spList = <-spListC:
-	// 		(&spList).validateName(name)
-	// 	case sptList = <-sptListC:
-	// 	case hwList = <-hwListC:
-	// 	case hwtList = <-hwtListC:
-	// 	case icList = <-icListC:
-	// 	case netList = <-netListC:
-	// 	case netsetList = <-netsetListC:
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
 
-	// 	}
-	// }
+	wg.Wait()
 
-	// sptMap := make(map[string]SPTemplate)
+	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
+	egList := *(rmap["EG"].listptr.(*[]EG))
+	hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
+	icList := *(rmap["IC"].listptr.(*[]IC))
+	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
+	netsetList := *(rmap["NetSet"].listptr.(*[]NetSet))
 
-	// for _, v := range sptList {
-	// 	sptMap[v.URI] = v
-	// }
+	log.Printf("[DEBUG] sptlist length: %d\n", len(sptList))
+	log.Printf("[DEBUG] eglist length: %d\n", len(egList))
+	log.Printf("[DEBUG] hwtlist length: %d\n", len(hwtList))
+	log.Printf("[DEBUG] iclist length: %d\n", len(icList))
+	log.Printf("[DEBUG] netlist length: %d\n", len(netList))
+	log.Printf("[DEBUG] netsetlist length: %d\n", len(netsetList))
 
-	// hwMap := make(map[string]ServerHW)
+	if err := validateName(&sptList, name); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
-	// for _, v := range hwList {
-	// 	hwMap[v.URI] = v
-	// }
+	egMap := make(map[string]EG)
+	for _, v := range egList {
+		egMap[v.URI] = v
+	}
 
-	// hwtMap := make(map[string]ServerHWType)
+	hwtMap := make(map[string]ServerHWType)
+	for _, v := range hwtList {
+		hwtMap[v.URI] = v
+	}
 
-	// for _, v := range hwtList {
-	// 	hwtMap[v.URI] = v
-	// }
+	for i, v := range sptList {
+		sptList[i].EG = egMap[v.EnclosureGroupURI].Name
+		sptList[i].ServerHWType = hwtMap[v.ServerHardwareTypeURI].Name
 
-	// for i, v := range spList {
-	// 	spList[i].SPTemplate = sptMap[v.ServerProfileTemplateURI].Name
+		sptList[i].conns(icList, netList, netsetList)
 
-	// 	spList[i].ServerHW = hwMap[v.ServerHardwareURI].Name
-	// 	spList[i].PowerState = hwMap[v.ServerHardwareURI].PowerState
+	}
 
-	// 	spList[i].ServerHWType = hwtMap[v.ServerHardwareTypeURI].Name
-
-	// 	spList[i].conns(icList, netList, netsetList)
-
-	// }
+	sort.Slice(sptList, func(i, j int) bool { return sptList[i].Name < sptList[j].Name })
 
 	return sptList
 
@@ -313,58 +307,55 @@ func DeleteSPTemplate(name string) error {
 	return nil
 }
 
-// func (sp *SP) conns(icList []IC, netList []ENetwork, netsetList []NetSet) {
+func (spt *SPTemplate) conns(icList []IC, netList []ENetwork, netsetList []NetSet) {
 
-// 	icMap := make(map[string]IC)
+	icMap := make(map[string]IC)
 
-// 	for _, v := range icList {
-// 		icMap[v.URI] = v
-// 	}
+	for _, v := range icList {
+		icMap[v.URI] = v
+	}
 
-// 	netMap := make(map[string]ENetwork)
-// 	for _, v := range netList {
-// 		netMap[v.URI] = v
-// 	}
+	netMap := make(map[string]ENetwork)
+	for _, v := range netList {
+		netMap[v.URI] = v
+	}
 
-// 	netsetMap := make(map[string]NetSet)
-// 	for _, v := range netsetList {
-// 		netsetMap[v.URI] = v
-// 	}
+	netsetMap := make(map[string]NetSet)
+	for _, v := range netsetList {
+		netsetMap[v.URI] = v
+	}
 
-// 	for i, v := range sp.Connections {
+	for i, v := range spt.ConnectionSettings.Connections {
 
-// 		if strings.Contains(v.NetworkURI, "ethernet-networks") {
+		if strings.Contains(v.NetworkURI, "ethernet-networks") {
 
-// 			sp.Connections[i].NetworkName = netMap[v.NetworkURI].Name
-// 			sp.Connections[i].NetworkVlan = strconv.Itoa(netMap[v.NetworkURI].VlanId)
-// 		} else {
-// 			sp.Connections[i].NetworkName = netsetMap[v.NetworkURI].Name
-// 			sp.Connections[i].NetworkVlan = "NetworkSet"
-// 		}
+			spt.ConnectionSettings.Connections[i].NetworkName = netMap[v.NetworkURI].Name
+			spt.ConnectionSettings.Connections[i].NetworkVlan = strconv.Itoa(netMap[v.NetworkURI].VlanId)
+		} else {
+			spt.ConnectionSettings.Connections[i].NetworkName = netsetMap[v.NetworkURI].Name
+			spt.ConnectionSettings.Connections[i].NetworkVlan = "NetworkSet"
+		}
 
-// 		sp.Connections[i].ICName = icMap[v.InterconnectURI].Name
+	}
 
-// 	}
+}
 
-// }
+func validateName(list *[]SPTemplate, name string) error {
 
-// func (list *SPList) validateName(name string) {
+	if name == "all" {
+		return nil //if name is all, don't touch *list, directly return
+	}
 
-// 	if name == "all" {
-// 		return //if name is all, don't touch *list, directly return
-// 	}
+	localslice := *list //define a localslice to avoid too many *list in the following
 
-// 	localslice := *list //define a localslice to avoid too many *list in the following
+	for i, v := range localslice {
+		if name == v.Name {
+			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
+			*list = localslice               //update list pointer to point to new shortened slice
+			return nil
+		}
+	}
 
-// 	for i, v := range localslice {
-// 		if name == v.Name {
-// 			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
-// 			*list = localslice               //update list pointer to point to new shortened slice
-// 			return
-// 		}
-// 	}
+	return fmt.Errorf("no profile matching name: \"%v\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ", name)
 
-// 	fmt.Println("no profile matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ")
-// 	os.Exit(0)
-
-// }
+}

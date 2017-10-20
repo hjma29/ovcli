@@ -51,34 +51,35 @@ type CLIOVClient struct {
 	APIKey      string
 	APIVersion  int
 	ContentType string
-	out         io.Writer
+	Out         io.ReadWriter
 }
 
 //FakeClient is client for testing
-type FakeClient struct {
-	endpoint string
-	APIKey   string
-	out      io.Writer
-}
+// type FakeClient struct {
+// 	endpoint string
+// 	APIKey   string
+// 	out      io.ReadWriter
+// }
 
-func NewFakeClient(url string, out io.Writer) *FakeClient {
-	return &FakeClient{
-		endpoint: url,
+// type Client interface {
+// 	Out() io.ReadWriter
+// }
+
+// func (c *CLIOVClient) Out() io.ReadWriter {
+// 	return c.out
+// }
+
+// func (c *FakeClient) Out() io.ReadWriter {
+// 	return c.out
+// }
+
+func NewFakeClient(url string, out io.ReadWriter) *CLIOVClient {
+
+	return &CLIOVClient{
+		Endpoint: url,
 		APIKey:   "1111",
-		out:      out,
+		Out:      out,
 	}
-}
-
-type Client interface {
-	Out() io.Writer
-}
-
-func (c *CLIOVClient) Out() io.Writer {
-	return c.out
-}
-
-func (c *FakeClient) Out() io.Writer {
-	return c.out
 }
 
 // NewCLIOVClient first reads local default config for IP/User/Pass information, then it'll connect to server to get version without key, finally returns a client with info acquired
@@ -104,16 +105,16 @@ func NewCLIOVClient() *CLIOVClient {
 		APIVersion:  ver,
 		APIKey:      "",
 		ContentType: "application/json; charset=utf-8",
-		out:         os.Stdout,
+		Out:         os.Stdout,
 	}
 }
 
 //GetResourceLists is method to get list of resource list, it updates global rmap resource table to store resource data
-func (c *CLIOVClient) GetResourceLists(res, name string) {
+func (c *CLIOVClient) GetResourceLists(resourceName, filterName string) {
 
-	listptr := rmap[res].listptr
-	uri := rmap[res].uri
-	logmsg := rmap[res].logmsg
+	listptr := rmap[resourceName].listptr
+	uri := rmap[resourceName].uri
+	logmsg := rmap[resourceName].logmsg
 
 	log.Print("[DEBUG] ", logmsg)
 
@@ -126,13 +127,13 @@ func (c *CLIOVClient) GetResourceLists(res, name string) {
 
 	for uri != "" {
 
-		data, err := c.SendHTTPRequest("GET", uri, name, "", nil)
+		data, err := c.SendHTTPRequest("GET", uri, filterName, "", nil)
 		if err != nil {
 			fmt.Printf("OVCLI: error sending HTTP GET request: %v, err: %v", uri, err)
 			os.Exit(1)
 		}
 
-		colptr := rmap[res].colptr
+		colptr := rmap[resourceName].colptr
 
 		if err := json.Unmarshal(data, colptr); err != nil {
 			fmt.Printf("OVCLI: unmarshal error for type %T: %s", colptr, err)
@@ -200,9 +201,10 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	if err != nil {
 		return nil, fmt.Errorf("OVCLI HTTP request sent error: %v", err)
 	}
-	log.Printf("[DEBUG] OVCLI Get response Code: %v for request %v\n\n", resp.StatusCode, method+"=>"+req.URL.String())
+	log.Printf("[DEBUG] OVCLI response Code: %v for request %v\n\n", resp.StatusCode, method+"=>"+req.URL.String())
 
 	data, err := ioutil.ReadAll(resp.Body)
+
 	defer resp.Body.Close()
 	if err != nil {
 		return nil, fmt.Errorf("OVCLI error reading Response body: %v", err)
@@ -233,6 +235,10 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 		}
 		return nil, nil
 	}
+
+	log.Printf("[DEBUG] OVCLI response body length: %d for request %v\n", len(data), method+"=>"+req.URL.String())
+	log.Printf("[DEBUG] OVCLI response body first 200 bytes: %s\n", string(data[:200]))
+
 	return data, nil
 }
 
