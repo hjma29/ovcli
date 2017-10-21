@@ -123,8 +123,6 @@ func NewShowICCmd(c *oneview.CLIOVClient) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&porttype, "type", "t", "all", "Port Type:uplink,downlink,interconnect,all")
-
 	cmd.AddCommand(showICPortCmd)
 
 	return cmd
@@ -183,5 +181,7 @@ func showSFP(cmd *cobra.Command, args []string) {
 func init() {
 
 	showICPortCmd.AddCommand(showSFPCmd)
+
+	showICPortCmd.Flags().StringVarP(&porttype, "type", "t", "all", "Port Type:uplink,downlink,interconnect,all")
 
 }
