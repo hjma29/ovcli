@@ -21,24 +21,11 @@ import (
 	// "text/template"
 
 	"html/template"
-	"os"
 	"text/tabwriter"
 
 	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
-
-var showUplinkSetCmd = &cobra.Command{
-	Use:   "uplinkset",
-	Short: "Display enclosure uplink information",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showUplinkSet,
-}
 
 const (
 	usShowFormat = "" +
@@ -77,30 +64,39 @@ const (
 		"{{end}}" //done with LIGs
 )
 
-func showUplinkSet(cmd *cobra.Command, args []string) {
+func NewShowUplinkSetCmd(c *oneview.CLIOVClient) *cobra.Command {
 
-	var usList []oneview.UplinkSet
-	var showFormat string
+	var cmd = &cobra.Command{
+		Use:   "uplinkset",
+		Short: "show uplink sets",
+		Long:  `show uplink sets`,
+		Run: func(cmd *cobra.Command, args []string) {
 
-	if usName != "" {
-		usList = oneview.GetUplinkSetVerbose(usName)
-		showFormat = usShowFormatVerbose
+			var usList []oneview.UplinkSet
+			var showFormat string
 
-	} else {
-		usList = oneview.GetUplinkSet()
-		showFormat = usShowFormat
+			c := verifyClient(c)
 
+			if usName != "" {
+				usList = c.GetUplinkSetVerbose(usName)
+				showFormat = usShowFormatVerbose
+
+			} else {
+				usList = c.GetUplinkSet()
+				showFormat = usShowFormat
+
+			}
+
+			tw := tabwriter.NewWriter(c.Out, 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(showFormat))
+			t.Execute(tw, usList)
+		},
 	}
 
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
+	cmd.Flags().StringVarP(&usName, "name", "n", "", "UplinkSet Name: all, <name>")
 
-	t := template.Must(template.New("").Parse(showFormat))
-	t.Execute(tw, usList)
-
-}
-
-func init() {
-	showUplinkSetCmd.Flags().StringVarP(&usName, "name", "n", "", "UplinkSet Name: all, <name>")
+	return cmd
 
 }

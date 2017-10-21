@@ -54,25 +54,6 @@ type CLIOVClient struct {
 	Out         io.ReadWriter
 }
 
-//FakeClient is client for testing
-// type FakeClient struct {
-// 	endpoint string
-// 	APIKey   string
-// 	out      io.ReadWriter
-// }
-
-// type Client interface {
-// 	Out() io.ReadWriter
-// }
-
-// func (c *CLIOVClient) Out() io.ReadWriter {
-// 	return c.out
-// }
-
-// func (c *FakeClient) Out() io.ReadWriter {
-// 	return c.out
-// }
-
 func NewFakeClient(url string, out io.ReadWriter) *CLIOVClient {
 
 	return &CLIOVClient{
@@ -416,5 +397,49 @@ func AddRemoteEnc(ipv6 string) error {
 	}
 
 	return nil
+
+}
+
+func validateName(listPtr interface{}, name string) error {
+
+	if name == "all" {
+		return nil //if name is all, don't touch *list, directly return
+	}
+
+	lvptr := reflect.ValueOf(listPtr)
+	lv := lvptr.Elem()
+
+	//fmt.Println(lv.CanSet())
+
+	//localslice := listPtr.Elem()
+
+	for i := 0; i < lv.Len(); i++ {
+		if lv.Index(i).FieldByName("Name").String() == name {
+			//fmt.Println("i=", i, "name =", lv.Index(i).FieldByName("Name").String())
+			lv.Set(lv.Slice(i, i+1))
+			return nil
+		}
+
+	}
+
+	// for i, v := range localslice {
+	// 	if name == v.Name {
+	// 		localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
+	// 		*list = localslice               //update list pointer to point to new shortened slice
+	// 		return nil
+	// 	}
+	// }
+
+	// localslice := *list //define a localslice to avoid too many *list in the following
+
+	// for i, v := range localslice {
+	// 	if name == v.Name {
+	// 		localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
+	// 		*list = localslice               //update list pointer to point to new shortened slice
+	// 		return nil
+	// 	}
+	// }
+
+	return fmt.Errorf("no profile matching name: \"%v\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ", name)
 
 }

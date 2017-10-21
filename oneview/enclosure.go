@@ -1,7 +1,9 @@
 package oneview
 
 import (
+	"log"
 	"sort"
+	"sync"
 )
 
 type EncCol struct {
@@ -200,53 +202,30 @@ type Enclosure struct {
 	ApplianceBayCount int `json:"applianceBayCount"`
 }
 
-func GetEnc() EncList {
-	encListC := make(chan EncList)
+func (c *CLIOVClient) GetEnc() []Enclosure {
 
-	go EncGetURI(encListC)
+	var wg sync.WaitGroup
 
-	var list EncList
+	rl := []string{"Enclosure"}
 
-	list = <-encListC
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
 
-	return list
+	wg.Wait()
 
-}
+	l := *(rmap["Enclosure"].listptr.(*[]Enclosure))
 
-func EncGetURI(c chan EncList) {
+	log.Printf("[DEBUG] enclist length: %d\n", len(l))
 
-	// log.Println("Rest Get Enc")
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
 
-	// defer timeTrack(time.Now(), "Rest Get Enc")
-
-	// ov := NewCLIOVClient()
-
-	// var list EncList
-	// uri := EnclosureURL
-
-	// for uri != "" {
-
-	// 	data, err := ov.GetURI("", "", uri)
-	// 	if err != nil {
-
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	var page EncCol
-
-	// 	if err := json.Unmarshal(data, &page); err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	list = append(list, page.Members...)
-
-	// 	uri = page.NextPageURI
-	// }
-
-	// c <- list
+	return l
 
 }

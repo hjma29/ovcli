@@ -340,22 +340,3 @@ func (spt *SPTemplate) conns(icList []IC, netList []ENetwork, netsetList []NetSe
 
 }
 
-func validateName(list *[]SPTemplate, name string) error {
-
-	if name == "all" {
-		return nil //if name is all, don't touch *list, directly return
-	}
-
-	localslice := *list //define a localslice to avoid too many *list in the following
-
-	for i, v := range localslice {
-		if name == v.Name {
-			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
-			*list = localslice               //update list pointer to point to new shortened slice
-			return nil
-		}
-	}
-
-	return fmt.Errorf("no profile matching name: \"%v\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ", name)
-
-}

@@ -206,7 +206,7 @@ func (c *CLIOVClient) GetLI() []LI {
 	l := *(rmap["LI"].listptr.(*[]LI))
 	ligList := *(rmap["LIG"].listptr.(*[]LIG))
 
-	log.Printf("[DEBUG] list length: %d\n", len(l))
+	log.Printf("[DEBUG] lilist length: %d\n", len(l))
 	log.Printf("[DEBUG] liglist length: %d\n", len(ligList))
 
 	ligMap := make(map[string]LIG)
@@ -224,11 +224,11 @@ func (c *CLIOVClient) GetLI() []LI {
 	return l
 }
 
-func (c *CLIOVClient) GetLIVerbose(liName string) LIList {
+func (c *CLIOVClient) GetLIVerbose(name string) LIList {
 
 	var wg sync.WaitGroup
 
-	rl := []string{"LI", "UplinkSet", "Enclosure", "Enetwork", "ICType"}
+	rl := []string{"LI", "UplinkSet", "Enclosure", "ENetwork", "ICType"}
 
 	for _, v := range rl {
 		localv := v
@@ -242,38 +242,27 @@ func (c *CLIOVClient) GetLIVerbose(liName string) LIList {
 
 	wg.Wait()
 
-	// usListC := make(chan UplinkSetList)
-	// encListC := make(chan EncList)
-	// netListC := make(chan []ENetwork)
-	// liListC := make(chan LIList)
-	// ictypeListC := make(chan []ICType)
+	l := *(rmap["LI"].listptr.(*[]LI))
+	usList := *(rmap["UplinkSet"].listptr.(*UplinkSetList))
+	encList := *(rmap["Enclosure"].listptr.(*[]Enclosure))
+	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
+	ictypeList := *(rmap["ICType"].listptr.(*[]ICType))
 
-	// go UplinkSetGetURI(usListC)
-	// go EncGetURI(encListC)
-	// go ENetworkGetURI(netListC)
-	// go LIGetURI(liListC)
-	// go ICTypeGetURI(ictypeListC)
+	log.Printf("[DEBUG] lilist length: %d\n", len(l))
+	log.Printf("[DEBUG] uslist length: %d\n", len(usList))
+	log.Printf("[DEBUG] enclist length: %d\n", len(encList))
+	log.Printf("[DEBUG] netlist length: %d\n", len(netList))
+	log.Printf("[DEBUG] ictypelist length: %d\n", len(ictypeList))
 
-	var usList UplinkSetList
-	var encList EncList
-	var netList []ENetwork
-	var liList LIList
-	var ictypeList []ICType
-
-	for i := 0; i < 5; i++ {
-		select {
-		case usList = <-usListC:
-		case encList = <-encListC:
-		case netList = <-netListC:
-		case ictypeList = <-ictypeListC:
-		case liList = <-liListC:
-			(&liList).validateName(liName)
-		}
+	if err := validateName(&l, name); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	usList.genList(liList, netList, encList)
 
-	for i, lv := range liList {
+	usList.genList(l, netList, encList)
+
+	for i, lv := range l {
 		list := make(UplinkSetList, 0)
 
 		for _, uv := range usList {
@@ -281,12 +270,15 @@ func (c *CLIOVClient) GetLIVerbose(liName string) LIList {
 				list = append(list, uv)
 			}
 		}
-		liList[i].UplinkSets = list
-		liList[i].getIOBay(ictypeList, encList)
+		l[i].UplinkSets = list
+		l[i].getIOBay(ictypeList, encList)
 
 	}
 
-	return liList
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
+	
+
+	return l
 }
 
 //LIGetURI is the function to get raw structs from all json next pages

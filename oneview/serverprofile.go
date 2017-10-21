@@ -283,7 +283,7 @@ func (c *CLIOVClient) GetSPVerbose(name string) SPList {
 	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
 	netsetList := *(rmap["NetSet"].listptr.(*[]NetSet))
 
-	if err := (&spList).validateName(name); err != nil {
+	if err := validateName(&spList, name); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -355,22 +355,22 @@ func (sp *SP) conns(icList []IC, netList []ENetwork, netsetList []NetSet) {
 
 }
 
-func (list *SPList) validateName(name string) error {
+// func (list *SPList) validateName(name string) error {
 
-	if name == "all" {
-		return nil //if name is all, don't touch *list, directly return
-	}
+// 	if name == "all" {
+// 		return nil //if name is all, don't touch *list, directly return
+// 	}
 
-	localslice := *list //define a localslice to avoid too many *list in the following
+// 	localslice := *list //define a localslice to avoid too many *list in the following
 
-	for i, v := range localslice {
-		if name == v.Name {
-			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
-			*list = localslice               //update list pointer to point to new shortened slice
-			return nil
-		}
-	}
+// 	for i, v := range localslice {
+// 		if name == v.Name {
+// 			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
+// 			*list = localslice               //update list pointer to point to new shortened slice
+// 			return nil
+// 		}
+// 	}
 
-	return fmt.Errorf("no profile matching name: \"%v\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ", name)
+// 	return fmt.Errorf("no profile matching name: \"%v\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ", name)
 
-}
+// }

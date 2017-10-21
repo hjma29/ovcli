@@ -71,13 +71,13 @@ func NewShowCmd() *cobra.Command {
 
 	var c *oneview.CLIOVClient
 
-	showCmd.AddCommand(showLIGCmd)
+	showCmd.AddCommand(NewShowLIGCmd(c))
 	showCmd.AddCommand(NewShowLICmd(c))
-	showCmd.AddCommand(showICCmd)
-	showCmd.AddCommand(showUplinkSetCmd)
-	showCmd.AddCommand(showEncCmd)
+	showCmd.AddCommand(NewShowICCmd(c))
+	showCmd.AddCommand(NewShowUplinkSetCmd(c))
+	showCmd.AddCommand(NewShowEncCmd(c))
 	showCmd.AddCommand(NewShowNetworkCmd(c))
-	showCmd.AddCommand(showEGCmd)
+	showCmd.AddCommand(NewShowEGCmd(c))
 	showCmd.AddCommand(NewShowSPCmd(c))
 	showCmd.AddCommand(NewShowSPTemplateCmd(c))
 

@@ -136,7 +136,7 @@ var rmap = resourceMap{
 	},
 
 	"UplinkSet": resource{
-		listptr: &[]UplinkSet{},
+		listptr: &UplinkSetList{},
 		colptr:  &UplinkSetCol{},
 		uri:     UplinkSetURL,
 		logmsg:  "get UplinkSet",

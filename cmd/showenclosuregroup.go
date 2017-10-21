@@ -24,17 +24,6 @@ import (
 )
 
 // enclosure-groupCmd represents the enclosure-group command
-var showEGCmd = &cobra.Command{
-	Use:   "enclosuregroup",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showEG,
-}
 
 const (
 	egShowFormat = "" +
@@ -74,31 +63,45 @@ const (
 		"{{end}}" //done with LIGs
 )
 
-func showEG(cmd *cobra.Command, args []string) {
+func NewShowEGCmd(c *oneview.CLIOVClient) *cobra.Command {
 
-	var egList []oneview.EG
-	var showFormat string
+	var cmd = &cobra.Command{
+		Use:   "enclosuregroup",
+		Short: "A brief description of your command",
+		Long: `A longer description that spans multiple lines and likely contains examples
+	and usage of using your command. For example:
+	
+	Cobra is a CLI library for Go that empowers applications.
+	This application is a tool to generate the needed files
+	to quickly create a Cobra application.`,
 
-	if egName != "" {
-		egList = oneview.GetEGVerbose(egName)
-		showFormat = egShowFormatVerbose
+		Run: func(cmd *cobra.Command, args []string) {
 
-	} else {
-		egList = oneview.GetEG()
-		showFormat = egShowFormat
+			c := verifyClient(c)
 
+			var egList []oneview.EG
+			var showFormat string
+
+			if egName != "" {
+				egList = c.GetEGVerbose(egName)
+				showFormat = egShowFormatVerbose
+
+			} else {
+				egList = c.GetEG()
+				showFormat = egShowFormat
+
+			}
+
+			tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(showFormat))
+			t.Execute(tw, egList)
+		},
 	}
 
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
+	cmd.Flags().StringVarP(&egName, "name", "n", "", "Enclosure Group Name: all, <name>")
 
-	t := template.Must(template.New("").Parse(showFormat))
-	t.Execute(tw, egList)
-
-}
-
-func init() {
-
-	showEGCmd.Flags().StringVarP(&egName, "name", "n", "", "Enclosure Group Name: all, <name>")
+	return cmd
 
 }

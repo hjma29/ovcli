@@ -2,8 +2,10 @@ package oneview
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sort"
+	"sync"
 )
 
 type LIGCol struct {
@@ -108,49 +110,74 @@ type LocationEntry struct {
 	Type          string `json:"type,omitempty"`          //"type": "StackingMemberId",
 }
 
-func GetLIG() LIGList {
+func (c *CLIOVClient) GetLIG() []LIG {
 
-	ligListC := make(chan LIGList)
+	var wg sync.WaitGroup
 
-	go LIGGetURI(ligListC)
-	ligList := <-ligListC
+	rl := []string{"LIG"}
 
-	return ligList
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
+
+	wg.Wait()
+
+	l := *(rmap["LIG"].listptr.(*[]LIG))
+
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
+
+	return l
 
 }
 
-func GetLIGVerbose(ligName string) LIGList {
+func (c *CLIOVClient) GetLIGVerbose(name string) []LIG {
 
-	ligListC := make(chan LIGList)
-	ictypeListC := make(chan []ICType)
-	eNetworkListC := make(chan []ENetwork)
+	var wg sync.WaitGroup
 
-	go LIGGetURI(ligListC)
-	go ICTypeGetURI(ictypeListC)
-	go ENetworkGetURI(eNetworkListC)
+	rl := []string{"LIG", "ENetwork", "ICType"}
 
-	var ligList LIGList
-	var ictypeList []ICType
-	var eNetworkList []ENetwork
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 3; i++ {
-		select {
-		case ligList = <-ligListC:
-			(&ligList).validateName(ligName)
-		case ictypeList = <-ictypeListC:
-		case eNetworkList = <-eNetworkListC:
-		}
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
 	}
 
-	for i := range ligList {
+	wg.Wait()
 
-		lig := &ligList[i]
+	l := *(rmap["LIG"].listptr.(*[]LIG))
+	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
+	ictypeList := *(rmap["ICType"].listptr.(*[]ICType))
+
+	log.Printf("[DEBUG] liglist length: %d\n", len(l))
+	log.Printf("[DEBUG] netlist length: %d\n", len(netList))
+	log.Printf("[DEBUG] ictypelist length: %d\n", len(ictypeList))
+
+	if err := validateName(&l, name); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	for i := range l {
+
+		lig := &l[i]
 		lig.getIOBay(ictypeList)
 		lig.getUplinkPort(ictypeList)
-		lig.getNetwork(eNetworkList)
+		lig.getNetwork(netList)
 	}
 
-	return ligList
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
+
+	return l
 
 }
 
@@ -269,66 +296,6 @@ func (lig *LIG) getNetwork(networkList []ENetwork) {
 		//sort.Slice(lig.UplinkSets[i].Networks, func(x, y int) bool { return lig.UplinkSets[i].Networks[x].Name < lig.UplinkSets[i].Networks[y].Name })
 
 	}
-}
-
-//LIGGetURI to get mapping between LIG URI/name to LIG struct
-func LIGGetURI(x chan LIGList) {
-
-	// log.Println("Rest Get LIG")
-
-	// defer timeTrack(time.Now(), "Rest Get LIG")
-
-	// c := NewCLIOVClient()
-
-	// var list LIGList
-	// uri := LIGURL
-
-	// for uri != "" {
-
-	// 	data, err := c.GetURI("", "", uri)
-	// 	if err != nil {
-
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	var page LIGCol
-
-	// 	if err := json.Unmarshal(data, &page); err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	list = append(list, page.Members...)
-
-	// 	uri = page.NextPageURI
-	// }
-
-	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
-
-	// x <- list
-
-}
-
-func (list *LIGList) validateName(name string) {
-
-	if name == "all" {
-		return //if name is all, don't touch *list, directly return
-	}
-
-	localslice := *list //define a localslice to avoid too many *list in the following
-
-	for i, v := range localslice {
-		if name == v.Name {
-			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
-			*list = localslice               //update list pointer to point to new shortened slice
-			return
-		}
-	}
-
-	fmt.Println("no LIG matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show lig --name lig1\" ")
-	os.Exit(0)
-
 }
 
 func (x LIGUplinkPortList) multiSort(i, j int) bool {

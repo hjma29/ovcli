@@ -1,5 +1,10 @@
 package oneview
 
+import (
+	"log"
+	"sync"
+)
+
 type EG struct {
 	AssociatedLogicalInterconnectGroups []string             `json:"associatedLogicalInterconnectGroups,omitempty"` // "associatedInterconnectGorups": [],
 	Category                            string               `json:"category,omitempty"`                            // "category": "enclosure-groups",
@@ -21,7 +26,7 @@ type EG struct {
 	Status                              string               `json:"status,omitempty"`           // "status": "Critical",
 	Type                                string               `json:"type,omitempty"`             // "type": "EnclosureGroupV200",
 	URI                                 string               `json:"uri,omitempty"`              // "uri": "/rest/enclosure-groups/e2f0031b-52bd-4223-9ac1-d91cb519d548"
-	LIGs                                LIGList
+	LIGs                                LIGList              `json:"-"`
 }
 
 type EGCol struct {
@@ -44,23 +49,29 @@ type PortMap struct {
 	MidplanePort    int `json:"midplanePort,omitempty"`    // "midplanePort": 1,
 }
 
-func GetEG() []EG {
+func (c *CLIOVClient) GetEG() []EG {
 
-	egListC := make(chan []EG)
-	ligListC := make(chan LIGList)
+	var wg sync.WaitGroup
 
-	go EGGetURI(egListC)
-	go LIGGetURI(ligListC)
+	rl := []string{"EG", "LIG"}
 
-	var egList []EG
-	var ligList LIGList
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 2; i++ {
-		select {
-		case egList = <-egListC:
-		case ligList = <-ligListC:
-		}
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
 	}
+
+	wg.Wait()
+
+	l := *(rmap["EG"].listptr.(*[]EG))
+	ligList := *(rmap["LIG"].listptr.(*[]LIG))
+
+	log.Printf("[DEBUG] eglist length: %d\n", len(l))
+	log.Printf("[DEBUG] liglist length: %d\n", len(ligList))
 
 	ligMap := make(map[string]LIG)
 
@@ -68,20 +79,20 @@ func GetEG() []EG {
 		ligMap[v.URI] = v
 	}
 
-	for i, v := range egList {
+	for i, v := range l {
 		liglist := make(LIGList, 0)
 		for _, v := range v.AssociatedLogicalInterconnectGroups {
 			liglist = append(liglist, ligMap[v])
 		}
 
-		egList[i].LIGs = liglist
+		l[i].LIGs = liglist
 	}
 
-	return egList
+	return l
 
 }
 
-func GetEGVerbose(name string) []EG {
+func (c *CLIOVClient) GetEGVerbose(name string) []EG {
 
 	// netListC := make(chan []ENetwork)
 	// //liListC := make(chan LIList)
@@ -111,60 +122,4 @@ func GetEGVerbose(name string) []EG {
 
 	return egList
 
-}
-
-func EGGetURI(x chan []EG) {
-
-	// log.Debugf("Rest Get Enclosure Group")
-
-	// defer timeTrack(time.Now(), "Rest Get Enclosure Group")
-
-	// c := NewCLIOVClient()
-
-	// var list []EG
-	// uri := EGURL
-
-	// for uri != "" {
-
-	// 	data, err := c.GetURI("", "", uri)
-	// 	if err != nil {
-
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	var page EGCol
-
-	// 	if err := json.Unmarshal(data, &page); err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	list = append(list, page.Members...)
-
-	// 	uri = page.NextPageURI
-	// }
-
-	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
-
-	// x <- list
-
-}
-
-func (c *CLIOVClient) GetEGByName(name string) []EG {
-
-	var col EGCol
-
-	// data, err := c.GetURI(fmt.Sprintf("name regex '%s'", name), "", EGURL)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	os.Exit(1)
-	// }
-
-	// if err := json.Unmarshal(data, &col); err != nil {
-	// 	fmt.Println(err)
-	// 	os.Exit(1)
-	// }
-
-	return col.Members
 }

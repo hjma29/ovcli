@@ -2,8 +2,10 @@ package oneview
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sort"
+	"sync"
 )
 
 type UplinkSetCol struct {
@@ -71,43 +73,27 @@ type PortConfigInfo struct {
 	} `json:"location"`
 }
 
-// const (
-// 	uplinkShowFormat = "" +
-// 		"{{range .}}" +
-// 		"{{if ne .ProductName \"Synergy 20Gb Interconnect Link Module\" }}" +
-// 		"-------------\n" +
-// 		"Interconnect: {{.Name}} ({{.ProductName}})\n" +
-// 		"-------------\n" +
-// 		"PortName\tConnectorType\tPortStatus\tPortType\tNeighbor\tNeighbor Port\tTransceiver\n" +
-// 		"{{range .Ports}}" +
-// 		"{{if or (eq .PortType \"Uplink\") (eq .PortType \"Stacking\") }}" +
-// 		//"{{if eq .PortType Uplink }}" +
-// 		"{{.PortName}}\t{{.ConnectorType}}\t{{.PortStatus}}\t{{.PortType}}\t{{.Neighbor.RemoteSystemName}}\t{{.Neighbor.RemotePortID}}\t{{.TransceiverPN}}\n" +
-// 		"{{end}}" +
-// 		"{{end}}" +
-// 		"\n" +
-// 		"{{end}}" +
-// 		"{{end}}"
-// )
-
 //GetUplinkSet is to retrive uplinkset information
-func GetUplinkSet() UplinkSetList {
+func (c *CLIOVClient) GetUplinkSet() UplinkSetList {
 
-	usListC := make(chan UplinkSetList)
-	liListC := make(chan LIList)
+	var wg sync.WaitGroup
 
-	go UplinkSetGetURI(usListC)
-	go LIGetURI(liListC)
+	rl := []string{"UplinkSet", "LI"}
 
-	var usList UplinkSetList
-	var liList LIList
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 2; i++ {
-		select {
-		case usList = <-usListC:
-		case liList = <-liListC:
-		}
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
 	}
+
+	wg.Wait()
+
+	l := *(rmap["UplinkSet"].listptr.(*UplinkSetList))
+	liList := *(rmap["LI"].listptr.(*[]LI))
 
 	liMap := make(map[string]LI)
 
@@ -115,45 +101,53 @@ func GetUplinkSet() UplinkSetList {
 		liMap[v.URI] = v
 	}
 
-	for i, v := range usList {
-		usList[i].LIName = liMap[v.LogicalInterconnectURI].Name
+	for i, v := range l {
+		l[i].LIName = liMap[v.LogicalInterconnectURI].Name
 	}
 
-	return usList
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
+
+	return l
 
 }
 
 //GetUplinkSet is to retrive uplinkset information
-func GetUplinkSetVerbose(usName string) UplinkSetList {
+func (c *CLIOVClient) GetUplinkSetVerbose(name string) UplinkSetList {
 
-	usListC := make(chan UplinkSetList)
-	encListC := make(chan EncList)
-	netListC := make(chan []ENetwork)
-	liListC := make(chan LIList)
+	var wg sync.WaitGroup
 
-	go UplinkSetGetURI(usListC)
-	go EncGetURI(encListC)
-	go ENetworkGetURI(netListC)
-	go LIGetURI(liListC)
+	rl := []string{"UplinkSet", "LI", "Enclosure", "ENetwork"}
 
-	var usList UplinkSetList
-	var encList EncList
-	var netList []ENetwork
-	var liList LIList
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	for i := 0; i < 4; i++ {
-		select {
-		case usList = <-usListC:
-			(&usList).validateName(usName)
-		case encList = <-encListC:
-		case netList = <-netListC:
-		case liList = <-liListC:
-		}
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
 	}
 
-	usList.genList(liList, netList, encList)
+	wg.Wait()
 
-	return usList
+	l := *(rmap["UplinkSet"].listptr.(*UplinkSetList))
+	liList := *(rmap["LI"].listptr.(*[]LI))
+	encList := *(rmap["Enclosure"].listptr.(*[]Enclosure))
+	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
+
+	log.Printf("[DEBUG] uslist length: %d\n", len(l))
+	log.Printf("[DEBUG] lilist length: %d\n", len(liList))
+	log.Printf("[DEBUG] enclist length: %d\n", len(encList))
+	log.Printf("[DEBUG] netlist length: %d\n", len(netList))
+
+	if err := validateName(&l, name); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	l.genList(liList, netList, encList)
+
+	return l
 
 }
 
@@ -228,65 +222,6 @@ func (us *UplinkSet) getLI(liList LIList) {
 	}
 
 	(*us).LIName = liMap[us.LogicalInterconnectURI].Name
-
-}
-
-//UplinkSetGetURI is the function to get raw structs from all json next pages
-func UplinkSetGetURI(x chan UplinkSetList) {
-
-	// log.Println("Fetch UplinkSet")
-
-	// defer timeTrack(time.Now(), "Fetch UplinkSet")
-
-	// c := NewCLIOVClient()
-
-	// var list UplinkSetList
-	// uri := UplinkSetURL
-
-	// for uri != "" {
-
-	// 	data, err := c.GetURI("", "", uri)
-
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	var page UplinkSetCol
-	// 	if err := json.Unmarshal(data, &page); err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	list = append(list, page.Members...)
-
-	// 	uri = page.NextPageURI
-	// }
-
-	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
-
-	// x <- list
-
-}
-
-func (list *UplinkSetList) validateName(name string) {
-
-	if name == "all" {
-		return //if name is all, don't touch *list, directly return
-	}
-
-	localslice := *list //define a localslice to avoid too many *list in the following
-
-	for i, v := range localslice {
-		if name == v.Name {
-			localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
-			*list = localslice               //update list pointer to point to new shortened slice
-			return
-		}
-	}
-
-	fmt.Println("no UplinkSet matching name: \"", name, "\" was found, please check spelling and syntax, valid syntax example: \"show uplinkset --name us1\" ")
-	os.Exit(0)
 
 }
 

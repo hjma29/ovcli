@@ -15,26 +15,12 @@
 package cmd
 
 import (
-	"os"
 	"text/tabwriter"
 	"text/template"
 
 	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
-
-// ligCmd represents the lig command
-var showLIGCmd = &cobra.Command{
-	Use:   "lig",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showLIG,
-}
 
 type ModulePortMapping struct {
 	ModelName   string
@@ -117,31 +103,46 @@ const (
 
 )
 
-func showLIG(cmd *cobra.Command, args []string) {
+func NewShowLIGCmd(c *oneview.CLIOVClient) *cobra.Command {
 
-	var ligList []oneview.LIG
-	var showFormat string
+	// ligCmd represents the lig command
+	var cmd = &cobra.Command{
+		Use:   "lig",
+		Short: "A brief description of your command",
+		Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
 
-	if ligName != "" {
-		ligList = oneview.GetLIGVerbose(ligName)
-		showFormat = ligShowFormatVerbose
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
 
-	} else {
-		ligList = oneview.GetLIG()
-		showFormat = ligShowFormat
+		Run: func(cmd *cobra.Command, args []string) {
 
+			c := verifyClient(c)
+
+			var ligList []oneview.LIG
+			var showFormat string
+
+			if ligName != "" {
+				ligList = c.GetLIGVerbose(ligName)
+				showFormat = ligShowFormatVerbose
+
+			} else {
+				ligList = c.GetLIG()
+				showFormat = ligShowFormat
+
+			}
+
+			tw := tabwriter.NewWriter(c.Out, 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(showFormat))
+			t.Execute(tw, ligList)
+		},
 	}
 
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
+	cmd.Flags().StringVarP(&ligName, "name", "n", "", "LIG Name: all, <name>")
 
-	t := template.Must(template.New("").Parse(showFormat))
-	t.Execute(tw, ligList)
-
-}
-
-func init() {
-
-	showLIGCmd.Flags().StringVarP(&ligName, "name", "n", "", "LIG Name: all, <name>")
+	return cmd
 
 }

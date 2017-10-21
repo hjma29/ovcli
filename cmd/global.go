@@ -19,9 +19,7 @@ var (
 	ipv6           string
 )
 
-
-
 const (
 	DefaultConfigFile = "appliance-credential.yml"
-	version = "0.1"
+	version           = "0.1"
 )

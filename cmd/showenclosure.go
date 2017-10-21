@@ -15,25 +15,12 @@
 package cmd
 
 import (
-	"os"
 	"text/tabwriter"
 	"text/template"
 
 	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
-
-var showEncCmd = &cobra.Command{
-	Use:   "enclosure",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showEnc,
-}
 
 const (
 	encShowFormat = "" +
@@ -44,14 +31,27 @@ const (
 		"{{end}}"
 )
 
-func showEnc(cmd *cobra.Command, args []string) {
+func NewShowEncCmd(c *oneview.CLIOVClient) *cobra.Command {
 
-	encList := oneview.GetEnc()
+	var cmd = &cobra.Command{
+		Use:   "enclosure",
+		Short: "show enclosures",
+		Long:  `show enclosures`,
 
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
+		Run: func(cmd *cobra.Command, args []string) {
 
-	t := template.Must(template.New("").Parse(encShowFormat))
-	t.Execute(tw, encList)
+			c := verifyClient(c)
+
+			encList := c.GetEnc()
+
+			tw := tabwriter.NewWriter(c.Out, 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(encShowFormat))
+			t.Execute(tw, encList)
+		},
+	}
+
+	return cmd
 
 }
