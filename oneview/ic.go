@@ -206,7 +206,7 @@ type SFP struct {
 	VendorOui        string      `json:"vendorOui"`
 }
 
-func GetIC() []IC {
+func (c *CLIOVClient) GetIC() []IC {
 
 	var wg sync.WaitGroup
 
@@ -218,7 +218,6 @@ func GetIC() []IC {
 
 		go func() {
 			defer wg.Done()
-			c := NewCLIOVClient()
 			c.GetResourceLists(localv, "")
 		}()
 	}

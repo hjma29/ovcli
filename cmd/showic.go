@@ -24,18 +24,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var showICCmd = &cobra.Command{
-	Use:   "interconnect",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showIC,
-}
-
 var showICPortCmd = &cobra.Command{
 	Use:   "port",
 	Short: "A brief description of your command",
@@ -115,15 +103,31 @@ const (
 		"{{end}}"
 )
 
-func showIC(cmd *cobra.Command, args []string) {
+func NewShowICCmd(c *oneview.CLIOVClient) *cobra.Command {
 
-	icList := oneview.GetIC()
+	var cmd = &cobra.Command{
+		Use:   "interconnect",
+		Short: "show Interconnect",
+		Long:  `show Interconnect`,
+		Run: func(cmd *cobra.Command, args []string) {
 
-	tw := tabwriter.NewWriter(os.Stdout, 5, 1, 3, ' ', 0)
-	defer tw.Flush()
+			c := verifyClient(c)
 
-	t := template.Must(template.New("").Parse(icShowFormat))
-	t.Execute(tw, icList)
+			icList := c.GetIC()
+
+			tw := tabwriter.NewWriter(c.Out, 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(icShowFormat))
+			t.Execute(tw, icList)
+		},
+	}
+
+	cmd.Flags().StringVarP(&porttype, "type", "t", "all", "Port Type:uplink,downlink,interconnect,all")
+
+	cmd.AddCommand(showICPortCmd)
+
+	return cmd
 
 }
 
@@ -178,24 +182,6 @@ func showSFP(cmd *cobra.Command, args []string) {
 
 func init() {
 
-	showICCmd.AddCommand(showICPortCmd)
 	showICPortCmd.AddCommand(showSFPCmd)
-
-	showICPortCmd.Flags().StringVarP(&porttype, "type", "t", "all", "Port Type:uplink,downlink,interconnect,all")
-	//&porttype = showICPortCmd.Flags().String("type", "", "Port Type:uplink,downlink,interconnect")
-
-	// createNetworkTypePtr = createNetworkCmd.PersistentFlags().String("type", "", "Network Type")
-	// createNetworkPurposePtr = createNetworkCmd.PersistentFlags().String("purpose", "", "General or Management etc")
-	// createNetworkVlanIDPtr = createNetworkCmd.PersistentFlags().Int("vlan", 777, "General or Management etc")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// networkCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// networkCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 }
