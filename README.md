@@ -20,7 +20,7 @@ OVCLI tool is written in Go bebind the scene. For developers, latest source code
 * For questions, please send email to <hongjun.ma@hpe.com>
 
 ## Getting Started
-* **Verify executable file** by running command ```ovcli``` either in the current directory or through system PATH environment setup. The succuss run should general the output like the sameple below.
+* **Verify executable file** by running command <code>ovcli</code> either in the current directory or through system PATH environment setup. The succuss run should general the output like the sameple below.
 ```
 $ ovcli
 Release Version: 0.1
