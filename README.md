@@ -16,7 +16,7 @@ OVCLI tool is written in Go bebind the scene. For developers, latest source code
 
 ## Release Notes
 * Synergy 3.10 has been tested. Synergy 3.0 should work for most cases. 
-* For questions, please send email to [hongjun.ma@hpe.com](hongjun.ma@hpe.com)
+* For questions, please send email to <hongjun.ma@hpe.com>
 
 ## Getting Started
 * Verify executable file by running command ```ovcli``` either in the current directory or through system PATH environment setup.
