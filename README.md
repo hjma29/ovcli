@@ -6,8 +6,8 @@ OVCLI is a CLI tool to manage Hewlett Packard Enterprise Synergy. It leverages S
 
 OVCLI is written in Go. For developers, latest source code and binary can be directly downloaded by ```go get``` command.
 
-## Windows .EXE Download Link
-https://github.com/hjma29/ovcliexe
+## Windows .EXE Download
+## [ovcli.exe](https://github.com/hjma29/ovcliexe)
 
 
 
