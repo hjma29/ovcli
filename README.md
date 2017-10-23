@@ -13,15 +13,15 @@ For IT admins just want a simple small CLI tool, they can directly download the 
 
 ## Developer Source Code Access
 
-OVCLI tool is written in Go bebind the scene. For developers, latest source code can be directly downloaded from the [github repository](https://github.com/hjma29/ovcli) by using ```go get``` command and further compilied into binary executable file for the platform.
+OVCLI tool is written in Go bebind the scene. For developers, latest source code can be directly downloaded from the [github repository](https://github.com/hjma29/ovcli) by using <code>go get</code> command and further compilied into binary executable file for the platform.
 
 ## Release Notes
 * Synergy 3.10 has been tested. Synergy 3.0 should work for most cases. 
 * For questions, please send email to <hongjun.ma@hpe.com>
 
 ## Getting Started
-* **Verify executable file** by running command ```ovcli``` either in the current directory or through system PATH environment setup. The succuss run should general the output like the sameple below.
-```
+* **Verify executable file** by running command <code>ovcli</code> either in the current directory or through system PATH environment setup. The succuss run should general the output like the sameple below.
+<pre>
 $ ovcli
 Release Version: 0.1
 
@@ -33,7 +33,7 @@ Usage:
   ovcli [command]
   ...
   ...
-```
+<pre>
 
 * **Create a Synergy configuration text file** including Synergy Mgmt IP address/hostname, login username and password in the current directory. It's a very simple text file with the following three lines(please update with your corresponding login credentials)
 
