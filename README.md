@@ -21,6 +21,7 @@ OVCLI tool is written in Go bebind the scene. For developers, latest source code
 
 ## Getting Started
 * **Verify executable file** by running command <code>ovcli</code> either in the current directory or through system PATH environment setup. The succuss run should general the output like the sameple below.
+
 ```
 $ ovcli
 Release Version: 0.1
@@ -45,7 +46,6 @@ password: password
 
 * **Populate OVCLI login configuration file** and test the connection with HPE Synergy using the above file by running "ovcli connect -f <filname>". A successful Synergy connection should come back with the Synergy API version. "500" below shows Synergy is running OneView version 3.10. (Behind the scene, the ovcli will copy the file to a new file called "appliance-credential.yml" and verify the Synergy connection using the yaml file contents.)
 
-
 ```
 C:\Users\Administrator\Downloads>ovcli connect -f login.txt
 Appliance Address      Username        Appliance Current Version
@@ -67,6 +67,7 @@ vsan node 3      vsan profile   Middle - Frame 2 -CN75150484, bay 6   SY 480 Gen
 </pre>
 
 **Show Server Profile details for one specific profile**
+
 ```
 $show serverprofile --name "vsan node 1"
 ------------------------------------------------------------------------------
@@ -88,8 +89,9 @@ ID   Name             Network          VLAN         MAC                 Port    
 6    Mgmt 2           TE-Testing-300   300          F2:BA:A8:F0:01:BD   Mezz 3:2-b   Middle - Frame 2 -CN75150484, interconnect 6   NotBootable
 ```
 **Show logical uplink details for all LIs**
+
 ```
-→ ovcli show li --name all
+$ ovcli show li --name all
 ------------------------------------------------------------------------------
 SSA-DCA-3Frame-DCA-Solcenter-LIG-Copy
   UplinkSet: DCA-ToR
