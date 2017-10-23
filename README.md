@@ -56,7 +56,7 @@ https://10.16.44.101   Administrator   500
 * With login credential verified, you can **try different "ovcli show"** commands like the following examples. "--help" or "-h" flag should give you help contexts for the commands.
 
 **Show Server Profiles**
-<pre><code>
+<pre>
 $ovcli show serverprofile
 Name             Template       Hardware                              Hardware Type
 DCA-ToR-Host17                  Top - Frame1 - CN7515010J, bay 7      SY 480 Gen9 1
@@ -64,7 +64,7 @@ DCA-Tor-Host28                  Middle - Frame 2 -CN75150484, bay 8   SY 480 Gen
 vsan node 1      vsan profile   Middle - Frame 2 -CN75150484, bay 1   SY 480 Gen9 3
 vsan node 2      vsan profile   Middle - Frame 2 -CN75150484, bay 4   SY 480 Gen9 3
 vsan node 3      vsan profile   Middle - Frame 2 -CN75150484, bay 6   SY 480 Gen9 3
-</code></pre>
+</pre>
 
 **Show Server Profile details for one specific profile**
 ```
