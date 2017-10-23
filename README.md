@@ -1,6 +1,6 @@
 # OVCLI: A HPE Synergy Command Line Tool
 
-OVCLI is a CLI tool to manage Hewlett Packard Enterprise Synergy resources It provide IT admins with a cross-platform HPE Synergy CLI utility that can directly run on Linux, Windows and MAC operating systems, without worrying about installing any programming language library dependencies.
+OVCLI is a CLI tool to manage Hewlett Packard Enterprise Synergy resources. It provides IT admins with a cross-platform HPE Synergy CLI utility that can directly run on Linux, Windows, and MAC operating systems without worrying about installing/troubleshooting any programming language library dependencies.
 
 OVCLI tool communicates with Synergy OneView Restful API interface. It complements HPE OneView GUI interface to provide quicker Synergy access in many use cases.
 
@@ -9,6 +9,7 @@ OVCLI tool communicates with Synergy OneView Restful API interface. It complemen
 
 ## [**Windows .EXE Download**](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
 For IT admins just want a simple small CLI tool, they can directly download the above .exe file. The image was compiled on windows2016 64-bit OS and tested also on windows2012R2 OS.
+
 
 ## Developer Source Code Access
 
@@ -19,7 +20,7 @@ OVCLI tool is written in Go bebind the scene. For developers, latest source code
 * For questions, please send email to <hongjun.ma@hpe.com>
 
 ## Getting Started
-* Verify executable file by running command ```ovcli``` either in the current directory or through system PATH environment setup.
+* **Verify executable file** by running command ```ovcli``` either in the current directory or through system PATH environment setup. The succuss run should general the output like the sameple below.
 ```
 $ ovcli
 Release Version: 0.1
@@ -33,7 +34,8 @@ Usage:
   ...
   ...
 ```
-* Create a Synergy configuration text file including Synergy Mgmt IP address/hostname, login username and password in the current directory. It's a very simple text file with the following three lines(please update with your corresponding login credentials)
+
+* **Create a Synergy configuration text file** including Synergy Mgmt IP address/hostname, login username and password in the current directory. It's a very simple text file with the following three lines(please update with your corresponding login credentials)
 
 ```
 ipaddress: 192.168.1.1
@@ -41,7 +43,7 @@ username: Administrator
 password: password
 ```
 
-* Populate OVCLI login configuration file and test the connection with HPE Synergy using the above file using "ovcli connect -f <filname>". A successful Synergy connection should come back with the Synergy API version. "500" below shows Synergy is running OneView version 3.10. (Behind the scene, the ovcli will copy the file to a new file called "appliance-credential.yml" and  verify the Synergy connection using the yaml file contents.)
+* **Populate OVCLI login configuration file** and test the connection with HPE Synergy using the above file by running "ovcli connect -f <filname>". A successful Synergy connection should come back with the Synergy API version. "500" below shows Synergy is running OneView version 3.10. (Behind the scene, the ovcli will copy the file to a new file called "appliance-credential.yml" and verify the Synergy connection using the yaml file contents.)
 
 
 ```
@@ -51,7 +53,7 @@ Appliance Address      Username        Appliance Current Version
 https://10.16.44.101   Administrator   500
 ```
 
-* With login credential verified, you can try different "ovcli show" commands like the following examples. "--help" or "-h" flag should give you help contexts for the commands.
+* With login credential verified, you can **try different "ovcli show"** commands like the following examples. "--help" or "-h" flag should give you help contexts for the commands.
 
 **Show Server Profiles**
 ```
