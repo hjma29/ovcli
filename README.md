@@ -7,14 +7,14 @@ OVCLI tool communicates with Synergy OneView Restful API interface. It complemen
 ![image](https://user-images.githubusercontent.com/14317124/31856927-38e2c82a-b684-11e7-9924-cc12d617914a.png)
 
 
-## [Windows .EXE Download](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
+## [**Windows .EXE Download**](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
 For IT admins just want a simple small CLI tool, they can directly download the above .exe file. The image was compiled on windows2016 64-bit OS and tested also on windows2012R2 OS.
 
 ## Developer Source Code Access
 
 OVCLI tool is written in Go bebind the scene. For developers, latest source code can be directly downloaded from the [github repository](https://github.com/hjma29/ovcli) by using ```go get``` command and further compilied into binary executable file for the platform.
 
-
+##Getting Started
 
 
 ```
