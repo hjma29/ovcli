@@ -8,7 +8,7 @@ OVCLI is written in Go. For developers, latest source code and binary can be dir
 
 ## Windows .EXE Download
 ## [ovcli.exe](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe)
-<a href="https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe">ovcli.exe</a>
+<a href="https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe" download>ovcli.exe</a>
 
 
 
