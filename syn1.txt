@@ -1,0 +1,4 @@
+# This is config sample file, do not change. Copy this file to another yaml file and modify on that file and have ovcli loaded that file
+ipaddress: 10.16.44.101 
+username: Administrator
+password: hpent123
