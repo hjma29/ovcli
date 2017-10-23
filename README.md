@@ -33,7 +33,7 @@ Usage:
   ovcli [command]
   ...
   ...
-<pre>
+</pre>
 
 * **Create a Synergy configuration text file** including Synergy Mgmt IP address/hostname, login username and password in the current directory. It's a very simple text file with the following three lines(please update with your corresponding login credentials)
 
