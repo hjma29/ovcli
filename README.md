@@ -1,16 +1,19 @@
-# OVCLI: A HPE Synergy Command Tool
+# OVCLI: A HPE Synergy Command Line Tool
 
-OVCLI is a CLI tool to manage Hewlett Packard Enterprise Synergy. It leverages Synergy OneView Restful API interface to provide IT admins with quick CLI access to Synergy.
+OVCLI is a CLI tool to manage Hewlett Packard Enterprise Synergy resources It provide IT admins with a cross-platform HPE Synergy CLI utility that can directly run on Linux, Windows and MAC operating systems, without worrying about installing any programming language library dependencies.
+
+OVCLI tool communicates with Synergy OneView Restful API interface. It complements HPE OneView GUI interface to provide quicker Synergy access in many use cases.
 
 ![image](https://user-images.githubusercontent.com/14317124/31856927-38e2c82a-b684-11e7-9924-cc12d617914a.png)
 
-OVCLI is written in Go. For developers, latest source code and binary can be directly downloaded by ```go get``` command.
 
-## Windows .EXE Download
-<!---## [ovcli.exe](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
---->
+## [Windows .EXE Download](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
+For IT admins just want a simple small CLI tool, they can directly download the above .exe file. The image was compiled on windows2016 64-bit OS and tested also on windows2012R2 OS.
 
-<a href="https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true" download="ovcli.exe"><input type="button" value="ovcli.exe" /></a>
+## Developer Source Code Access
+
+OVCLI tool is written in Go bebind the scene. For developers, latest source code can be directly downloaded from the [github repository](https://github.com/hjma29/ovcli) by using ```go get``` command and further compilied into binary executable file for the platform.
+
 
 
 
