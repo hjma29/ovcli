@@ -21,7 +21,7 @@ OVCLI tool is written in Go bebind the scene. For developers, latest source code
 
 ## Getting Started
 * **Verify executable file** by running command ```ovcli``` either in the current directory or through system PATH environment setup. The succuss run should general the output like the sameple below.
-<pre>
+```
 $ ovcli
 Release Version: 0.1
 
@@ -33,7 +33,7 @@ Usage:
   ovcli [command]
   ...
   ...
-</pre>
+```
 
 * **Create a Synergy configuration text file** including Synergy Mgmt IP address/hostname, login username and password in the current directory. It's a very simple text file with the following three lines(please update with your corresponding login credentials)
 
