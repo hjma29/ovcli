@@ -50,7 +50,12 @@ to explore what are next available options`,
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 
+	fmt.Println("flagfile:", flagFile)
+	fmt.Println("debug mode:", Debugmode)
+
 	if err := RootCmd.Execute(); err != nil {
+		fmt.Println("flagfile:", flagFile)
+		fmt.Println("debug mode:", Debugmode)
 		fmt.Println(err)
 		os.Exit(-1)
 	}

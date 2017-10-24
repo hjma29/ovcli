@@ -29,14 +29,15 @@ import (
 var connectCmd = &cobra.Command{
 	Use:   "connect",
 	Short: "connect OV",
-	Long:  `First command to run to authentication with OneView, Use "Connect --file config-file.yml"`,
+	Long:  `First command to run to authenticate with OneView, Use "Connect --file config-file.yml"`,
 	Run:   ConnectOV,
 }
 
 func ConnectOV(cmd *cobra.Command, args []string) {
 
+
 	if flagFile == "" {
-		fmt.Print("Please specify credential filename")
+		fmt.Println("Please specify credential filename by using \"-f\" flag")
 		os.Exit(1)
 	}
 

@@ -173,7 +173,7 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
-	client := &http.Client{Transport: tr}
+	client := &http.Client{Transport: tr, Timeout: time.Second * 10}
 
 	log.Printf("[DEBUG] OVCLI *Send Request: %v=>%v\n", method, req.URL.String())
 	log.Printf("[DEBUG] OVCLI X-Api-Version: %v,   Token: %v\n", req.Header.Get("X-Api-Version"), req.Header.Get("Auth"))
