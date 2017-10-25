@@ -12,10 +12,10 @@ servertemplates:
     serverhardwaretype: "SY 480 Gen9 1"
 
 
+
 networks: 
   - name: hj-test1
     vlanId: 671
   - name: hj-test2
     vlanId: 672
 
-    

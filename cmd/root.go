@@ -45,17 +45,12 @@ to explore what are next available options`,
 	RootCmd.AddCommand(NewShowCmd())
 	RootCmd.AddCommand(deleteCmd)
 	RootCmd.AddCommand(createCmd)
-	RootCmd.AddCommand(connectCmd)
+	RootCmd.AddCommand(NewConnectCmd())
 	RootCmd.AddCommand(addCmd)
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 
-	fmt.Println("flagfile:", flagFile)
-	fmt.Println("debug mode:", Debugmode)
-
 	if err := RootCmd.Execute(); err != nil {
-		fmt.Println("flagfile:", flagFile)
-		fmt.Println("debug mode:", Debugmode)
 		fmt.Println(err)
 		os.Exit(-1)
 	}

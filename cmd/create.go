@@ -15,8 +15,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/hjma29/ovcli/oneview"
 	"github.com/spf13/cobra"
 )
@@ -24,29 +22,19 @@ import (
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "create Synergy resources",
+	Long:  `create Synergy resources`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Work your own magic here
-		fmt.Println("create called")
+		cmd.Help()
 	},
 }
 
 var createNetworkCmd = &cobra.Command{
 	Use:   "network",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: createNetwork,
+	Short: "create networks",
+	Long:  `create networks`,
+	Run:   createNetwork,
 }
 
 func createNetwork(cmd *cobra.Command, args []string) {
@@ -56,14 +44,9 @@ func createNetwork(cmd *cobra.Command, args []string) {
 
 var createSPTemplateCmd = &cobra.Command{
 	Use:   "sptemplate",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: createSPTemplate,
+	Short: "create server profile templates",
+	Long:  `create server profile templates`,
+	Run:   createSPTemplate,
 }
 
 func createSPTemplate(cmd *cobra.Command, args []string) {
@@ -76,10 +59,10 @@ func init() {
 	createCmd.AddCommand(createNetworkCmd)
 	createCmd.AddCommand(createSPTemplateCmd)
 
-	createNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
-	createNetworkCmd.Flags().StringVarP(&netType, "type", "t", "", "Network Type")
-	createNetworkCmd.Flags().StringVarP(&netPurpose, "purpose", "p", "", "General or Management etc")
-	createNetworkCmd.Flags().IntVarP(&netVlanId, "vlan", "v", 777, "vlan id in number")
+	// createNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
+	// createNetworkCmd.Flags().StringVarP(&netType, "type", "t", "", "Network Type")
+	// createNetworkCmd.Flags().StringVarP(&netPurpose, "purpose", "p", "", "General or Management etc")
+	// createNetworkCmd.Flags().IntVarP(&netVlanId, "vlan", "v", 777, "vlan id in number")
 	createNetworkCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
 
 	createSPTemplateCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")

@@ -45,6 +45,6 @@ func addenc(cmd *cobra.Command, args []string) {
 
 func init() {
 
-	addCmd.Flags().StringVarP(&ipv6, "ipv6", "i", "", "remote enclosure ipv6 address")
+	addCmd.Flags().StringVarP(&ipv6, "ipv6", "i", "fe80::2:0:9:7%eth2", "remote enclosure ipv6 address")
 
 }

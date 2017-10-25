@@ -105,8 +105,8 @@ type SPTConnection struct {
 		Priority   string `json:"priority,omitempty"`
 		BootVlanID string `json:"bootVlanId,omitempty"`
 	} `json:"boot,omitempty"`
-	NetworkName string `json:"networkName"`
-	NetworkVlan string
+	NetworkName string `json:"-"`
+	NetworkVlan string `json:"-"`
 }
 
 func (c *CLIOVClient) GetSPTemplate() []SPTemplate {
@@ -223,16 +223,46 @@ func (c *CLIOVClient) GetSPTemplateVerbose(name string) []SPTemplate {
 
 func CreateSPTemplateConfigParse(fileName string) {
 
+	if fileName == "" {
+		fmt.Println(`Please specify config YAML filename by using \"-f\". 
+
+A sample config file format is as below:
+→ cat config.yml
+servertemplates:
+	- name: hj-sptemplate1
+	enclosuregroup: DCA-SolCenter-EG
+	serverhardwaretype: "SY 480 Gen9 3"
+	connections:
+		- id: 1
+		name: nic1
+		network: TE-Testing-300
+
+	- name: hj-sptemplate2
+	enclosuregroup: DCA-SolCenter-EG
+	serverhardwaretype: "SY 480 Gen9 1"
+
+
+networks:
+	- name: hj-test1
+	vlanId: 671
+	- name: hj-test2
+	vlanId: 672
+`)
+		os.Exit(1)
+	}
+
 	y := YAMLConfig{}
 
 	yamlFile, err := ioutil.ReadFile(fileName)
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	if err := yaml.Unmarshal(yamlFile, &y); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	// log.Print("[DEBUG] SPTemplate list length: ", len(y.SPTemplates))
@@ -272,9 +302,10 @@ func CreateSPTemplateConfigParse(fileName string) {
 		// j, _ := json.MarshalIndent(spt, "", "  ")
 		// log.Printf("[DEBUG] SP Template Json Body: %s", j)
 
+		fmt.Printf("Creating server profile template: %q\n", v.Name)
 		_, err := c.SendHTTPRequest("POST", SPTemplateURL, "", "", spt)
 		if err != nil {
-			fmt.Printf("OVCLI Create profile template failed: %v", err)
+			fmt.Printf("OVCLI Create profile template failed: %v\n", err)
 		}
 	}
 }
@@ -298,7 +329,7 @@ func DeleteSPTemplate(name string) error {
 	}
 
 	for _, v := range list {
-		fmt.Printf("Deleting profile template: %v", v.Name)
+		fmt.Printf("Deleting profile template: %q\n", v.Name)
 		_, err := c.SendHTTPRequest("DELETE", v.URI, "", "", nil)
 		if err != nil {
 			fmt.Printf("Error submitting delete server profile template request: %v", err)
@@ -339,4 +370,3 @@ func (spt *SPTemplate) conns(icList []IC, netList []ENetwork, netsetList []NetSe
 	}
 
 }
-
