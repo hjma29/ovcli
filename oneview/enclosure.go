@@ -1,7 +1,9 @@
 package oneview
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"sort"
 	"sync"
 )
@@ -227,5 +229,47 @@ func (c *CLIOVClient) GetEnc() []Enclosure {
 	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
 
 	return l
+
+}
+
+func (c *CLIOVClient) SetEncName(from, to string) {
+
+	if from == "" || to == "" {
+		fmt.Println("Please specify non-empty enclosure current and new names")
+		os.Exit(1)
+	}
+
+	c.GetResourceLists("Enclosure", from)
+
+	list := *(rmap["Enclosure"].listptr.(*[]Enclosure))
+
+	if len(list) == 0 {
+		fmt.Printf("Can't find enclosure %v to change\n", from)
+		os.Exit(1)
+	}
+
+	if len(list) > 1 {
+		fmt.Printf("find multiple enclosures %v, please specify name with only one enclosure match\n", from)
+		os.Exit(1)
+	}
+
+	enc := list[0]
+
+	//[{"op":"replace","path":"/name","value":"enc-04"}]
+	encRenameBody := []struct {
+		Op    string `json:"op"`
+		Path  string `json:"path"`
+		Value string `json:"value"`
+	}{{
+		Op:    "replace",
+		Path:  "/name",
+		Value: to,
+	}}
+
+	fmt.Printf("Setting enclosure %q to new name %q\n", from, to)
+	_, err := c.SendHTTPRequest("PATCH", enc.URI, "", "", encRenameBody)
+	if err != nil {
+		fmt.Printf("Error renaming enclosure: %v\n", err)
+	}
 
 }

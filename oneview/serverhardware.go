@@ -1,5 +1,14 @@
 package oneview
 
+import (
+	"fmt"
+	"log"
+	"os"
+	"sort"
+	"strings"
+	"sync"
+)
+
 type ServerHWCol struct {
 	Type        string     `json:"type"`
 	Category    string     `json:"category"`
@@ -108,6 +117,8 @@ type ServerHW struct {
 	UUID                       string `json:"uuid"`
 	VirtualSerialNumber        string `json:"virtualSerialNumber"`
 	VirtualUUID                string `json:"virtualUuid"`
+	ServerHWTName              string `json:"-"`
+	SPName                     string `json:"-"`
 }
 
 type PhysicalPort struct {
@@ -129,40 +140,102 @@ type PhysicalPort struct {
 	Wwn interface{} `json:"wwn"`
 }
 
-func ServerHWGetURI(x chan []ServerHW) {
+func (c *CLIOVClient) GetServerHW() []ServerHW {
 
-	// log.Println("[DEBUG] Rest Get Server Harddware")
+	var wg sync.WaitGroup
 
-	// defer timeTrack(time.Now(), "Rest Get Server Hardware")
+	rl := []string{"ServerHW", "ServerHWType", "SP"}
 
-	// c := NewCLIOVClient()
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
-	// var list []ServerHW
-	// uri := ServerHWURL
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
 
-	// for uri != "" {
+	wg.Wait()
 
-	// 	data, err := c.GetURI("", "", uri)
-	// 	if err != nil {
+	l := *(rmap["ServerHW"].listptr.(*[]ServerHW))
+	spList := *(rmap["SP"].listptr.(*SPList))
+	hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
 
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
+	log.Printf("[DEBUG] hwlist length: %d\n", len(l))
+	log.Printf("[DEBUG] splist length: %d\n", len(spList))
+	log.Printf("[DEBUG] hwtlist length: %d\n", len(hwtList))
 
-	// 	var page ServerHWCol
+	spMap := make(map[string]SP)
 
-	// 	if err := json.Unmarshal(data, &page); err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
+	for _, v := range spList {
+		spMap[v.URI] = v
+	}
 
-	// 	list = append(list, page.Members...)
+	hwtMap := make(map[string]ServerHWType)
 
-	// 	uri = page.NextPageURI
-	// }
+	for _, v := range hwtList {
+		hwtMap[v.URI] = v
+	}
 
-	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
+	for i, v := range l {
+		l[i].SPName = spMap[v.ServerProfileURI].Name
 
-	// x <- list
+		l[i].ServerHWTName = hwtMap[v.ServerHardwareTypeURI].Name
+
+	}
+
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
+
+	return l
+
+}
+
+func (c *CLIOVClient) SetServerPower(server, state string) {
+
+	if server == "" || state == "" {
+		fmt.Println("Please specify non-empty server and powerstate names")
+		os.Exit(1)
+	}
+
+	state = strings.Title(state)
+
+	if state != "On" && state != "Off" {
+		fmt.Println("Please specify desired server power state as either \"on\" or \"off\"")
+		os.Exit(1)
+	}
+
+	filter := ""
+	if server != "all" {
+		filter = server
+	}
+
+	c.GetResourceLists("ServerHW", filter)
+
+	l := *(rmap["ServerHW"].listptr.(*[]ServerHW))
+
+	var wg sync.WaitGroup
+
+	var ps = struct {
+		PowerState string `json:"powerState"`
+	}{
+		PowerState: state,
+	}
+
+	for _, v := range l {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			fmt.Printf("Starting Power %v the server: %v\n", state, localv.Name)
+			if _, err := c.SendHTTPRequest("PUT", localv.URI+"/powerState", "", "", ps); err != nil {
+				fmt.Printf("can't set power state for server: %s, error is:\n %v\n", localv.Name, err)
+
+			}
+		}()
+	}
+
+	wg.Wait()
 
 }

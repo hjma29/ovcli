@@ -25,13 +25,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type connectOpts struct {
-	filename string
-}
+// type connectOpts struct {
+// 	filename string
+// }
 
 func NewConnectCmd() *cobra.Command {
 
-	var opts connectOpts
+	//	var opts connectOpts
+
+	var name string
 
 	var cmd = &cobra.Command{
 		Use:   "connect",
@@ -39,20 +41,25 @@ func NewConnectCmd() *cobra.Command {
 		Long:  `First command to run to authenticate with OneView, Use "Connect --file config-file.yml"`,
 		Run: func(cmd *cobra.Command, args []string) {
 
-			log.Printf("[DEBUG] opts.filename: %v", opts.filename)
+			for _, v := range args {
+				fmt.Printf("%v is extra command argument not expected here, please use flag starting with \"-\" to provide user input options\n", v)
+				os.Exit(1)
+			}
 
-			if opts.filename == "" {
+			log.Printf("[DEBUG] opts.filename: %v", name)
+
+			if name == "" {
 				fmt.Println("Please specify credential filename by using \"-f\" flag")
 				os.Exit(1)
 			}
 
-			if err := oneview.ConnectOV(opts.filename); err != nil {
+			if err := oneview.ConnectOV(name); err != nil {
 				log.Fatal(err)
 			}
 		},
 	}
 
-	cmd.Flags().StringVarP(&opts.filename, "file", "f", "appliance-credential.yml", "OneView Appliance Config Credential file path/name in YAML format")
+	cmd.Flags().StringVarP(&name, "file", "f", "appliance-credential.yml", "OneView Appliance Config Credential file path/name in YAML format")
 
 	return cmd
 }

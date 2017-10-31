@@ -157,6 +157,9 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	req.Header.Add("Content-Type", "application/json; charset=utf-8")
 	req.Header.Add("X-Api-Version", strconv.Itoa(c.APIVersion))
 	req.Header.Add("Auth", c.APIKey)
+	if method == "PATCH" {
+		req.Header.Add("If-Match", "*")
+	}
 
 	q := req.URL.Query()
 	if filter != "" {
@@ -177,6 +180,7 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 
 	log.Printf("[DEBUG] OVCLI *Send Request: %v=>%v\n", method, req.URL.String())
 	log.Printf("[DEBUG] OVCLI X-Api-Version: %v,   Token: %v\n", req.Header.Get("X-Api-Version"), req.Header.Get("Auth"))
+	//log.Printf("[DEBUG] OVCLI Request body: %s\n", body)
 	log.Printf("[DEBUG] OVCLI Request body: %s\n", out.Bytes())
 	resp, err := client.Do(req)
 	if err != nil {
@@ -203,13 +207,17 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 
 	}
 
-	if method == "POST" || method == "DELETE" {
+	if method == "POST" || method == "DELETE" || method == "PATCH" || method == "PUT" {
 		t := NewTask(c)
 		uri, ok := resp.Header["Location"]
 		if !ok {
 			return nil, fmt.Errorf("OVCLI Request requires to monitor task but can't get task id from response header: %v", err)
 		}
 		t.URI = uri[0]
+
+		//fmt.Printf("Monitoring Task")
+		log.Printf("[DEBUG] *** Monitoring the task, task ID: %v\n", t.URI)
+		
 
 		if err = t.Wait(); err != nil {
 			return nil, fmt.Errorf("OVCLI Task wait returns failure: %v", err)

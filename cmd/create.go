@@ -54,18 +54,33 @@ func createSPTemplate(cmd *cobra.Command, args []string) {
 
 }
 
+var createLIGCmd = &cobra.Command{
+	Use:   "lig",
+	Short: "create LIG",
+	Long:  `create LIG`,
+	Run:   createLIG,
+}
+
+func createLIG(cmd *cobra.Command, args []string) {
+	oneview.CreateLIGConfigParse(flagFile)
+
+}
+
 func init() {
 
 	createCmd.AddCommand(createNetworkCmd)
 	createCmd.AddCommand(createSPTemplateCmd)
+	createCmd.AddCommand(createLIGCmd)
 
 	// createNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
 	// createNetworkCmd.Flags().StringVarP(&netType, "type", "t", "", "Network Type")
 	// createNetworkCmd.Flags().StringVarP(&netPurpose, "purpose", "p", "", "General or Management etc")
 	// createNetworkCmd.Flags().IntVarP(&netVlanId, "vlan", "v", 777, "vlan id in number")
-	createNetworkCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
+	// createNetworkCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
 
-	createSPTemplateCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
+	// createSPTemplateCmd.Flags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
+
+	createCmd.PersistentFlags().StringVarP(&flagFile, "file", "f", "", "Config YAML File path/name")
 
 	// Here you will define your flags and configuration settings.
 

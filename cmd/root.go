@@ -47,6 +47,7 @@ to explore what are next available options`,
 	RootCmd.AddCommand(createCmd)
 	RootCmd.AddCommand(NewConnectCmd())
 	RootCmd.AddCommand(addCmd)
+	RootCmd.AddCommand(NewSetCmd())
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 
@@ -80,9 +81,12 @@ func NewShowCmd() *cobra.Command {
 	showCmd.AddCommand(NewShowEGCmd(c))
 	showCmd.AddCommand(NewShowSPCmd(c))
 	showCmd.AddCommand(NewShowSPTemplateCmd(c))
+	showCmd.AddCommand(NewShowServerHWCmd(c))
 
 	return showCmd
 }
+
+
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {

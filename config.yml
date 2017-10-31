@@ -19,3 +19,25 @@ networks:
   - name: hj-test2
     vlanId: 672
 
+
+ligs:
+  - name: test1
+    framecount: 2
+    interconnectset: 3
+    interconnects: 
+      - { frame: 1, bay: 3, interconnect: VC40F8 }
+      - { frame: 1, bay: 6, interconnect: ILM20 }
+      - { frame: 2, bay: 3, interconnect: ILM20 }
+      - { frame: 2, bay: 6, interconnect: VC40F8 }
+      
+  - name: test2
+    framecount: 2
+    interconnectset: 3
+    interconnects: 
+      - { frame: 1, bay: 3, interconnect: VC40F8 }
+      - { frame: 1, bay: 6, interconnect: ILM20 }
+      - { frame: 2, bay: 3, interconnect: ILM20 }
+      - { frame: 2, bay: 6, interconnect: VC40F8 }
+
+
+

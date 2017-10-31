@@ -62,16 +62,30 @@ func deleteSPTemplate(cmd *cobra.Command, args []string) {
 		fmt.Println("quit:", err)
 		os.Exit(1)
 	}
+}
 
+var deleteLIGCmd = &cobra.Command{
+	Use:   "lig",
+	Short: "Delete LIG by Name",
+	Long:  `Delete LIG by Name`,
+	Run:   deleteLIG,
+}
+
+func deleteLIG(cmd *cobra.Command, args []string) {
+	if err := oneview.DeleteLIG(name); err != nil {
+		//fmt.Println(err)
+		fmt.Println("quit:", err)
+		os.Exit(1)
+	}
 }
 
 func init() {
 
 	deleteCmd.AddCommand(deleteNetworkCmd)
 	deleteCmd.AddCommand(deleteSPTemplateCmd)
+	deleteCmd.AddCommand(deleteLIGCmd)
 
-	deleteNetworkCmd.Flags().StringVarP(&name, "name", "n", "", "Network Name")
-	deleteSPTemplateCmd.Flags().StringVarP(&name, "name", "n", "", "Server Profile Template Name")
+	deleteCmd.PersistentFlags().StringVarP(&name, "name", "n", "", "Network Name")
 
 	// Here you will define your flags and configuration settings.
 

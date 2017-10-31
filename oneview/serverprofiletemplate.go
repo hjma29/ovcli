@@ -313,7 +313,7 @@ networks:
 func DeleteSPTemplate(name string) error {
 
 	if name == "" {
-		fmt.Print("Neet to specify Server Template name using \"n\" flag")
+		fmt.Println("Neet to specify Server Template name using \"n\" flag")
 		os.Exit(1)
 	}
 

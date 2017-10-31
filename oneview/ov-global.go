@@ -167,6 +167,7 @@ func ColToMap(x OVCol, c *CLIOVClient) {
 type YAMLConfig struct {
 	ENetworks   []ENetwork       `json:"networks"`
 	SPTemplates []YAMLSPTemplate `json:"servertemplates"`
+	LIGs        []YAMLLIG        `json:"ligs"`
 }
 
 type YAMLSPTemplate struct {
@@ -181,3 +182,26 @@ type YAMLConnection struct {
 	Name    string `json:"name,omiempty"`
 	Network string `json:"network,omiempty"`
 }
+
+type YAMLLIG struct {
+	Name            string `json:"name"`
+	FrameCount      int    `json:"framecount`
+	InterConnectSet int    `json:"interconnectset`
+	Interconnects   []YAMLInterconnect
+}
+
+type YAMLInterconnect struct {
+	Frame        int    `json:"frame"`
+	Bay          int    `json:"bay"`
+	Interconnect string `json:"interconnect"`
+}
+
+// ligs:
+// - name: test2
+//   framecount: 2
+//   interconnectset: 3
+//   interconnects:
+// 	- { frame: 1, bay: 3, interconnect: VC40F8 }
+// 	# - { frame: 1, bay: 6, interconnect: ILM
+// 	# - frame: 1, bay: 3, interconnect: ILM
+// 	# - frame: 1, bay: 6, interconnect: VC40F8

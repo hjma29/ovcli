@@ -2,10 +2,13 @@ package oneview
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"sort"
 	"sync"
+
+	"github.com/ghodss/yaml"
 )
 
 type LIGCol struct {
@@ -21,39 +24,32 @@ type LIGCol struct {
 type LIGList []LIG
 
 type LIG struct {
-	Category                string                   `json:"category,omitempty"`               // "category": "logical-interconnect-groups",
-	Created                 string                   `json:"created,omitempty"`                // "created": "20150831T154835.250Z",
-	Description             string                   `json:"description,omitempty"`            // "description": "Logical Interconnect Group 1",
-	ETAG                    string                   `json:"eTag,omitempty"`                   // "eTag": "1441036118675/8",
-	EnclosureIndexes        []int                    `json:"enclosureIndexes,omitempty"`       // "enclosureIndexes": [1],
-	EnclosureType           string                   `json:"enclosureType,omitempty"`          // "enclosureType": "C7000",
-	EthernetSettings        *EthernetSettings        `json:"ethernetSettings,omitempty"`       // "ethernetSettings": {...},
-	FabricUri               string                   `json:"fabricUri,omitempty"`              // "fabricUri": "/rest/fabrics/9b8f7ec0-52b3-475e-84f4-c4eac51c2c20",
-	InterconnectMapTemplate *InterconnectMapTemplate `json:"interconnectMapTemplate"`          // "interconnectMapTemplate": {...},
-	InternalNetworkUris     []string                 `json:"internalNetworkUris,omitempty"`    // "internalNetworkUris": []
-	Modified                string                   `json:"modified,omitempty"`               // "modified": "20150831T154835.250Z",
-	Name                    string                   `json:"name"`                             // "name": "Logical Interconnect Group1",
-	QosConfiguration        *QosConfiguration        `json:"qosConfiguration,omitempty"`       // "qosConfiguration": {},
-	RedundancyType          string                   `json:"redundancyType,omitempty"`         // "redundancyType": "HighlyAvailable"
-	SnmpConfiguration       *SnmpConfiguration       `json:"snmpConfiguration,omitempty"`      // "snmpConfiguration": {...}
-	StackingHealth          string                   `json:"stackingHealth,omitempty"`         //"stackingHealth": "Connected",
-	StackingMode            string                   `json:"stackingMode,omitempty"`           //"stackingMode": "Enclosure",
-	State                   string                   `json:"state,omitempty"`                  // "state": "Normal",
-	Status                  string                   `json:"status,omitempty"`                 // "status": "Critical",
-	TelemetryConfiguration  *TelemetryConfiguration  `json:"telemetryConfiguration,omitempty"` // "telemetryConfiguration": {...},
-	Type                    string                   `json:"type"`                             // "type": "logical-interconnect-groupsV3",
-	UplinkSets              []LIGUplinkSet           `json:"uplinkSets,omitempty"`             // "uplinkSets": {...},
-	URI                     string                   `json:"uri,omitempty"`                    // "uri": "/rest/logical-interconnect-groups/e2f0031b-52bd-4223-9ac1-d91cb519d548",
-	IOBays                  LIGIOBayList             //define []IOBay as named type to use multisort method later
-}
-
-type LIGIOBayList []LIGIOBay
-
-type LIGIOBay struct {
-	Enclosure   int
-	Bay         int
-	ModelName   string
-	ModelNumber string
+	Category                string                  `json:"category,omitempty"`         // "category": "logical-interconnect-groups",
+	Created                 string                  `json:"created,omitempty"`          // "created": "20150831T154835.250Z",
+	Description             string                  `json:"description,omitempty"`      // "description": "Logical Interconnect Group 1",
+	ETAG                    string                  `json:"eTag,omitempty"`             // "eTag": "1441036118675/8",
+	EnclosureIndexes        []int                   `json:"enclosureIndexes,omitempty"` // "enclosureIndexes": [1],
+	EnclosureType           string                  `json:"enclosureType,omitempty"`    // "enclosureType": "C7000",
+	EthernetSettings        *EthernetSettings       `json:"ethernetSettings,omitempty"` // "ethernetSettings": {...},
+	FabricUri               string                  `json:"fabricUri,omitempty"`        // "fabricUri": "/rest/fabrics/9b8f7ec0-52b3-475e-84f4-c4eac51c2c20",
+	InterconnectBaySet      int                     `json:"interconnectBaySet"`
+	InterconnectMapTemplate InterconnectMapTemplate `json:"interconnectMapTemplate"` // "interconnectMapTemplate": {...},
+	// InterconnectMapTemplate *InterconnectMapTemplate `json:"interconnectMapTemplate"`          // "interconnectMapTemplate": {...},
+	InternalNetworkUris    []string                `json:"internalNetworkUris,omitempty"`    // "internalNetworkUris": []
+	Modified               string                  `json:"modified,omitempty"`               // "modified": "20150831T154835.250Z",
+	Name                   string                  `json:"name"`                             // "name": "Logical Interconnect Group1",
+	QosConfiguration       *QosConfiguration       `json:"qosConfiguration,omitempty"`       // "qosConfiguration": {},
+	RedundancyType         string                  `json:"redundancyType,omitempty"`         // "redundancyType": "HighlyAvailable"
+	SnmpConfiguration      *SnmpConfiguration      `json:"snmpConfiguration,omitempty"`      // "snmpConfiguration": {...}
+	StackingHealth         string                  `json:"stackingHealth,omitempty"`         //"stackingHealth": "Connected",
+	StackingMode           string                  `json:"stackingMode,omitempty"`           //"stackingMode": "Enclosure",
+	State                  string                  `json:"state,omitempty"`                  // "state": "Normal",
+	Status                 string                  `json:"status,omitempty"`                 // "status": "Critical",
+	TelemetryConfiguration *TelemetryConfiguration `json:"telemetryConfiguration,omitempty"` // "telemetryConfiguration": {...},
+	Type                   string                  `json:"type"`                             // "type": "logical-interconnect-groupsV3",
+	UplinkSets             []LIGUplinkSet          `json:"uplinkSets"`                       // "uplinkSets": {...},
+	URI                    string                  `json:"uri,omitempty"`                    // "uri": "/rest/logical-interconnect-groups/e2f0031b-52bd-4223-9ac1-d91cb519d548",
+	IOBays                 LIGIOBayList            `json:"-"`                                //define []IOBay as named type to use multisort method later
 }
 
 type InterconnectMapTemplate struct {
@@ -65,6 +61,29 @@ type InterconnectMapEntryTemplate struct {
 	LogicalDownlinkUri           string          `json:"logicalDownlinkUri,omitempty"`           // "logicalDownlinkUri": "/rest/logical-downlinks/5b33fec1-63e8-40e1-9e3d-3af928917b2f",
 	LogicalLocation              LogicalLocation `json:"logicalLocation,omitempty"`              // "logicalLocation": {...},
 	PermittedInterconnectTypeUri string          `json:"permittedInterconnectTypeUri,omitempty"` //"permittedSwitchTypeUri": "/rest/switch-types/a2bc8f42-8bb8-4560-b80f-6c3c0e0d66e0",
+}
+
+type LogicalLocation struct {
+	LocationEntries []LocationEntry `json:"locationEntries,omitempty"` // "locationEntries": {...}
+}
+
+type LocationEntry struct {
+	RelativeValue int    `json:"relativeValue,omitempty"` //"relativeValue": 2,
+	Type          string `json:"type,omitempty"`          //"type": "StackingMemberId",
+}
+
+type LogicalPortConfigInfo struct {
+	DesiredSpeed    string          `json:"desiredSpeed,omitempty"`    // "desiredSpeed": "Auto",
+	LogicalLocation LogicalLocation `json:"logicalLocation,omitempty"` // "logicalLocation": {...},
+}
+
+type LIGIOBayList []LIGIOBay
+
+type LIGIOBay struct {
+	Enclosure   int
+	Bay         int
+	ModelName   string
+	ModelNumber string
 }
 
 type LIGUplinkSet struct {
@@ -94,20 +113,6 @@ type NetworkSummary struct {
 	Name   string
 	Vlanid int
 	Type   string
-}
-
-type LogicalPortConfigInfo struct {
-	DesiredSpeed    string          `json:"desiredSpeed,omitempty"`    // "desiredSpeed": "Auto",
-	LogicalLocation LogicalLocation `json:"logicalLocation,omitempty"` // "logicalLocation": {...},
-}
-
-type LogicalLocation struct {
-	LocationEntries []LocationEntry `json:"locationEntries,omitempty"` // "locationEntries": {...}
-}
-
-type LocationEntry struct {
-	RelativeValue int    `json:"relativeValue,omitempty"` //"relativeValue": 2,
-	Type          string `json:"type,omitempty"`          //"type": "StackingMemberId",
 }
 
 func (c *CLIOVClient) GetLIG() []LIG {
@@ -328,6 +333,162 @@ func (x LIGIOBayList) multiSort(i, j int) bool {
 	return false
 }
 
+func CreateLIGConfigParse(fileName string) {
+
+	if fileName == "" {
+		fmt.Println(`Please specify config YAML filename by using "-f". 
+	
+	A sample config file format is as below:
+	→ cat config.yml
+	servertemplates:
+		- name: hj-sptemplate1
+		enclosuregroup: DCA-SolCenter-EG
+		serverhardwaretype: "SY 480 Gen9 3"
+		connections:
+			- id: 1
+			name: nic1
+			network: TE-Testing-300
+	
+		- name: hj-sptemplate2
+		enclosuregroup: DCA-SolCenter-EG
+		serverhardwaretype: "SY 480 Gen9 1"
+	
+	
+	networks:
+		- name: hj-test1
+		vlanId: 671
+		- name: hj-test2
+		vlanId: 672
+	`)
+		os.Exit(1)
+	}
+
+	y := YAMLConfig{}
+
+	yamlFile, err := ioutil.ReadFile(fileName)
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	if err := yaml.Unmarshal(yamlFile, &y); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	c := NewCLIOVClient()
+	c.GetResourceLists("ICType", "")
+	ictypeList := *(rmap["ICType"].listptr.(*[]ICType))
+
+	ictypeMap := make(map[string]ICType)
+	for _, v := range ictypeList {
+		ictypeMap[v.PartNumber] = v
+	}
+
+	icTypeTable := map[string]string{"VC40F8": "794502-B23", "ILM20": "779218-B21"}
+
+	for _, v := range y.LIGs {
+
+		//fmt.Println(v.Name, v.FrameCount, v.InterConnectSet, v.Interconnects[0].Frame, v.Interconnects[0].Bay, v.Interconnects[0].Interconnect)
+
+		var lig LIG
+		lig.Name = v.Name
+		lig.UplinkSets = []LIGUplinkSet{}
+		lig.Type = "logical-interconnect-groupV300"
+		lig.EnclosureType = "SY12000"
+		lig.RedundancyType = "HighlyAvailable"
+		lig.InterconnectBaySet = v.InterConnectSet
+		lig.EnclosureIndexes = make([]int, v.FrameCount)
+
+		for i := 0; i < v.FrameCount; i++ {
+			lig.EnclosureIndexes[i] = i + 1
+		}
+
+		lig.InterconnectMapTemplate.InterconnectMapEntryTemplates = make([]InterconnectMapEntryTemplate, len(v.Interconnects))
+
+		for i, v := range v.Interconnects {
+
+			lf := LocationEntry{
+				Type:          "Enclosure",
+				RelativeValue: v.Frame,
+			}
+			lb := LocationEntry{
+				Type:          "Bay",
+				RelativeValue: v.Bay,
+			}
+
+			//lEntries := make([]LocationEntry, 2)
+			lEntries := []LocationEntry{lf, lb}
+			lLocation := LogicalLocation{LocationEntries: lEntries}
+
+			ictypePN, ok := icTypeTable[v.Interconnect]
+			if !ok {
+				fmt.Printf("can't find matching IC type part number for config %q\n", v.Interconnect)
+				os.Exit(1)
+			}
+
+			ictype, ok := ictypeMap[ictypePN]
+			if !ok {
+				fmt.Printf("can't find matching IC part numbber %q from server response\n", v.Interconnect)
+				os.Exit(1)
+			}
+
+			lig.InterconnectMapTemplate.InterconnectMapEntryTemplates[i] = InterconnectMapEntryTemplate{
+				EnclosureIndex:               v.Frame,
+				LogicalLocation:              lLocation,
+				PermittedInterconnectTypeUri: ictype.URI,
+			}
+
+			//fmt.Printf("%#v\n", lig.InterconnectMapTemplate.InterconnectMapEntryTemplates[i])
+
+		}
+
+		// b, err := json.MarshalIndent(lig, "", "  ")
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+		//fmt.Printf("%s\n", b)
+
+		fmt.Printf("Creating Logical Interconnect Group: %q\n", v.Name)
+
+		if _, err := c.SendHTTPRequest("POST", LIGURL, "", "", lig); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+
+		}
+
+	}
+}
+
+func DeleteLIG(name string) error {
+
+	if name == "" {
+		fmt.Println("Neet to specify LIG name using \"-n\" flag")
+		os.Exit(1)
+	}
+
+	c := NewCLIOVClient()
+
+	c.GetResourceLists("LIG", name)
+
+	list := *(rmap["LIG"].listptr.(*[]LIG))
+
+	if len(list) == 0 {
+		fmt.Printf("Can't find LIG %v to delete", name)
+		os.Exit(1)
+	}
+
+	for _, v := range list {
+		fmt.Printf("Deleting LIG: %q\n", v.Name)
+		_, err := c.SendHTTPRequest("DELETE", v.URI, "", "", nil)
+		if err != nil {
+			fmt.Printf("Error submitting delete server LIG request: %v", err)
+		}
+	}
+	return nil
+}
+
 type EthernetSettings struct {
 	Category                    string `json:"category,omitempty"`                    // "category": null,
 	Created                     string `json:"created,omitempty"`                     // "created": "20150831T154835.250Z",
@@ -481,3 +642,131 @@ type TelemetryConfiguration struct {
 	Type            string `json:"type,omitempty"`            // "type": "telemetry-configuration",
 	URI             string `json:"uri,omitempty"`             // "uri": null
 }
+
+// type LIG struct {
+// 	Type          string      `json:"type"`
+// 	EnclosureType string      `json:"enclosureType"`
+// 	UplinkSets    []LIGUplinkSet `json:"uplinkSets"`
+// QosConfiguration struct {
+// 	Type            string `json:"type"`
+// 	ActiveQosConfig struct {
+// 		Type                       string        `json:"type"`
+// 		ConfigType                 string        `json:"configType"`
+// 		UplinkClassificationType   interface{}   `json:"uplinkClassificationType"`
+// 		DownlinkClassificationType interface{}   `json:"downlinkClassificationType"`
+// 		QosTrafficClassifiers      []interface{} `json:"qosTrafficClassifiers"`
+// 		Description                interface{}   `json:"description"`
+// 		Name                       interface{}   `json:"name"`
+// 		State                      interface{}   `json:"state"`
+// 		Status                     interface{}   `json:"status"`
+// 		Category                   string        `json:"category"`
+// 		ETag                       interface{}   `json:"eTag"`
+// 		Created                    interface{}   `json:"created"`
+// 		Modified                   interface{}   `json:"modified"`
+// 		URI                        interface{}   `json:"uri"`
+// 	} `json:"activeQosConfig"`
+// 	InactiveFCoEQosConfig    interface{} `json:"inactiveFCoEQosConfig"`
+// 	InactiveNonFCoEQosConfig interface{} `json:"inactiveNonFCoEQosConfig"`
+// 	Description              interface{} `json:"description"`
+// 	Name                     interface{} `json:"name"`
+// 	State                    interface{} `json:"state"`
+// 	Status                   interface{} `json:"status"`
+// 	Category                 string      `json:"category"`
+// 	ETag                     interface{} `json:"eTag"`
+// 	Created                  time.Time   `json:"created"`
+// 	Modified                 time.Time   `json:"modified"`
+// 	URI                      interface{} `json:"uri"`
+// } `json:"qosConfiguration"`
+// SnmpConfiguration struct {
+// 	Type             string        `json:"type"`
+// 	ReadCommunity    string        `json:"readCommunity"`
+// 	SystemContact    string        `json:"systemContact"`
+// 	TrapDestinations []interface{} `json:"trapDestinations"`
+// 	SnmpAccess       []interface{} `json:"snmpAccess"`
+// 	Enabled          bool          `json:"enabled"`
+// 	Description      interface{}   `json:"description"`
+// 	Name             interface{}   `json:"name"`
+// 	State            interface{}   `json:"state"`
+// 	Status           interface{}   `json:"status"`
+// 	Category         string        `json:"category"`
+// 	ETag             interface{}   `json:"eTag"`
+// 	Created          time.Time     `json:"created"`
+// 	Modified         time.Time     `json:"modified"`
+// 	URI              interface{}   `json:"uri"`
+// } `json:"snmpConfiguration"`
+// TelemetryConfiguration struct {
+// 	Type            string      `json:"type"`
+// 	EnableTelemetry bool        `json:"enableTelemetry"`
+// 	SampleCount     int         `json:"sampleCount"`
+// 	SampleInterval  int         `json:"sampleInterval"`
+// 	Description     interface{} `json:"description"`
+// 	Name            interface{} `json:"name"`
+// 	State           interface{} `json:"state"`
+// 	Status          interface{} `json:"status"`
+// 	Category        string      `json:"category"`
+// 	ETag            interface{} `json:"eTag"`
+// 	Created         time.Time   `json:"created"`
+// 	Modified        time.Time   `json:"modified"`
+// 	URI             interface{} `json:"uri"`
+// } `json:"telemetryConfiguration"`
+// StackingHealth          string `json:"stackingHealth"`
+// InterconnectMapTemplate InterconnectMapTemplate `json:"interconnectMapTemplate"`
+// FabricURI          string `json:"fabricUri"`
+// InterconnectBaySet int    `json:"interconnectBaySet"`
+// RedundancyType     string `json:"redundancyType"`
+// EthernetSettings   struct {
+// 	Type                        string      `json:"type"`
+// 	LldpIpv4Address             string      `json:"lldpIpv4Address"`
+// 	LldpIpv6Address             string      `json:"lldpIpv6Address"`
+// 	EnableIgmpSnooping          bool        `json:"enableIgmpSnooping"`
+// 	IgmpIdleTimeoutInterval     int         `json:"igmpIdleTimeoutInterval"`
+// 	EnableFastMacCacheFailover  bool        `json:"enableFastMacCacheFailover"`
+// 	MacRefreshInterval          int         `json:"macRefreshInterval"`
+// 	EnableNetworkLoopProtection bool        `json:"enableNetworkLoopProtection"`
+// 	EnablePauseFloodProtection  bool        `json:"enablePauseFloodProtection"`
+// 	EnableRichTLV               bool        `json:"enableRichTLV"`
+// 	EnableTaggedLldp            bool        `json:"enableTaggedLldp"`
+// 	InterconnectType            string      `json:"interconnectType"`
+// 	DependentResourceURI        string      `json:"dependentResourceUri"`
+// 	Name                        string      `json:"name"`
+// 	ID                          string      `json:"id"`
+// 	Description                 interface{} `json:"description"`
+// 	State                       interface{} `json:"state"`
+// 	Status                      interface{} `json:"status"`
+// 	Category                    interface{} `json:"category"`
+// 	ETag                        interface{} `json:"eTag"`
+// 	Created                     time.Time   `json:"created"`
+// 	Modified                    time.Time   `json:"modified"`
+// 	URI                         string      `json:"uri"`
+// } `json:"ethernetSettings"`
+// 	EnclosureIndexes    []int        `json:"enclosureIndexes"`
+// 	InternalNetworkUris []string     `json:"internalNetworkUris"`
+// 	StackingMode        string       `json:"stackingMode"`
+// 	ScopeUris           []string     `json:"scopeUris"`
+// 	Description         string       `json:"description"`
+// 	Name                string       `json:"name"`
+// 	State               string       `json:"state"`
+// 	Status              string       `json:"status"`
+// 	Category            string       `json:"category"`
+// 	ETag                string       `json:"eTag"`
+// 	Created             string       `json:"created"`
+// 	Modified            string       `json:"modified"`
+// 	URI                 string       `json:"uri"`
+// 	IOBays              LIGIOBayList //define []IOBay as named type to use multisort method later
+// }
+
+// type InterconnectMapTemplate struct{
+// 	InterconnectMapEntryTemplates []InterconnectMapEntryTemplate `json:"interconnectMapEntryTemplates"`
+// }
+
+// type InterconnectMapEntryTemplate struct {
+// 	EnclosureIndex               int    `json:"enclosureIndex"`
+// 	PermittedInterconnectTypeURI string `json:"permittedInterconnectTypeUri"`
+// 	LogicalLocation              struct {
+// 		LocationEntries []struct {
+// 			RelativeValue int    `json:"relativeValue"`
+// 			Type          string `json:"type"`
+// 		} `json:"locationEntries"`
+// 	} `json:"logicalLocation"`
+// 	LogicalDownlinkURI string `json:"logicalDownlinkUri"`
+// }

@@ -217,14 +217,12 @@ func (t *Task) GetLastStatusUpdate() string {
 // Wait - wait on task to complete
 func (t *Task) Wait() error {
 
-	fmt.Printf("*** Monitoring task for the above request, task ID: %v\n", t.URI)
-
 	for t.PercentComplete != 100 {
 		t.checkStatus()
 		time.Sleep(time.Millisecond * t.WaitTime)
 	}
 
-	fmt.Printf("*** Task final State: %v, Status: %v\n\n", t.TaskState, t.TaskStatus)
+	fmt.Printf("*** Task Final -State: %v, -Status: %v\n", t.TaskState, t.TaskStatus)
 	if len(t.TaskErrors) != 0 {
 		fmt.Printf("Error Code: %v\n", t.TaskErrors[0].ErrorCode)
 		fmt.Printf("Message: %v\n", t.TaskErrors[0].Message)
