@@ -29,7 +29,12 @@ ligs:
       - { frame: 1, bay: 6, interconnect: ILM20 }
       - { frame: 2, bay: 3, interconnect: ILM20 }
       - { frame: 2, bay: 6, interconnect: VC40F8 }
-      
+    uplinksets:
+      - name: uplinkset1
+        type: ethernet
+        networks: [ hj-test1, hj-test2 ]
+        uplinkports: [ "frame1|bay3|Q1:2", "frame2|bay6|Q1:2" ] 
+
   - name: test2
     framecount: 2
     interconnectset: 3
@@ -38,6 +43,8 @@ ligs:
       - { frame: 1, bay: 6, interconnect: ILM20 }
       - { frame: 2, bay: 3, interconnect: ILM20 }
       - { frame: 2, bay: 6, interconnect: VC40F8 }
+
+
 
 
 

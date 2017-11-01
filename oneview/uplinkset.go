@@ -2,10 +2,13 @@ package oneview
 
 import (
 	"fmt"
+	//"io/ioutil"
 	"log"
 	"os"
 	"sort"
+	//"strings"
 	"sync"
+	//"github.com/ghodss/yaml"
 )
 
 type UplinkSetCol struct {

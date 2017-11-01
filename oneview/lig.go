@@ -6,7 +6,10 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strconv"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/ghodss/yaml"
 )
@@ -63,6 +66,7 @@ type InterconnectMapEntryTemplate struct {
 	PermittedInterconnectTypeUri string          `json:"permittedInterconnectTypeUri,omitempty"` //"permittedSwitchTypeUri": "/rest/switch-types/a2bc8f42-8bb8-4560-b80f-6c3c0e0d66e0",
 }
 
+//shared by InterconnectMapEntryTemplate and LogicalPortConfigInfo
 type LogicalLocation struct {
 	LocationEntries []LocationEntry `json:"locationEntries,omitempty"` // "locationEntries": {...}
 }
@@ -70,11 +74,6 @@ type LogicalLocation struct {
 type LocationEntry struct {
 	RelativeValue int    `json:"relativeValue,omitempty"` //"relativeValue": 2,
 	Type          string `json:"type,omitempty"`          //"type": "StackingMemberId",
-}
-
-type LogicalPortConfigInfo struct {
-	DesiredSpeed    string          `json:"desiredSpeed,omitempty"`    // "desiredSpeed": "Auto",
-	LogicalLocation LogicalLocation `json:"logicalLocation,omitempty"` // "logicalLocation": {...},
 }
 
 type LIGIOBayList []LIGIOBay
@@ -99,6 +98,11 @@ type LIGUplinkSet struct {
 	Reachability           string                  `json:"reachability,omitempty"`        // "reachability": "Reachable",
 	UplinkPorts            LIGUplinkPortList       //define named type to use multisort method later
 	Networks               []NetworkSummary        //collect network name and vlanid from NetworkURI list
+}
+
+type LogicalPortConfigInfo struct {
+	DesiredSpeed    string          `json:"desiredSpeed,omitempty"`    // "desiredSpeed": "Auto",
+	LogicalLocation LogicalLocation `json:"logicalLocation,omitempty"` // "logicalLocation": {...},
 }
 
 type LIGUplinkPortList []LIGUplinkPort
@@ -223,12 +227,16 @@ func (lig *LIG) getIOBay(ictypeList []ICType) {
 func (lig *LIG) getUplinkPort(ictypeList []ICType) {
 
 	//prepare enc/bay lookup map to find out model number, 1st step loopup to convert port from "83" to "Q4:1"
-	slotModel := make(map[struct{ enc, slot int }]string)
+	type SlotModel struct {
+		enc  int
+		slot int
+	}
+	slotModel := make(map[SlotModel]string)
 	for _, v := range lig.IOBays {
-		slotModel[struct{ enc, slot int }{v.Enclosure, v.Bay}] = v.ModelNumber
+		slotModel[SlotModel{v.Enclosure, v.Bay}] = v.ModelNumber
 	}
 
-	//prepare modelnumber/portnumber lookup map to find out portname, 1st step loopup to convert port from "83" to "Q4:1"
+	//prepare modelnumber/portnumber lookup map to find out portname, 2nd step loopup to convert port from "83" to "Q4:1"
 	type ModelPort struct {
 		model string
 		port  int
@@ -409,18 +417,18 @@ func CreateLIGConfigParse(fileName string) {
 
 		for i, v := range v.Interconnects {
 
-			lf := LocationEntry{
-				Type:          "Enclosure",
-				RelativeValue: v.Frame,
-			}
-			lb := LocationEntry{
-				Type:          "Bay",
-				RelativeValue: v.Bay,
-			}
+			// lf := LocationEntry{
+			// 	Type:          "Enclosure",
+			// 	RelativeValue: v.Frame,
+			// }
+			// lb := LocationEntry{
+			// 	Type:          "Bay",
+			// 	RelativeValue: v.Bay,
+			// }
 
-			//lEntries := make([]LocationEntry, 2)
-			lEntries := []LocationEntry{lf, lb}
-			lLocation := LogicalLocation{LocationEntries: lEntries}
+			// //lEntries := make([]LocationEntry, 2)
+			// lEntries := []LocationEntry{lf, lb}
+			// lLocation := LogicalLocation{LocationEntries: lEntries}
 
 			ictypePN, ok := icTypeTable[v.Interconnect]
 			if !ok {
@@ -434,10 +442,29 @@ func CreateLIGConfigParse(fileName string) {
 				os.Exit(1)
 			}
 
+			// lf := LocationEntry{
+			// 	Type:          "Enclosure",
+			// 	RelativeValue: v.Frame,
+			// }
+			// lb := LocationEntry{
+			// 	Type:          "Bay",
+			// 	RelativeValue: v.Bay,
+			// }
+
+			// //lEntries := make([]LocationEntry, 2)
+			// lEntries := []LocationEntry{lf, lb}
+			// lLocation := LogicalLocation{LocationEntries: lEntries}
+
 			lig.InterconnectMapTemplate.InterconnectMapEntryTemplates[i] = InterconnectMapEntryTemplate{
 				EnclosureIndex:               v.Frame,
-				LogicalLocation:              lLocation,
 				PermittedInterconnectTypeUri: ictype.URI,
+				// LogicalLocation:              lLocation,
+				LogicalLocation: LogicalLocation{
+					LocationEntries: []LocationEntry{
+						LocationEntry{Type: "Enclosure", RelativeValue: v.Frame},
+						LocationEntry{Type: "Bay", RelativeValue: v.Bay},
+					},
+				},
 			}
 
 			//fmt.Printf("%#v\n", lig.InterconnectMapTemplate.InterconnectMapEntryTemplates[i])
@@ -455,10 +482,168 @@ func CreateLIGConfigParse(fileName string) {
 		if _, err := c.SendHTTPRequest("POST", LIGURL, "", "", lig); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
+		}
 
+		fmt.Println("Sleep for 5 secs to wait for LIG creation finish")
+		time.Sleep(5 * time.Second)
+		if len(v.UplinkSets) > 0 {
+			CreateLIGUplinkSet(c, v)
 		}
 
 	}
+}
+
+func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
+
+	fmt.Printf("Verifing UplinkSet for the LIG: %q\n", ylig.Name)
+
+	var wg sync.WaitGroup
+
+	rl := []string{"ENetwork", "ICType"}
+
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
+
+	wg.Wait()
+
+	ligList := *(rmap["LIG"].listptr.(*[]LIG))
+	netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
+	ictypeList := *(rmap["ICType"].listptr.(*[]ICType))
+
+	ligMap := make(map[string]LIG)
+	for _, v := range ligList {
+		ligMap[v.Name] = v
+	}
+
+	lig, ok := ligMap[ylig.Name]
+	if !ok {
+		fmt.Printf("can't find matching LIG name %q before creating uplinkset\n", ylig.Name)
+		os.Exit(1)
+	}
+
+	netMap := make(map[string]ENetwork)
+	for _, v := range netList {
+		netMap[v.Name] = v
+	}
+
+	(&lig).getIOBay(ictypeList)
+
+	lig.UplinkSets = make([]LIGUplinkSet, len(ylig.UplinkSets))
+
+	for ui, v := range ylig.UplinkSets {
+		// lig, ok := ligMap[v.LIG]
+		// if !ok {
+		// 	fmt.Printf("can't find LIG %q in current LIG list", v.LIG)
+		// 	os.Exit(1)
+		// }
+
+		nets := make([]ENetwork, 0)
+		for _, v := range v.Networks {
+			n, ok := netMap[v]
+			if !ok {
+				fmt.Printf("can't find network %q in current network list\n", v)
+				os.Exit(1)
+			}
+			nets = append(nets, n)
+		}
+
+		type validport struct {
+			frame      int
+			bay        int
+			portnumber int
+		}
+
+		validports := make([]validport, 0)
+
+		for _, v := range v.UplinkPorts {
+
+			//string config strings down to frame number, bay number and port number
+			ps := strings.Split(v, "|")
+			if len(ps) != 3 {
+				fmt.Println(`uplink ports config format should have 3 sections such as "frame1:bay3:Q1.1"`)
+			}
+			f, _ := strconv.Atoi(ps[0][len(ps[0])-1:])
+			b, _ := strconv.Atoi(ps[1][len(ps[1])-1:])
+			p := ps[2]
+			fmt.Println(f, " ", b, " ", p, " ", lig.Name)
+
+			//prepare enc/bay lookup map to find out model number
+			type FrameSlot struct {
+				enc  int
+				slot int
+			}
+			slotModel := make(map[FrameSlot]string)
+			for _, v := range lig.IOBays {
+				slotModel[FrameSlot{v.Enclosure, v.Bay}] = v.ModelNumber
+			}
+
+			model, ok := slotModel[FrameSlot{f, b}]
+			if !ok {
+				fmt.Printf("can't find model number for specified frame %q slot %q position\n", f, b)
+			}
+
+			//prepare modelnumber/portname lookup map to find out portnumber
+			type ModelPortName struct {
+				model    string
+				portName string
+			}
+			modelPort := make(map[ModelPortName]int)
+			for _, t := range ictypeList {
+				for _, p := range t.PortInfos {
+					modelPort[ModelPortName{t.PartNumber, p.PortName}] = p.PortNumber
+				}
+			}
+
+			pnumber, ok := modelPort[ModelPortName{model, p}]
+			if !ok {
+				fmt.Println("can't find port number for specified port %q on frame %q slot %q position", p, f, b)
+			}
+
+			validports = append(validports, validport{f, b, pnumber})
+			//fmt.Println("find port number:", pnumber)
+		}
+
+		//after creating valid nets and ports lists
+		netURIs := make([]string, 0)
+		for _, v := range nets {
+			netURIs = append(netURIs, v.URI)
+		}
+
+		lig.UplinkSets[ui].NetworkUris = netURIs
+		lig.UplinkSets[ui].LogicalPortConfigInfos = make([]LogicalPortConfigInfo, len(validports))
+
+		for i, v := range validports {
+			// leList := make([]LocationEntry, 3)
+			// leList[0] = LocationEntry{Type: "Enclosure", RelativeValue: v.frame}
+			// leList[1] = LocationEntry{Type: "Bay", RelativeValue: v.bay}
+			// leList[2] = LocationEntry{Type: "Port", RelativeValue: v.portnumber}
+
+			lig.UplinkSets[ui].LogicalPortConfigInfos[i] = LogicalPortConfigInfo{
+				LogicalLocation: LogicalLocation{
+					LocationEntries: []LocationEntry{
+						LocationEntry{Type: "Enclosure", RelativeValue: v.frame},
+						LocationEntry{Type: "Bay", RelativeValue: v.bay},
+						LocationEntry{Type: "Port", RelativeValue: v.portnumber},
+					},
+				},
+			}
+		}
+
+		fmt.Printf("Creating UplinkSet %q for the LIG: %q\n", v.Name, ylig.Name)
+		fmt.Println("URI:", lig.URI)
+
+		if _, err := c.SendHTTPRequest("PUT", lig.URI, "", "", lig); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	} //end of uplinkset loop
 }
 
 func DeleteLIG(name string) error {

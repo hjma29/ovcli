@@ -46,10 +46,14 @@ to explore what are next available options`,
 	RootCmd.AddCommand(deleteCmd)
 	RootCmd.AddCommand(createCmd)
 	RootCmd.AddCommand(NewConnectCmd())
-	RootCmd.AddCommand(addCmd)
-	RootCmd.AddCommand(NewSetCmd())
+	RootCmd.AddCommand(importCmd)
+	RootCmd.AddCommand(NewEditCmd())
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
+	if err := RootCmd.PersistentFlags().MarkHidden("debug"); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -63,8 +67,8 @@ func NewShowCmd() *cobra.Command {
 
 	var showCmd = &cobra.Command{
 		Use:   "show",
-		Short: "shows different OneView resources",
-		Long:  `shows different OneView resources`,
+		Short: "show Synergy resources",
+		Long:  `show Synergy resources`,
 		Run: func(cmd *cobra.Command, args []string) {
 			cmd.Help()
 		},
@@ -85,8 +89,6 @@ func NewShowCmd() *cobra.Command {
 
 	return showCmd
 }
-
-
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {

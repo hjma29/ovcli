@@ -170,6 +170,13 @@ type YAMLConfig struct {
 	LIGs        []YAMLLIG        `json:"ligs"`
 }
 
+type YAMLUplinkSet struct {
+	Name        string
+	Type        string
+	Networks    []string
+	UplinkPorts []string `json:"uplinkports"`
+}
+
 type YAMLSPTemplate struct {
 	Name            string           `json:"name,omitempty"`
 	EG              string           `json:"enclosuregroup,omitempty"`
@@ -188,6 +195,7 @@ type YAMLLIG struct {
 	FrameCount      int    `json:"framecount`
 	InterConnectSet int    `json:"interconnectset`
 	Interconnects   []YAMLInterconnect
+	UplinkSets      []YAMLUplinkSet `json:"uplinksets"`
 }
 
 type YAMLInterconnect struct {

@@ -176,7 +176,7 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
-	client := &http.Client{Transport: tr, Timeout: time.Second * 10}
+	client := &http.Client{Transport: tr, Timeout: time.Second * 20}
 
 	log.Printf("[DEBUG] OVCLI *Send Request: %v=>%v\n", method, req.URL.String())
 	log.Printf("[DEBUG] OVCLI X-Api-Version: %v,   Token: %v\n", req.Header.Get("X-Api-Version"), req.Header.Get("Auth"))
@@ -217,7 +217,6 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 
 		//fmt.Printf("Monitoring Task")
 		log.Printf("[DEBUG] *** Monitoring the task, task ID: %v\n", t.URI)
-		
 
 		if err = t.Wait(); err != nil {
 			return nil, fmt.Errorf("OVCLI Task wait returns failure: %v", err)
@@ -390,8 +389,8 @@ func timeTrack(start time.Time, name string) {
 	log.Printf("[DEBUG] %s took %s\n", name, elapsed)
 }
 
-//AddRemoteEnc adds remote enclosure during OV initial setup
-func AddRemoteEnc(ipv6 string) error {
+//ImportRemoteEnc adds remote enclosure during OV initial setup
+func ImportRemoteEnc(ipv6 string) error {
 
 	c := NewCLIOVClient()
 

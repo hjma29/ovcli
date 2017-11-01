@@ -25,8 +25,8 @@ import (
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Delete Resources",
-	Long:  `Delete Resources.`,
+	Short: "delete Synergy resources",
+	Long:  `delete Synergy resources.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Work your own magic here
 		fmt.Println("delete called")

@@ -26,25 +26,25 @@ import (
 )
 
 // connectCmd represents the connect command
-var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "add remote enclosure",
-	Long:  `add remote enclosure during initial setup`,
-	Run:   addenc,
+var importCmd = &cobra.Command{
+	Use:   "import",
+	Short: "import remote enclosure",
+	Long:  `import remote enclosure during initial setup`,
+	Run:   importenc,
 }
 
-func addenc(cmd *cobra.Command, args []string) {
+func importenc(cmd *cobra.Command, args []string) {
 
 	if ipv6 == "" {
 		fmt.Print("Please specify remote enclosure ipv6 address")
 		os.Exit(1)
 	}
 
-	oneview.AddRemoteEnc(ipv6)
+	oneview.ImportRemoteEnc(ipv6)
 }
 
 func init() {
 
-	addCmd.Flags().StringVarP(&ipv6, "ipv6", "i", "fe80::2:0:9:7%eth2", "remote enclosure ipv6 address")
+	importCmd.Flags().StringVarP(&ipv6, "ipv6", "i", "fe80::2:0:9:7%eth2", "remote enclosure ipv6 address")
 
 }

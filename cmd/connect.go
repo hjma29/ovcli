@@ -37,7 +37,7 @@ func NewConnectCmd() *cobra.Command {
 
 	var cmd = &cobra.Command{
 		Use:   "connect",
-		Short: "connect OV",
+		Short: "connect to Synergy",
 		Long:  `First command to run to authenticate with OneView, Use "Connect --file config-file.yml"`,
 		Run: func(cmd *cobra.Command, args []string) {
 
