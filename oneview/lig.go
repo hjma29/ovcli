@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/ghodss/yaml"
 )
@@ -96,8 +95,8 @@ type LIGUplinkSet struct {
 	NetworkUris            []string                `json:"networkUris"`                   // "networkUris": ["/rest/ethernet-networks/f1e38895-721b-4204-8395-ae0caba5e163"]
 	PrimaryPort            *LogicalLocation        `json:"primaryPort,omitempty"`         // "primaryPort": {...},
 	Reachability           string                  `json:"reachability,omitempty"`        // "reachability": "Reachable",
-	UplinkPorts            LIGUplinkPortList       //define named type to use multisort method later
-	Networks               []NetworkSummary        //collect network name and vlanid from NetworkURI list
+	UplinkPorts            LIGUplinkPortList       `json:"-"`                             //define named type to use multisort method later
+	Networks               []NetworkSummary        `json:"-"`                             //collect network name and vlanid from NetworkURI list
 }
 
 type LogicalPortConfigInfo struct {
@@ -417,19 +416,6 @@ func CreateLIGConfigParse(fileName string) {
 
 		for i, v := range v.Interconnects {
 
-			// lf := LocationEntry{
-			// 	Type:          "Enclosure",
-			// 	RelativeValue: v.Frame,
-			// }
-			// lb := LocationEntry{
-			// 	Type:          "Bay",
-			// 	RelativeValue: v.Bay,
-			// }
-
-			// //lEntries := make([]LocationEntry, 2)
-			// lEntries := []LocationEntry{lf, lb}
-			// lLocation := LogicalLocation{LocationEntries: lEntries}
-
 			ictypePN, ok := icTypeTable[v.Interconnect]
 			if !ok {
 				fmt.Printf("can't find matching IC type part number for config %q\n", v.Interconnect)
@@ -442,19 +428,6 @@ func CreateLIGConfigParse(fileName string) {
 				os.Exit(1)
 			}
 
-			// lf := LocationEntry{
-			// 	Type:          "Enclosure",
-			// 	RelativeValue: v.Frame,
-			// }
-			// lb := LocationEntry{
-			// 	Type:          "Bay",
-			// 	RelativeValue: v.Bay,
-			// }
-
-			// //lEntries := make([]LocationEntry, 2)
-			// lEntries := []LocationEntry{lf, lb}
-			// lLocation := LogicalLocation{LocationEntries: lEntries}
-
 			lig.InterconnectMapTemplate.InterconnectMapEntryTemplates[i] = InterconnectMapEntryTemplate{
 				EnclosureIndex:               v.Frame,
 				PermittedInterconnectTypeUri: ictype.URI,
@@ -466,16 +439,7 @@ func CreateLIGConfigParse(fileName string) {
 					},
 				},
 			}
-
-			//fmt.Printf("%#v\n", lig.InterconnectMapTemplate.InterconnectMapEntryTemplates[i])
-
 		}
-
-		// b, err := json.MarshalIndent(lig, "", "  ")
-		// if err != nil {
-		// 	fmt.Println(err)
-		// }
-		//fmt.Printf("%s\n", b)
 
 		fmt.Printf("Creating Logical Interconnect Group: %q\n", v.Name)
 
@@ -484,8 +448,6 @@ func CreateLIGConfigParse(fileName string) {
 			os.Exit(1)
 		}
 
-		fmt.Println("Sleep for 5 secs to wait for LIG creation finish")
-		time.Sleep(5 * time.Second)
 		if len(v.UplinkSets) > 0 {
 			CreateLIGUplinkSet(c, v)
 		}
@@ -499,7 +461,7 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 
 	var wg sync.WaitGroup
 
-	rl := []string{"ENetwork", "ICType"}
+	rl := []string{"LIG", "ENetwork", "ICType"}
 
 	for _, v := range rl {
 		localv := v
@@ -519,6 +481,7 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 
 	ligMap := make(map[string]LIG)
 	for _, v := range ligList {
+		//log.Println(v.Name)
 		ligMap[v.Name] = v
 	}
 
@@ -538,11 +501,6 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 	lig.UplinkSets = make([]LIGUplinkSet, len(ylig.UplinkSets))
 
 	for ui, v := range ylig.UplinkSets {
-		// lig, ok := ligMap[v.LIG]
-		// if !ok {
-		// 	fmt.Printf("can't find LIG %q in current LIG list", v.LIG)
-		// 	os.Exit(1)
-		// }
 
 		nets := make([]ENetwork, 0)
 		for _, v := range v.Networks {
@@ -616,6 +574,14 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 			netURIs = append(netURIs, v.URI)
 		}
 
+		lig.UplinkSets[ui].Name = v.Name
+		lig.UplinkSets[ui].Mode = "Auto"
+
+		if v.Type == "ethernet" {
+			lig.UplinkSets[ui].NetworkType = "Ethernet"
+
+		}
+
 		lig.UplinkSets[ui].NetworkUris = netURIs
 		lig.UplinkSets[ui].LogicalPortConfigInfos = make([]LogicalPortConfigInfo, len(validports))
 
@@ -633,6 +599,7 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 						LocationEntry{Type: "Port", RelativeValue: v.portnumber},
 					},
 				},
+				DesiredSpeed: "Auto",
 			}
 		}
 
