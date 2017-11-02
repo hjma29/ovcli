@@ -184,9 +184,34 @@ func CreateEG(filename string) {
 					os.Exit(1)
 				}
 
-				bays := baysetMap[lig.InterconnectBaySet]
-				for _, v := range bays {
-					eg.InterconnectBayMappings = append(eg.InterconnectBayMappings, InterconnectBayMap{InterconnectBay: v, LogicalInterconnectGroupUri: lig.URI})
+				// if LIG is ethernet type
+				if lig.EnclosureIndexes[0] != -1 {
+
+					//converts bayset 3 to bays [3,6]
+					bays := baysetMap[lig.InterconnectBaySet]
+
+					//check lipPositionMap to see if any LIG already defined for the slot
+					if existLIG, ok := ligPostionMap[enclosureBay{enclosure: fv.ID, bay: bays[0]}]; ok {
+						//if exists, check if it's the same LIG for ethernet
+						if lig.Name != existLIG {
+							fmt.Printf("When trying to add LIG %q on interconnect bay set %v, there is one existing LIG %q\n", lig.Name, lig.InterconnectBaySet, existLIG)
+							os.Exit(1)
+						}
+						//if it's the same name for ethernet, go to next LIG
+						continue
+					}
+
+					//if no existing LIG defined for ethernet LIG, populate all enclosures with LIG name
+					for i := 1; i <= v.FrameCount; i++ {
+						ligPostionMap[enclosureBay{enclosure: i, bay: bays[0]}] = lig.Name
+						ligPostionMap[enclosureBay{enclosure: i, bay: bays[1]}] = lig.Name
+					}
+
+					//only write InterconnectBay field, don't write Enclosure Index field for ethernet LIG as it's across enclosures.
+					for _, v := range bays {
+						eg.InterconnectBayMappings = append(eg.InterconnectBayMappings, InterconnectBayMap{InterconnectBay: v, LogicalInterconnectGroupUri: lig.URI})
+
+					}
 
 				}
 
