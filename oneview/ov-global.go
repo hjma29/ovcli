@@ -168,6 +168,18 @@ type YAMLConfig struct {
 	ENetworks   []ENetwork       `json:"networks"`
 	SPTemplates []YAMLSPTemplate `json:"servertemplates"`
 	LIGs        []YAMLLIG        `json:"ligs"`
+	EGs         []YAMLEG         `json:"egs"`
+}
+
+type YAMLEG struct {
+	Name       string
+	FrameCount int `json:"framecount"`
+	Frames     []YAMLFrame
+}
+
+type YAMLFrame struct {
+	ID   int
+	LIGs []string `json:"ligs"`
 }
 
 type YAMLUplinkSet struct {

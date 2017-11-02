@@ -186,7 +186,7 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	if err != nil {
 		return nil, fmt.Errorf("OVCLI HTTP request sent error: %v", err)
 	}
-	log.Printf("[DEBUG] OVCLI response Code: %v for request %v\n\n", resp.StatusCode, method+"=>"+req.URL.String())
+	log.Printf("[DEBUG] OVCLI response Code: %v for request %v\n", resp.StatusCode, method+"=>"+req.URL.String())
 
 	data, err := ioutil.ReadAll(resp.Body)
 

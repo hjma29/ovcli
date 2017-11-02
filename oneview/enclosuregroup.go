@@ -1,7 +1,9 @@
 package oneview
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"sync"
 )
 
@@ -16,6 +18,7 @@ type EG struct {
 	InterconnectBayMappingCount         int                  `json:"interconnectBayMappingCount,omitempty"`         // "interconnectBayMappingCount": 8,
 	InterconnectBayMappings             []InterconnectBayMap `json:"interconnectBayMappings"`                       // "interconnectBayMappings": [],
 	IpRangeUris                         []string             `json:"ipRangeUris,omitempty"`
+	IpAddressingMode                    string               `json:"ipAddressingMode"`
 	Modified                            string               `json:"modified,omitempty"`         // "modified": "20150831T154835.250Z",
 	Name                                string               `json:"name,omitempty"`             // "name": "Enclosure Group 1",
 	PortMappingCount                    int                  `json:"portMappingCount,omitempty"` // "portMappingCount": 1,
@@ -121,5 +124,81 @@ func (c *CLIOVClient) GetEGVerbose(name string) []EG {
 	// // }
 
 	return egList
+
+}
+
+func CreateEG(filename string) {
+	y := parseYAML(filename)
+
+	//fmt.Printf("%#v", y.EGs)
+
+	c := NewCLIOVClient()
+
+	var wg sync.WaitGroup
+
+	rl := []string{"LIG"}
+
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
+
+	wg.Wait()
+
+	ligList := *(rmap["LIG"].listptr.(*[]LIG))
+
+	ligMap := make(map[string]LIG)
+	for _, v := range ligList {
+		//log.Println(v.Name)
+		ligMap[v.Name] = v
+	}
+
+	baysetMap := map[int][]int{1: {1, 4}, 2: {2, 5}, 3: {3, 6}}
+
+	type enclosureBay struct {
+		enclosure int
+		bay       int
+	}
+
+	ligPostionMap := make(map[enclosureBay]string)
+
+	for _, v := range y.EGs {
+		var eg EG
+		eg.Name = v.Name
+		eg.EnclosureCount = v.FrameCount
+		eg.Type = "EnclosureGroupV400"
+		eg.IpAddressingMode = "External"
+		eg.StackingMode = "Enclosure"
+		eg.InterconnectBayMappings = make([]InterconnectBayMap, 0)
+
+		for _, fv := range v.Frames {
+			for _, lv := range fv.LIGs {
+				lig, ok := ligMap[lv]
+				if !ok {
+					fmt.Printf("can't find matching LIG name %q in EG configuraltion\n", lv)
+					os.Exit(1)
+				}
+
+				bays := baysetMap[lig.InterconnectBaySet]
+				for _, v := range bays {
+					eg.InterconnectBayMappings = append(eg.InterconnectBayMappings, InterconnectBayMap{InterconnectBay: v, LogicalInterconnectGroupUri: lig.URI})
+
+				}
+
+			}
+
+		}
+		//fmt.Printf("%#v\n", eg.InterconnectBayMappings)
+		fmt.Printf("Creating EG %q\n", v.Name)
+		if _, err := c.SendHTTPRequest("POST", EGURL, "", "", eg); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
 
 }

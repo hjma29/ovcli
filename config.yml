@@ -44,6 +44,17 @@ ligs:
       - { frame: 2, bay: 3, interconnect: ILM20 }
       - { frame: 2, bay: 6, interconnect: VC40F8 }
 
+egs:
+  - name: test-eg
+    framecount: 2
+    frames:
+      - { id: 1, ligs: [test1] }
+      - { id: 2, ligs: [test1] }
+
+    # - { frame: 1, ligs: [test-1] }
+    # - { frame: 2, ligs: [test-1] }
+  
+
 
 
 
