@@ -39,6 +39,7 @@ const (
 	NetSetURL       = "/rest/network-sets"
 	EnclosureURL    = "/rest/enclosures"
 	EGURL           = "/rest/enclosure-groups"
+	LEURL           = "/rest/logical-enclosures"
 	SPURL           = "/rest/server-profiles"
 	SPTemplateURL   = "/rest/server-profile-templates"
 	ServerHWURL     = "/rest/server-hardware"
@@ -70,6 +71,13 @@ var rmap = resourceMap{
 		colptr:  &SPCol{},
 		uri:     SPURL,
 		logmsg:  "get Server Profile",
+	},
+
+	"LE": resource{
+		listptr: &[]LE{},
+		colptr:  &LECol{},
+		uri:     LEURL,
+		logmsg:  "get LE",
 	},
 
 	"EG": resource{
@@ -169,6 +177,13 @@ type YAMLConfig struct {
 	SPTemplates []YAMLSPTemplate `json:"servertemplates"`
 	LIGs        []YAMLLIG        `json:"ligs"`
 	EGs         []YAMLEG         `json:"egs"`
+	LEs         []YAMLLE         `json:"les"`
+}
+
+type YAMLLE struct {
+	Name       string
+	Enclosures []string
+	EG         string
 }
 
 type YAMLEG struct {

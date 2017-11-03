@@ -1,0 +1,142 @@
+{
+    "type": "LogicalEnclosureListV400",
+    "members": [
+        {
+            "type": "LogicalEnclosureV400",
+            "enclosureGroupUri": "/rest/enclosure-groups/fad224ff-e476-45c2-aea1-9d70d0fafb44",
+            "enclosureUris": [
+                "/rest/enclosures/0000000000A66104",
+                "/rest/enclosures/0000000000A66105"
+            ],
+            "enclosures": {
+                "/rest/enclosures/0000000000A66104": {
+                    "interconnectBays": [
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 1
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 2
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "Automatic"
+                            },
+                            "bayNumber": 3
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 4
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 5
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 6
+                        }
+                    ],
+                    "enclosureUri": "/rest/enclosures/0000000000A66104"
+                },
+                "/rest/enclosures/0000000000A66105": {
+                    "interconnectBays": [
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 1
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 2
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 3
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 4
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "No"
+                            },
+                            "bayNumber": 5
+                        },
+                        {
+                            "licenseIntents": {
+                                "FCUpgrade": "Automatic"
+                            },
+                            "bayNumber": 6
+                        }
+                    ],
+                    "enclosureUri": "/rest/enclosures/0000000000A66105"
+                }
+            },
+            "logicalInterconnectUris": [
+                "/rest/logical-interconnects/5f61a472-c3ee-43fb-b746-c14d341def9f"
+            ],
+            "ipAddressingMode": "External",
+            "ipv4Ranges": [],
+            "powerMode": "RedundantPowerFeed",
+            "ambientTemperatureMode": "Standard",
+            "firmware": {
+                "firmwareBaselineUri": null,
+                "validateIfLIFirmwareUpdateIsNonDisruptive": false,
+                "forceInstallFirmware": false,
+                "logicalInterconnectUpdateMode": "Parallel",
+                "updateFirmwareOnUnmanagedInterconnect": false
+            },
+            "scalingState": "NotScaling",
+            "deploymentManagerSettings": {
+                "osDeploymentSettings": {
+                    "deploymentModeSettings": {
+                        "deploymentMode": "None",
+                        "deploymentNetworkUri": null
+                    },
+                    "manageOSDeployment": false
+                },
+                "deploymentClusterUri": null
+            },
+            "deleteFailed": false,
+            "eTag": "2017-11-02T16:35:51.715Z",
+            "status": "Warning",
+            "uri": "/rest/logical-enclosures/c6644b09-1b91-4778-875b-28fd384d9ec3",
+            "name": "le-01",
+            "state": "Inconsistent",
+            "description": null,
+            "category": "logical-enclosures",
+            "created": "2017-11-02T15:47:42.674Z",
+            "modified": "2017-11-02T16:35:51.715Z"
+        }
+    ],
+    "count": 1,
+    "total": 1,
+    "start": 0,
+    "prevPageUri": null,
+    "nextPageUri": null,
+    "category": "logical-enclosures",
+    "created": "2017-11-02T16:52:54.578Z",
+    "eTag": "2017-11-02T16:52:54.578Z",
+    "modified": "2017-11-02T16:52:54.578Z",
+    "uri": "/rest/logical-enclosures?start=0&count=40"
+}

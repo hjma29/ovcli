@@ -79,6 +79,19 @@ func createEG(cmd *cobra.Command, args []string) {
 }
 
 
+var createLECmd = &cobra.Command{
+	Use:   "le",
+	Short: "create Logical Enclosure",
+	Long:  `create Logical Enclosure`,
+	Run:   createLE,
+}
+
+func createLE(cmd *cobra.Command, args []string) {
+	oneview.CreateLE(flagFile)
+
+}
+
+
 
 
 func init() {
@@ -87,6 +100,8 @@ func init() {
 	createCmd.AddCommand(createSPTemplateCmd)
 	createCmd.AddCommand(createLIGCmd)
 	createCmd.AddCommand(createEGCmd)
+	createCmd.AddCommand(createLECmd)
+	
 
 	// createNetworkCmd.Flags().StringVarP(&netName, "name", "n", "", "Network Name")
 	// createNetworkCmd.Flags().StringVarP(&netType, "type", "t", "", "Network Type")

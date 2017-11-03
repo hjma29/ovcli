@@ -1,8 +1,10 @@
 package oneview
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/ghodss/yaml"
@@ -52,4 +54,14 @@ func parseYAML(filename string) YAMLConfig {
 		os.Exit(1)
 	}
 	return y
+}
+
+func checkStructJson(st interface{}) {
+
+	b, err := json.MarshalIndent(st, "", "  ")
+	if err != nil {
+		log.Println(err)
+	}
+	log.Printf("%s\n", b)
+
 }

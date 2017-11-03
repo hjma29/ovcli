@@ -210,7 +210,6 @@ func (c *CLIOVClient) GetLI() []LI {
 	log.Printf("[DEBUG] liglist length: %d\n", len(ligList))
 
 	ligMap := make(map[string]LIG)
-
 	for _, v := range ligList {
 		ligMap[v.URI] = v
 	}

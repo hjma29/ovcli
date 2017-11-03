@@ -487,7 +487,7 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 			f, _ := strconv.Atoi(ps[0][len(ps[0])-1:])
 			b, _ := strconv.Atoi(ps[1][len(ps[1])-1:])
 			p := ps[2]
-			fmt.Println(f, " ", b, " ", p, " ", lig.Name)
+			//fmt.Println(f, " ", b, " ", p, " ", lig.Name)
 
 			//prepare enc/bay lookup map to find out model number
 			type FrameSlot struct {
@@ -561,7 +561,6 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 		}
 
 		fmt.Printf("Creating UplinkSet %q for the LIG: %q\n", v.Name, ylig.Name)
-		fmt.Println("URI:", lig.URI)
 
 		if _, err := c.SendHTTPRequest("PUT", lig.URI, "", "", lig); err != nil {
 			fmt.Println(err)

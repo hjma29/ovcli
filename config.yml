@@ -21,21 +21,24 @@ networks:
 
 
 ligs:
-  - name: test1
-    framecount: 2
+  - name: hj-lig-vc40-3frame-set3
+    framecount: 3
     interconnectset: 3
     interconnects: 
       - { frame: 1, bay: 3, interconnect: VC40F8 }
       - { frame: 1, bay: 6, interconnect: ILM20 }
       - { frame: 2, bay: 3, interconnect: ILM20 }
       - { frame: 2, bay: 6, interconnect: VC40F8 }
+      - { frame: 3, bay: 3, interconnect: ILM20 }
+      - { frame: 3, bay: 6, interconnect: ILM20 }
+
     uplinksets:
       - name: uplinkset1
         type: ethernet
         networks: [ hj-test1, hj-test2 ]
-        uplinkports: [ "frame1|bay3|Q1:2", "frame2|bay6|Q1:2" ] 
+        uplinkports: [ "frame1|bay3|Q1:1", "frame2|bay6|Q1:1" ] 
 
-  - name: test2
+  - name: hj-lig-vc40-2frame-set3
     framecount: 2
     interconnectset: 3
     interconnects: 
@@ -45,14 +48,20 @@ ligs:
       - { frame: 2, bay: 6, interconnect: VC40F8 }
 
 egs:
-  - name: test-eg
-    framecount: 2
+  - name: eg-3frame-set3
+    framecount: 3
     frames:
-      - { id: 1, ligs: [test1] }
-      - { id: 2, ligs: [test1] }
+      - { id: 1, ligs: [hj-lig-vc40-3frame-set3] }
+      - { id: 2, ligs: [hj-lig-vc40-3frame-set3] }
+      - { id: 3, ligs: [hj-lig-vc40-3frame-set3] }
 
     # - { frame: 1, ligs: [test-1] }
     # - { frame: 2, ligs: [test-1] }
+
+les:
+  - name: le-3frame
+    enclosures: [enc-01, enc-02, enc-03]
+    eg: eg-3frame-set3
   
 
 
