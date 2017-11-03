@@ -1,14 +1,14 @@
 servertemplates:
   - name: hj-sptemplate1
-    enclosuregroup: DCA-SolCenter-EG
+    enclosuregroup: eg-3frame-set3
     serverhardwaretype: "SY 480 Gen9 3"
     connections:
       - id: 1
         name: nic1
-        network: TE-Testing-300
+        network: hj-test1
 
   - name: hj-sptemplate2
-    enclosuregroup: DCA-SolCenter-EG
+    enclosuregroup: eg-3frame-set3
     serverhardwaretype: "SY 480 Gen9 1"
 
 
