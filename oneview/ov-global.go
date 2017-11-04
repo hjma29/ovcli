@@ -178,6 +178,12 @@ type YAMLConfig struct {
 	LIGs        []YAMLLIG        `json:"ligs"`
 	EGs         []YAMLEG         `json:"egs"`
 	LEs         []YAMLLE         `json:"les"`
+	SPs         []YAMLSP         `json:"serverprofiles"`
+}
+
+type YAMLSP struct {
+	Name     string
+	Template string
 }
 
 type YAMLLE struct {
@@ -209,10 +215,24 @@ type YAMLSPTemplate struct {
 	EG              string           `json:"enclosuregroup,omitempty"`
 	ServerHWType    string           `json:"serverhardwaretype,omitempty"`
 	YAMLConnections []YAMLConnection `json:"connections,omiempty"`
+	BootMode        string           `json:"bootmode,omiempty"`
+	Controllers     []YAMLController `json:"controllers,omiempty"`
+}
+
+type YAMLController struct {
+	Slot          string
+	Mode          string
+	Initialize    bool
+	LogicalDrives []YAMLLogicalDrive `json:"logicaldrives,omiempty"`
+}
+
+type YAMLLogicalDrive struct {
+	Name      string
+	RaidLevel string `json:"raidlevel,omiempty"`
+	NumDrive  int    `json:"numdrive,omiempty"`
 }
 
 type YAMLConnection struct {
-	ID      int    `json:"id,omiempty"`
 	Name    string `json:"name,omiempty"`
 	Network string `json:"network,omiempty"`
 }

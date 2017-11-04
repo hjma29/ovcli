@@ -1,15 +1,35 @@
 servertemplates:
-  - name: hj-sptemplate1
-    enclosuregroup: eg-3frame-set3
-    serverhardwaretype: "SY 480 Gen9 3"
-    connections:
-      - id: 1
-        name: nic1
-        network: hj-test1
+  # - name: hj-sptemplate1
+  #   enclosuregroup: eg-3frame-set3
+  #   serverhardwaretype: "SY 480 Gen9 3"
+  #   connections:
 
-  - name: hj-sptemplate2
+
+  # - name: hj-sptemplate2
+  #   enclosuregroup: eg-3frame-set3
+  #   serverhardwaretype: "SY 480 Gen9 1"
+
+  - name: hj-sptemplate3
     enclosuregroup: eg-3frame-set3
     serverhardwaretype: "SY 480 Gen9 1"
+    connections:
+      - {name: nic1, network: hj-test1}
+      - {name: nic2, network: hj-test2}
+    bootmode: BIOS
+    controllers: 
+      - slot: Embedded
+        mode: RAID
+        initialize: false
+        logicaldrives: 
+          - { name: logi-drive-01, raidlevel: RAID1, numdrive: 2}
+
+serverprofiles:
+  - name: hj-profile4
+    template: hj-sptemplate3
+
+
+        
+        
 
 
 

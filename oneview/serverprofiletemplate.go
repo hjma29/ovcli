@@ -62,27 +62,22 @@ type SPTemplate struct {
 	Boot struct {
 		ManageBoot bool     `json:"manageBoot,omitempty"`
 		Order      []string `json:"order,omitempty"`
-	} `json:"boot,omitempty"`
+	} `json:"boot,omitepmty"`
 	Bios struct {
 		ManageBios         bool `json:"manageBios,omitempty"`
 		OverriddenSettings []struct {
 			ID    string `json:"id,omitempty"`
 			Value string `json:"value,omitempty"`
 		} `json:"overriddenSettings,omitempty"`
-	} `json:"bios,omitempty"`
+	} `json:"-"`
 	LocalStorage struct {
 		SasLogicalJBODs []SasLogicalJBOD `json:"sasLogicalJBODs,omitempty"`
-		Controllers     []struct {
-			DeviceSlot    string         `json:"deviceSlot,omitempty"`
-			Mode          string         `json:"mode,omitempty"`
-			Initialize    bool           `json:"initialize,omitempty"`
-			LogicalDrives []LogicalDrive `json:"logicalDrives,omitempty"`
-		} `json:"controllers,omitempty"`
+		Controllers     []Controller     `json:"controllers,omitempty"`
 	} `json:"localStorage,omitempty"`
 	SanStorage struct {
 		ManageSanStorage  bool     `json:"manageSanStorage,omitempty"`
 		VolumeAttachments []string `json:"volumeAttachments,omitempty"`
-	} `json:"sanStorage,omitempty"`
+	} `json:"-"`
 	Category     string `json:"category,omitempty"`
 	Created      string `json:"created,omitempty"`
 	Modified     string `json:"modified,omitempty"`
@@ -107,6 +102,35 @@ type SPTConnection struct {
 	} `json:"boot,omitempty"`
 	NetworkName string `json:"-"`
 	NetworkVlan string `json:"-"`
+}
+
+type Controller struct {
+	DeviceSlot    string         `json:"deviceSlot,omitempty"`
+	Mode          string         `json:"mode,omitempty"`
+	Initialize    bool           `json:"initialize"`
+	LogicalDrives []LogicalDrive `json:"logicalDrives,omitempty"`
+}
+
+type LogicalDrive struct {
+	Name              string `json:"name,omitempty"`
+	RaidLevel         string `json:"raidLevel,omitempty"`
+	Bootable          bool   `json:"bootable,omitempty"`
+	NumPhysicalDrives int    `json:"numPhysicalDrives,omitempty"`
+	DriveTechnology   string `json:"driveTechnology,omitempty"`
+	SasLogicalJBODID  int    `json:"sasLogicalJBODId,omitempty"`
+	DriveNumber       int    `json:"driveNumber,omitempty"`
+}
+
+type SasLogicalJBOD struct {
+	ID                int    `json:"id,omitempty"`
+	DeviceSlot        string `json:"deviceSlot,omitempty"`
+	Name              string `json:"name,omitempty"`
+	NumPhysicalDrives int    `json:"numPhysicalDrives,omitempty"`
+	DriveMinSizeGB    int    `json:"driveMinSizeGB,omitempty"`
+	DriveMaxSizeGB    int    `json:"driveMaxSizeGB,omitempty"`
+	DriveTechnology   string `json:"driveTechnology,omitempty"`
+	SasLogicalJBODURI string `json:"sasLogicalJBODUri,omitempty"`
+	Status            string `json:"status,omitempty"`
 }
 
 func (c *CLIOVClient) GetSPTemplate() []SPTemplate {
@@ -283,24 +307,46 @@ networks:
 			spt.Type = "ServerProfileTemplateV3"
 		}
 
+		c.GetResourceLists("ENetwork", "")
+		netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
+
+		netMap := make(map[string]ENetwork)
+		for _, v := range netList {
+			netMap[v.Name] = v
+		}
+
+		//check and add connections
 		if len(v.YAMLConnections) != 0 {
 			spt.ConnectionSettings.ManageConnections = true
 			spt.ConnectionSettings.Connections = make([]SPTConnection, 0)
 
-			for _, v := range v.YAMLConnections {
+			for i, v := range v.YAMLConnections {
 
-				c.GetResourceLists("ENetwork", v.Network)
-				netlist := *(rmap["ENetwork"].listptr.(*[]ENetwork))
-				//we assume netlist only contains one element, better to do extra check here
-				neturi := netlist[0].URI
-				// log.Printf("[DEBUG] v.network: %v", v.Network)
-				// log.Printf("[DEBUG] len: %v", len(neturi))
-				spt.ConnectionSettings.Connections = append(spt.ConnectionSettings.Connections, SPTConnection{ID: v.ID, Name: v.Name, NetworkURI: neturi})
+				net, ok := netMap[v.Network]
+				if !ok {
+					fmt.Printf("network name %q in SP Template configuration can't be found in OneView resources\n", v.Name)
+					os.Exit(1)
+				}
+				spt.ConnectionSettings.Connections = append(spt.ConnectionSettings.Connections, SPTConnection{ID: i + 1, Name: v.Name, FunctionType: "Ethernet", NetworkURI: net.URI})
 			}
 		}
 
-		// j, _ := json.MarshalIndent(spt, "", "  ")
-		// log.Printf("[DEBUG] SP Template Json Body: %s", j)
+		//check and create storage parameters
+		spt.BootMode.Mode = v.BootMode
+		spt.BootMode.ManageMode = true
+
+		spt.LocalStorage.Controllers = make([]Controller, 0)
+		for _, v := range v.Controllers {
+			var ctl Controller
+			ld := make([]LogicalDrive, 0)
+			for _, v := range v.LogicalDrives {
+				var d LogicalDrive
+				d = LogicalDrive{Name: v.Name, RaidLevel: v.RaidLevel, NumPhysicalDrives: v.NumDrive}
+				ld = append(ld, d)
+			}
+			ctl = Controller{DeviceSlot: v.Slot, Mode: v.Mode, Initialize: v.Initialize, LogicalDrives: ld}
+			spt.LocalStorage.Controllers = append(spt.LocalStorage.Controllers, ctl)
+		}
 
 		fmt.Printf("Creating server profile template: %q\n", v.Name)
 		_, err := c.SendHTTPRequest("POST", SPTemplateURL, "", "", spt)

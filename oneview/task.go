@@ -246,8 +246,8 @@ func (t *Task) checkStatus() error {
 		os.Exit(1)
 	}
 
-	log.Printf("[DEBUG] state: %v, status: %v\n", t.TaskState, t.TaskStatus)
-	log.Printf("[DEBUG] expectedDuration: %v, completedSteps: %v, percentComplete: %v, computedPercentCompute: %v\n\n", t.ExpectedDuration, t.CompletedSteps, t.PercentComplete, t.ComputedPercentComplete)
+	fmt.Printf("state: %v, status: %v\n", t.TaskState, t.TaskStatus)
+	fmt.Printf("expectedDuration: %v, completedSteps: %v, percentComplete: %v, computedPercentCompute: %v\n\n", t.ExpectedDuration, t.CompletedSteps, t.PercentComplete, t.ComputedPercentComplete)
 
 	return nil
 }
