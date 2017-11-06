@@ -44,7 +44,7 @@ username: Administrator
 password: "password"
 ```
 
-* **Populate OVCLI login configuration file** and test the connection with HPE Synergy using the above file by running <code>ovcli login load -f <filname></code>. (Behind the scene, the ovcli will copy the specified file to ovcli default config file "appliance-credential.yml"). You can verify configuration file contents and connection by using <code>ovcli login show</code> and <code>ovcli login verify</code> command. A successful Synergy connection should come back with the Synergy API version. "500" below shows Synergy is running OneView version 3.10. 
+* **Populate OVCLI login configuration file** and test the connection with HPE Synergy using the above file by running <code>ovcli login load -f "filname"</code>. (Behind the scene, the ovcli will copy the specified file to ovcli default config file "appliance-credential.yml"). You can verify configuration file contents and connection by using <code>ovcli login show</code> and <code>ovcli login verify</code> command. A successful Synergy connection should come back with the Synergy API version. "500" below shows Synergy is running OneView version 3.10. 
 
 ```
 $ovcli login load -f syn2.yml
