@@ -36,21 +36,31 @@ Usage:
   ...
 ```
 
-* **Create a Synergy configuration text file** including Synergy Mgmt IP address/hostname, login username and password in the current directory. It's a very simple text file with the following three lines(please update with your corresponding login credentials)
+* **Create a Synergy configuration text file** including Synergy Mgmt IP address/hostname, login username and password in the current directory. It's a text file with the following three lines(please update with your corresponding login credentials and use "" if the string includes special characters)
 
 ```
 ipaddress: 192.168.1.1
 username: Administrator
-password: password
+password: "password"
 ```
 
-* **Populate OVCLI login configuration file** and test the connection with HPE Synergy using the above file by running "ovcli connect -f <filname>". A successful Synergy connection should come back with the Synergy API version. "500" below shows Synergy is running OneView version 3.10. (Behind the scene, the ovcli will copy the file to a new file called "appliance-credential.yml" and verify the Synergy connection using the yaml file contents.)
+* **Populate OVCLI login configuration file** and test the connection with HPE Synergy using the above file by running <code>ovcli login load -f <filname></code>. (Behind the scene, the ovcli will copy the specified file to ovcli default config file "appliance-credential.yml"). You can verify configuration file contents and connection by using <code>ovcli login show</code> and <code>ovcli login verify</code> command. A successful Synergy connection should come back with the Synergy API version. "500" below shows Synergy is running OneView version 3.10. 
 
 ```
-C:\Users\Administrator\Downloads>ovcli connect -f login.txt
+$ovcli login load -f syn2.yml
+Successfully load "syn2.yml" to default configuration file appliance-credential.yml, use "ovcli login show" to verify
+
+$ovcli login show
+Login information in default configuration file: use "ovcli login verify" to verify credential
+Synergy OneView IP Address:  10.16.43.100
+Synergy OneView Username:  Administrator
+Synergy OneView Password:  <trim>
+
+$ovcli login verify
+Connecting to Synergy OneView Appliance at "https://10.16.43.100" ...
 Appliance Address      Username        Appliance Current Version
 -----------------      --------        -------------------------
-https://10.16.44.101   Administrator   500
+https://10.16.43.100   Administrator   500
 ```
 
 * With login credential verified, you can **try different "ovcli show"** commands like the following examples. "--help" or "-h" flag should give you help contexts for the commands.

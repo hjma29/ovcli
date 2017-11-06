@@ -44,7 +44,7 @@ to explore what are next available options`,
 	RootCmd.AddCommand(NewShowCmd())
 	RootCmd.AddCommand(deleteCmd)
 	RootCmd.AddCommand(createCmd)
-	RootCmd.AddCommand(NewConnectCmd())
+	RootCmd.AddCommand(NewLoginCmd())
 	RootCmd.AddCommand(importCmd)
 	RootCmd.AddCommand(NewEditCmd())
 

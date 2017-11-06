@@ -230,34 +230,47 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	return data, nil
 }
 
-func ConnectOV(flagFile string) error {
+func LoadConfig(flagFile string) error {
 
-	if flagFile != "appliance-credential.yml" {
-		log.Print("[DEBUG] Copy config file to default config file \"appliance-cretential.yml\" for connection")
-
-		srcFile, err := os.Open(flagFile)
-		if err != nil {
-			log.Fatal("error opening file:", err)
-		}
-
-		dstFile, err := os.Create(DefaultConfigFile)
-		if err != nil {
-			return fmt.Errorf("error creating file: %f", err)
-		}
-
-		_, err = io.Copy(dstFile, srcFile)
-		if err != nil {
-			return fmt.Errorf("error copying file: %v", err)
-		}
-		defer srcFile.Close()
-		defer dstFile.Close()
+	if flagFile == "appliance-credential.yml" {
+		fmt.Println("Default appliance-credential.yml specified. No need to load. Use \"ovcli login show\" to verify")
+		return nil
 	}
+	log.Print("[DEBUG] Copy config file to default config file \"appliance-cretential.yml\" for connection")
+
+	srcFile, err := os.Open(flagFile)
+	defer srcFile.Close()
+
+	if err != nil {
+		log.Fatal("error opening file:", err)
+	}
+
+	dstFile, err := os.Create(DefaultConfigFile)
+	defer dstFile.Close()
+
+	if err != nil {
+		return fmt.Errorf("error creating file: %f", err)
+	}
+
+	_, err = io.Copy(dstFile, srcFile)
+	if err != nil {
+		return fmt.Errorf("error copying file: %v", err)
+	}
+
+	fmt.Printf("Successfully load %q to default configuration file appliance-credential.yml, use \"ovcli login show\" to verify\n", flagFile)
+
+	return nil
+
+}
+
+func VerifyConfig() error {
 
 	c := NewCLIOVClient()
 
 	log.Print("[DEBUG] c.APIVersion: ", c.APIVersion)
 	log.Print("[DEBUG] c.Endpoint : ", c.Endpoint)
 
+	fmt.Printf("Connecting to Synergy OneView Appliance at %q ...\n", c.Endpoint)
 	if err := c.setAuthKey(); err != nil {
 		return fmt.Errorf("login failed: %v", err)
 	}
@@ -270,6 +283,27 @@ func ConnectOV(flagFile string) error {
 	fmt.Fprintf(tw, format, c.Endpoint, c.User, c.APIVersion)
 
 	return nil
+}
+
+func ShowConfig() error {
+	y := cred{}
+
+	yamlData, err := ioutil.ReadFile(DefaultConfigFile)
+	if err != nil {
+		return fmt.Errorf("error reading from default config file appliance-credential.yml, error is: %v", err)
+	}
+
+	if err := yaml.Unmarshal(yamlData, &y); err != nil {
+		return fmt.Errorf("can't unmarshal fromdefault config file appliance-credential.yml, error is %v", err)
+	}
+
+	fmt.Println("Login information in default configuration file: use \"ovcli login verify\" to verify credential")
+	fmt.Println("Synergy OneView IP Address: ", y.Ip)
+	fmt.Println("Synergy OneView Username: ", y.User)
+	fmt.Println("Synergy OneView Password: ", y.Pass)
+
+	return nil
+
 }
 
 //GetResourceURL uses GetResourceLists to get resource for one item
@@ -299,11 +333,11 @@ func readCredential() (cred, error) {
 
 	yamlData, err := ioutil.ReadFile(DefaultConfigFile)
 	if err != nil {
-		return cred{}, fmt.Errorf("error reading from default config file %v,", err)
+		return cred{}, fmt.Errorf("error reading from default config file appliance-credential.yml, error is: %v", err)
 	}
 
 	if err := yaml.Unmarshal(yamlData, &y); err != nil {
-		return cred{}, fmt.Errorf("can't unmarshal from config file %v", err)
+		return cred{}, fmt.Errorf("can't unmarshal fromdefault config file appliance-credential.yml, error is %v", err)
 	}
 
 	return y, nil
@@ -362,10 +396,23 @@ func (c *CLIOVClient) setAuthKey() error {
 	if err != nil {
 		return fmt.Errorf("OVCLI get initial auth key error: %v", err)
 	}
+
 	data, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 	if err != nil {
 		return fmt.Errorf("OVCLI error reading init session-id response: %v", err)
+	}
+
+	if !respOK[resp.StatusCode] {
+		var e apiError
+		if err := json.Unmarshal(data, &e); err != nil {
+			return fmt.Errorf("OVCLI error trying unmarshal bad response code: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
+		}
+
+		log.Printf("[DEBUG]login username is %q\n", c.User)
+		log.Printf("[DEBUG]login password is %q\n", c.Password)
+		return fmt.Errorf("OVCLI request get error response code: \nResponse Status: %s\nErrorCode: %s\nMessage: %s\nDetails: %s\nRecommendations: %s", resp.Status, e.ErrorCode, e.Message, e.Details, e.RecommendedActions)
+
 	}
 
 	type sessionID struct {
