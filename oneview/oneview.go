@@ -164,7 +164,7 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	q := req.URL.Query()
 	if filter != "" {
 		q.Add("filter", fmt.Sprintf("name regex '%s'", filter))
-		defer q.Del("filter")
+		defer q.Del("filter") //remove filter after function to make sure no past info existing for new request using the same client
 	}
 	if sort != "" {
 		q.Add("sort", sort)

@@ -1,6 +1,6 @@
-# OVCLI: A HPE Synergy Command Line Tool
+# OVCLI: A HPE Synergy OneView Command Line Tool
 
-OVCLI is a CLI tool to manage Hewlett Packard Enterprise Synergy resources. It provides IT admins with a cross-platform HPE Synergy CLI utility that can directly run on Linux, Windows, and MAC operating systems without worrying about installing/troubleshooting any programming language library dependencies.
+OVCLI is a OneView CLI tool to manage Hewlett Packard Enterprise Synergy resources. It provides IT admins with a cross-platform HPE Synergy CLI utility that can directly run on Linux, Windows, and MAC operating systems without worrying about installing/troubleshooting any programming language library dependencies.
 
 OVCLI tool communicates with Synergy OneView Restful API interface. It complements HPE OneView GUI interface to provide quicker Synergy access in many use cases.
 

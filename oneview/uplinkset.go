@@ -65,15 +65,20 @@ type UplinkPort struct {
 }
 
 type PortConfigInfo struct {
-	DesiredSpeed     string `json:"desiredSpeed"`
-	PortURI          string `json:"portUri"`
-	ExpectedNeighbor string `json:"expectedNeighbor"`
+	DesiredSpeed     string           `json:"desiredSpeed"`
+	PortURI          string           `json:"portUri"`
+	ExpectedNeighbor ExpectedNeighbor `json:"expectedNeighbor"`
 	Location         struct {
 		LocationEntries []struct {
 			Value string `json:"value"`
 			Type  string `json:"type"`
 		} `json:"locationEntries"`
 	} `json:"location"`
+}
+
+type ExpectedNeighbor struct {
+	RemoteChassisID string `json:"remoteChassisId"`
+	RemotePortID    string `json:"remotePortId"`
 }
 
 //GetUplinkSet is to retrive uplinkset information

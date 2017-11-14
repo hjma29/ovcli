@@ -44,7 +44,7 @@ type SPTemplate struct {
 	WwnType                  string `json:"wwnType,omitempty"`
 	SerialNumberType         string `json:"serialNumberType,omitempty"`
 	IscsiInitiatorNameType   string `json:"iscsiInitiatorNameType,omitempty"`
-	OsDeploymentSettings     string `json:"osDeploymentSettings,omitempty"`
+	OsDeploymentSettings     OSDeploymentSettings `json:"osDeploymentSettings,omitempty"`
 	Firmware                 struct {
 		ManageFirmware         bool   `json:"manageFirmware,omitempty"`
 		ForceInstallFirmware   bool   `json:"forceInstallFirmware,omitempty"`
@@ -132,6 +132,17 @@ type SasLogicalJBOD struct {
 	SasLogicalJBODURI string `json:"sasLogicalJBODUri,omitempty"`
 	Status            string `json:"status,omitempty"`
 }
+
+type OSDeploymentSettings struct {
+	ForceOsDeployment   bool   `json:"forceOsDeployment"`
+	OsDeploymentPlanURI string `json:"osDeploymentPlanUri"`
+	OsVolumeURI         string `json:"osVolumeUri"`
+	OsCustomAttributes  []struct {
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	} `json:"osCustomAttributes"`
+}
+
 
 func (c *CLIOVClient) GetSPTemplate() []SPTemplate {
 

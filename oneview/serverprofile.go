@@ -91,13 +91,13 @@ type SP struct {
 		SanSystemCredentials []string `json:"sanSystemCredentials,omitempty"`
 		ManageSanStorage     bool     `json:"manageSanStorage,omitempty"`
 	} `json:"sanStorage,omitempty"`
-	OsDeploymentSettings string `json:"osDeploymentSettings,omitempty"`
-	RefreshState         string `json:"refreshState,omitempty"`
-	ETag                 string `json:"eTag,omitempty"`
-	SPTemplate           string `json:"-"`
-	ServerHW             string `json:"-"`
-	ServerHWType         string `json:"-"`
-	PowerState           string `json:"-"`
+	OsDeploymentSettings OSDeploymentSettings `json:"osDeploymentSettings,omitempty"`
+	RefreshState         string               `json:"refreshState,omitempty"`
+	ETag                 string               `json:"eTag,omitempty"`
+	SPTemplate           string               `json:"-"`
+	ServerHW             string               `json:"-"`
+	ServerHWType         string               `json:"-"`
+	PowerState           string               `json:"-"`
 	//ServerHWForCreation  string `json:"serverHardwareUri,omitempty"`
 }
 
@@ -118,7 +118,7 @@ type Connection struct {
 	RequestedMbps   string `json:"requestedMbps,omitempty"`
 	AllocatedMbps   int    `json:"allocatedMbps,omitempty"`
 	MaximumMbps     int    `json:"maximumMbps,omitempty"`
-	Ipv4            string `json:"ipv4,omitempty"`
+	Ipv4            Ipv4   `json:"ipv4,omitempty"`
 	Boot            struct {
 		Priority string `json:"priority,omitempty"`
 	} `json:"boot,omitempty"`
@@ -127,6 +127,13 @@ type Connection struct {
 	NetworkName string `json:"networkName,omitempty"`
 	NetworkVlan string `json:"-"`
 	ICName      string `json:"-"`
+}
+
+type Ipv4 struct {
+	IPAddressSource string `json:"ipAddressSource,omitempty"`
+	IPAddress       string `json:"ipAddress,omitempty"`
+	SubnetMask      string `json:"subnetMask,omitempty"`
+	Gateway         string `json:"gateway,omitempty"`
 }
 
 type serverprofileDetailPrint struct {

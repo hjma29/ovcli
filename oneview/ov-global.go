@@ -29,22 +29,25 @@ type LIUplinkSetMap map[string]UplinkSetMap
 var taskuri string
 
 const (
-	LIGURL          = "/rest/logical-interconnect-groups"
-	LIURL           = "/rest/logical-interconnects"
-	UplinkSetURL    = "/rest/uplink-sets"
-	ICURL           = "/rest/interconnects"
-	SFPURL          = "/pluggableModuleInformation"
-	ICTypeURL       = "/rest/interconnect-types"
-	ENetworkURL     = "/rest/ethernet-networks"
-	NetSetURL       = "/rest/network-sets"
-	EnclosureURL    = "/rest/enclosures"
-	EGURL           = "/rest/enclosure-groups"
-	LEURL           = "/rest/logical-enclosures"
-	SPURL           = "/rest/server-profiles"
-	SPTemplateURL   = "/rest/server-profile-templates"
-	ServerHWURL     = "/rest/server-hardware"
-	ServerHWTypeURL = "/rest/server-hardware-types"
-	VersionURL      = "/rest/version"
+	LIGURL              = "/rest/logical-interconnect-groups"
+	LIURL               = "/rest/logical-interconnects"
+	UplinkSetURL        = "/rest/uplink-sets"
+	ICURL               = "/rest/interconnects"
+	SFPURL              = "/pluggableModuleInformation"
+	ICTypeURL           = "/rest/interconnect-types"
+	ENetworkURL         = "/rest/ethernet-networks"
+	NetSetURL           = "/rest/network-sets"
+	EnclosureURL        = "/rest/enclosures"
+	EGURL               = "/rest/enclosure-groups"
+	LEURL               = "/rest/logical-enclosures"
+	SPURL               = "/rest/server-profiles"
+	SPTemplateURL       = "/rest/server-profile-templates"
+	ServerHWURL         = "/rest/server-hardware"
+	ServerHWTypeURL     = "/rest/server-hardware-types"
+	VersionURL          = "/rest/version"
+	DeploymentServerURL = "/rest/deployment-servers"
+	StreamerApplianceURL ="/rest/deployment-servers/image-streamer-appliances"
+	DeploymentPlanURL   = "/rest/os-deployment-plans/" //somehow needs to have ending /, otherwise error out from OV
 
 	DefaultConfigFile = "appliance-credential.yml"
 )
@@ -155,6 +158,26 @@ var rmap = resourceMap{
 		colptr:  &EncCol{},
 		uri:     EnclosureURL,
 		logmsg:  "get Enclosure",
+	},
+
+	"DeploymentServer": resource{
+		listptr: &[]DeploymentServer{},
+		colptr:  &DeploymentServerCol{},
+		uri:     DeploymentServerURL,
+		logmsg:  "get DeploymentServer",
+	},
+
+	"DeploymentPlan": resource{
+		listptr: &[]DeploymentPlan{},
+		colptr:  &DeploymentPlanCol{},
+		uri:     DeploymentPlanURL,
+		logmsg:  "get DeploymentPlan",
+	},
+	"StreamerAppliance": resource{
+		listptr: &[]StreamerAppliance{},
+		colptr:  &StreamerApplianceCol{},
+		uri:     StreamerApplianceURL,
+		logmsg:  "get StreamerAppliance",
 	},
 }
 

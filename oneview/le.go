@@ -46,11 +46,11 @@ type LE struct {
 	// 		EnclosureURI string `json:"enclosureUri,omitempty"`
 	// 	} `json:"/rest/enclosures/0000000000A66105,omitempty"`
 	// } `json:"enclosures,omitempty"`
-	LogicalInterconnectUris []string `json:"logicalInterconnectUris,omitempty"`
-	IPAddressingMode        string   `json:"ipAddressingMode,omitempty"`
-	Ipv4Ranges              []string `json:"ipv4Ranges,omitempty"`
-	PowerMode               string   `json:"powerMode,omitempty"`
-	AmbientTemperatureMode  string   `json:"ambientTemperatureMode,omitempty"`
+	LogicalInterconnectUris []string    `json:"logicalInterconnectUris,omitempty"`
+	IPAddressingMode        string      `json:"ipAddressingMode,omitempty"`
+	Ipv4Ranges              []Ipv4Range `json:"ipv4Ranges,omitempty"`
+	PowerMode               string      `json:"powerMode,omitempty"`
+	AmbientTemperatureMode  string      `json:"ambientTemperatureMode,omitempty"`
 	Firmware                struct {
 		FirmwareBaselineURI                       string `json:"firmwareBaselineUri,omitempty"`
 		ValidateIfLIFirmwareUpdateIsNonDisruptive bool   `json:"validateIfLIFirmwareUpdateIsNonDisruptive,omitempty"`
@@ -82,6 +82,15 @@ type LE struct {
 	EGName         string   `json:"-"`
 	EnclosureNames []string `json:"-"`
 	LINames        []string `json:"-"`
+}
+
+type Ipv4Range struct {
+	IPRangeURI string   `json:"ipRangeUri,omitempty"`
+	Name       string   `json:"name,omitempty"`
+	SubnetMask string   `json:"subnetMask,omitempty"`
+	Gateway    string   `json:"gateway,omitempty"`
+	Domain     string   `json:"domain,omitempty"`
+	DNSServers []string `json:"dnsServers,omitempty"`
 }
 
 func (c *CLIOVClient) GetLE() []LE {

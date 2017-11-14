@@ -13,7 +13,7 @@ const (
 		"Name\tEnclosure Group\tEnclosures\tLogical Interconnects\n" +
 		//"----\t-----\n" +
 		"{{range .}}" +
-		"{{.Name}}\t{{.EGName}}\t{{range .EnclosureNames}}{{.}} {{end}}\t{{range .LINames}}{{.}} {{end}}\n" +
+		"{{.Name}}\t{{.EGName}}\t{{range .EnclosureNames}}\"{{.}}\" {{end}}\t{{range .LINames}}\"{{.}}\" {{end}}\n" +
 		"{{end}}"
 
 	leShowFormatVerbose = "" //+

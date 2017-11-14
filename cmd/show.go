@@ -30,6 +30,9 @@ func NewShowCmd() *cobra.Command {
 	showCmd.AddCommand(NewShowSPCmd(c))
 	showCmd.AddCommand(NewShowSPTemplateCmd(c))
 	showCmd.AddCommand(NewShowServerHWCmd(c))
+	showCmd.AddCommand(NewShowDeploymentServerCmd(c))
+	
+	showCmd.AddCommand(NewShowStreamerCmd(c))
 
 	return showCmd
 }
