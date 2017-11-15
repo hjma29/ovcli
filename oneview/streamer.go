@@ -1,114 +1,153 @@
 package oneview
 
-// "log"
-// "sort"
-// "sync"
+import (
+	"sort"
+	"sync"
+)
 
-// type I3SAppplianceCol struct {
-// 	Type        string         `json:"type"`
-// 	Members     []StreamerAppliance `json:"members"`
-// 	NextPageURI interface{}    `json:"nextPageUri"`
-// 	Start       int            `json:"start"`
-// 	PrevPageURI interface{}    `json:"prevPageUri"`
-// 	Total       int            `json:"total"`
-// 	Count       int            `json:"count"`
-// 	ETag        string         `json:"eTag"`
-// 	Created     string         `json:"created"`
-// 	Modified    string         `json:"modified"`
-// 	Category    string         `json:"category"`
-// 	URI         string         `json:"uri"`
-// }
+type ArtifactCol struct {
+	Type        string     `json:"type"`
+	Sort        string     `json:"sort"`
+	Members     []Artifact `json:"members"`
+	NextPageURI string     `json:"nextPageUri"`
+	Start       int        `json:"start"`
+	PrevPageURI string     `json:"prevPageUri"`
+	Total       int        `json:"total"`
+	Count       int        `json:"count"`
+	ETag        string     `json:"eTag"`
+	Created     string     `json:"created"`
+	Modified    string     `json:"modified"`
+	Category    string     `json:"category"`
+	URI         string     `json:"uri"`
+}
 
-// type StreamerAppliance struct {
-// 	Type                      string      `json:"type"`
-// 	LogicalEnclosureURI       string      `json:"logicalEnclosureUri"`
-// 	CimEnclosureURI           string      `json:"cimEnclosureUri"`
-// 	CimBay                    string      `json:"cimBay"`
-// 	IscsiVlanTagID            int         `json:"iscsiVlanTagID"`
-// 	AtlasRepVlanTagID         int         `json:"atlasRepVlanTagID"`
-// 	EmIpv6Address             string      `json:"emIpv6Address"`
-// 	MgmtIpv6Address           string      `json:"mgmtIpv6Address"`
-// 	MgmtIpv4Address           string      `json:"mgmtIpv4Address"`
-// 	DataIpv4Address           string      `json:"dataIpv4Address"`
-// 	MgmtIpv4SubnetMask        string      `json:"mgmtIpv4SubnetMask"`
-// 	DataIpv4SubnetMask        string      `json:"dataIpv4SubnetMask"`
-// 	MgmtIpv4Gateway           string      `json:"mgmtIpv4Gateway"`
-// 	DataIpv4Gateway           string      `json:"dataIpv4Gateway"`
-// 	ILOIpv4Address            interface{} `json:"iLOIpv4Address"`
-// 	ClusterIpv6Address        string      `json:"clusterIpv6Address"`
-// 	ClusterIpv4Address        string      `json:"clusterIpv4Address"`
-// 	DNSServer1                string      `json:"dnsServer1"`
-// 	DNSServer2                string      `json:"dnsServer2"`
-// 	QuorumDeviceStoreID       string      `json:"quorumDeviceStoreId"`
-// 	QuorumEmIpv6Address       string      `json:"quorumEmIpv6Address"`
-// 	VsaMgmtIpv4Address        string      `json:"vsaMgmtIpv4Address"`
-// 	VsaDataIpv4Address        string      `json:"vsaDataIpv4Address"`
-// 	VsaDataClusterIpv4Address string      `json:"vsaDataClusterIpv4Address"`
-// 	VsaHostName               string      `json:"vsaHostName"`
-// 	VsaGroupName              string      `json:"vsaGroupName"`
-// 	VsaClusterName            string      `json:"vsaClusterName"`
-// 	CimHwStatus               interface{} `json:"cimHwStatus"`
-// 	IsActive                  bool        `json:"isActive"`
-// 	IsPrimary                 bool        `json:"isPrimary"`
-// 	IsMgmtOnly                bool        `json:"isMgmtOnly"`
-// 	PeerURI                   string      `json:"peerUri"`
-// 	OneViewIpv6Address        string      `json:"oneViewIpv6Address"`
-// 	PrimaryActiveURI          interface{} `json:"primaryActiveUri"`
-// 	DeploymentClusterURI      string      `json:"deploymentClusterUri"`
-// 	MgmtPoolRangeURI          string      `json:"mgmtPoolRangeUri"`
-// 	CimSerialNumber           string      `json:"cimSerialNumber"`
-// 	IsActiveConfigured        bool        `json:"isActiveConfigured"`
-// 	NeedUpgrade               bool        `json:"needUpgrade"`
-// 	OneViewApplianceUUID      string      `json:"oneViewApplianceUUID"`
-// 	ApplianceChecksum         interface{} `json:"applianceChecksum"`
-// 	ReplaceTopology           bool        `json:"replaceTopology"`
-// 	OneViewClusterIpv4Address string      `json:"oneViewClusterIpv4Address"`
-// 	CimEnclosureName          string      `json:"cimEnclosureName"`
-// 	AmvmMgmtIpv4Address       string      `json:"amvmMgmtIpv4Address"`
-// 	AmvmDataIpv4Address       string      `json:"amvmDataIpv4Address"`
-// 	Hostname                  interface{} `json:"hostname"`
-// 	ETag                      string      `json:"eTag"`
-// 	Created                   string      `json:"created"`
-// 	Modified                  string      `json:"modified"`
-// 	ApplianceUUID             string      `json:"applianceUUID"`
-// 	DomainName                string      `json:"domainName"`
-// 	Category                  string      `json:"category"`
-// 	ID                        string      `json:"id"`
-// 	State                     string      `json:"state"`
-// 	Description               string      `json:"description"`
-// 	URI                       string      `json:"uri"`
-// 	Status                    string      `json:"status"`
-// 	Name                      interface{} `json:"name"`
-// }
+type Artifact struct {
+	Type                   string                   `json:"type"`
+	DeploymentPlans        []ArtifactDeploymentPlan `json:"deploymentPlans"`
+	BuildPlans             []BuildPlan              `json:"buildPlans"`
+	Goldenimage            []Goldenimage            `json:"goldenimage"`
+	PlanScripts            []PlanScript             `json:"planScripts"`
+	Checksum               string                   `json:"checksum"`
+	ETag                   string                   `json:"eTag"`
+	Created                string                   `json:"created"`
+	Modified               string                   `json:"modified"`
+	ArtifactsbundleID      string                   `json:"artifactsbundleID"`
+	ArtifactsCount         int                      `json:"artifactsCount"`
+	Importbundle           bool                     `json:"importbundle"`
+	BackupService          bool                     `json:"backupService"`
+	RecoverBundle          bool                     `json:"recoverBundle"`
+	LastBackUpDownloadTime string                   `json:"lastBackUpDownloadTime"`
+	DownloadURI            string                   `json:"downloadURI"`
+	Category               string                   `json:"category"`
+	Name                   string                   `json:"name"`
+	State                  string                   `json:"state"`
+	Size                   int                      `json:"size"`
+	ReadOnly               bool                     `json:"readOnly"`
+	Description            string                   `json:"description"`
+	URI                    string                   `json:"uri"`
+	Status                 string                   `json:"status"`
+}
 
-// func (c *CLIOVClient) GetStreamer() []StreamerAppliance {
+type ArtifactDeploymentPlan struct {
+	DeploymentplanName string `json:"deploymentplanName"`
+	GoldenImageName    string `json:"goldenImageName"`
+	OebpName           string `json:"oebpName"`
+	DpID               string `json:"dpId"`
+	ReadOnly           bool   `json:"readOnly"`
+	Description        string `json:"description"`
+}
+type BuildPlan struct {
+	BuildPlanName  string `json:"buildPlanName"`
+	BpID           string `json:"bpID"`
+	PlanScriptName string `json:"planScriptName"`
+	ReadOnly       bool   `json:"readOnly"`
+	Description    string `json:"description"`
+}
+type PlanScript struct {
+	PlanScriptName string `json:"planScriptName"`
+	PsID           string `json:"psID"`
+	ReadOnly       bool   `json:"readOnly"`
+	Description    string `json:"description"`
+}
+type Goldenimage struct {
+	GoldenimageName string `json:"goldenimageName"`
+	GiID            string `json:"giID"`
+	ReadOnly        bool   `json:"readOnly"`
+	Description     string `json:"description"`
+}
 
-// 	//get streamer IP and put into client endpoint field
+type StreamerDeploymentPlanCol struct {
+	Type        string                   `json:"type"`
+	Sort        string                   `json:"sort"`
+	Members     []StreamerDeploymentPlan `json:"members"`
+	NextPageURI string                   `json:"nextPageUri"`
+	Start       int                      `json:"start"`
+	PrevPageURI string                   `json:"prevPageUri"`
+	Total       int                      `json:"total"`
+	Count       int                      `json:"count"`
+	ETag        string                   `json:"eTag"`
+	Created     string                   `json:"created"`
+	Modified    string                   `json:"modified"`
+	Category    string                   `json:"category"`
+	URI         string                   `json:"uri"`
+}
 
-// 		c.GetResourceLists("DeploymentServer", "")
-// 		l := *(rmap["DeploymentServer"].listptr.(*[]DeploymentServer))
-// 		c.Endpoint = "http://" + l[0].PrimaryIPV4
+type StreamerDeploymentPlan struct {
+	Type             string `json:"type"`
+	CopyURI          string `json:"copyUri"`
+	CustomAttributes []struct {
+		Constraints string `json:"constraints"`
+		Editable    bool   `json:"editable"`
+		Visible     bool   `json:"visible"`
+		Name        string `json:"name"`
+		Value       string `json:"value"`
+		ID          string `json:"id"`
+		Type        string `json:"type"`
+		Description string `json:"description"`
+	} `json:"customAttributes"`
+	ImportMetadata   bool   `json:"importMetadata"`
+	ETag             string `json:"eTag"`
+	Created          string `json:"created"`
+	Modified         string `json:"modified"`
+	HpProvided       bool   `json:"hpProvided"`
+	GoldenImageURI   string `json:"goldenImageURI"`
+	OeBuildPlanURI   string `json:"oeBuildPlanURI"`
+	Category         string `json:"category"`
+	Name             string `json:"name"`
+	ID               string `json:"id"`
+	State            string `json:"state"`
+	Description      string `json:"description"`
+	URI              string `json:"uri"`
+	Status           string `json:"status"`
+	PrintGoldenImage string
+	PrintBuildPlan   string
+}
 
-// 	var wg sync.WaitGroup
+func (c *CLIOVClient) StreamerGetArtifact() []Artifact {
 
-// 	rl := []string{"StreamerAppliance"}
+	//get streamer IP and put into client endpoint field
 
-// 	for _, v := range rl {
-// 		localv := v
-// 		wg.Add(1)
+	c.GetResourceLists("DeploymentServer", "")
+	sl := *(rmap["DeploymentServer"].listptr.(*[]DeploymentServer))
+	c.Endpoint = "https://" + sl[0].PrimaryIPV4
 
-// 		go func() {
-// 			defer wg.Done()
-// 			c.GetResourceLists(localv, "")
-// 		}()
-// 	}
+	var wg sync.WaitGroup
 
-// 	wg.Wait()
+	rl := []string{"Artifact"}
 
-// 	l := *(rmap["StreamerAppliance"].listptr.(*[]StreamerAppliance))
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
 
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
 
+	wg.Wait()
 
+	l := *(rmap["Artifact"].listptr.(*[]Artifact))
 
 	// spList := *(rmap["SP"].listptr.(*SPList))
 	// hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
@@ -136,7 +175,64 @@ package oneview
 
 	// }
 
-	// sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
 
-// 	return l
-// }
+	return l
+}
+
+func (c *CLIOVClient) StreamerGetDeploymentPlan() []StreamerDeploymentPlan {
+
+	//get streamer IP and put into client endpoint field
+
+	c.GetResourceLists("DeploymentServer", "")
+	sl := *(rmap["DeploymentServer"].listptr.(*[]DeploymentServer))
+	c.Endpoint = "https://" + sl[0].PrimaryIPV4
+
+	var wg sync.WaitGroup
+
+	rl := []string{"StreamerDeploymentPlan", "StreamerBuildPlan", "StreamerGoldenImage"}
+
+	for _, v := range rl {
+		localv := v
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			c.GetResourceLists(localv, "")
+		}()
+	}
+
+	wg.Wait()
+
+	l := *(rmap["StreamerDeploymentPlan"].listptr.(*[]StreamerDeploymentPlan))
+
+	sbpList := *(rmap["StreamerBuildPlan"].listptr.(*[]StreamerBuildPlan))
+	sgiList := *(rmap["StreamerGoldenImage"].listptr.(*[]StreamerGoldenImage))
+
+	// log.Printf("[DEBUG] hwlist length: %d\n", len(l))
+	// log.Printf("[DEBUG] splist length: %d\n", len(spList))
+	// log.Printf("[DEBUG] hwtlist length: %d\n", len(hwtList))
+
+	sbpMap := make(map[string]StreamerBuildPlan)
+
+	for _, v := range sbpList {
+		sbpMap[v.URI] = v
+	}
+
+	sgiMap := make(map[string]StreamerGoldenImage)
+
+	for _, v := range sgiList {
+		sgiMap[v.URI] = v
+	}
+
+	for i, v := range l {
+		l[i].PrintBuildPlan = sbpMap[v.OeBuildPlanURI].Name
+
+		l[i].PrintGoldenImage = sgiMap[v.GoldenImageURI].Name
+
+	}
+
+	sort.Slice(l, func(i, j int) bool { return l[i].Name < l[j].Name })
+
+	return l
+}

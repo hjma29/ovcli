@@ -29,25 +29,30 @@ type LIUplinkSetMap map[string]UplinkSetMap
 var taskuri string
 
 const (
-	LIGURL              = "/rest/logical-interconnect-groups"
-	LIURL               = "/rest/logical-interconnects"
-	UplinkSetURL        = "/rest/uplink-sets"
-	ICURL               = "/rest/interconnects"
-	SFPURL              = "/pluggableModuleInformation"
-	ICTypeURL           = "/rest/interconnect-types"
-	ENetworkURL         = "/rest/ethernet-networks"
-	NetSetURL           = "/rest/network-sets"
-	EnclosureURL        = "/rest/enclosures"
-	EGURL               = "/rest/enclosure-groups"
-	LEURL               = "/rest/logical-enclosures"
-	SPURL               = "/rest/server-profiles"
-	SPTemplateURL       = "/rest/server-profile-templates"
-	ServerHWURL         = "/rest/server-hardware"
-	ServerHWTypeURL     = "/rest/server-hardware-types"
-	VersionURL          = "/rest/version"
-	DeploymentServerURL = "/rest/deployment-servers"
-	StreamerApplianceURL ="/rest/deployment-servers/image-streamer-appliances"
-	DeploymentPlanURL   = "/rest/os-deployment-plans/" //somehow needs to have ending /, otherwise error out from OV
+	LIGURL               = "/rest/logical-interconnect-groups"
+	LIURL                = "/rest/logical-interconnects"
+	UplinkSetURL         = "/rest/uplink-sets"
+	ICURL                = "/rest/interconnects"
+	SFPURL               = "/pluggableModuleInformation"
+	ICTypeURL            = "/rest/interconnect-types"
+	ENetworkURL          = "/rest/ethernet-networks"
+	NetSetURL            = "/rest/network-sets"
+	EnclosureURL         = "/rest/enclosures"
+	EGURL                = "/rest/enclosure-groups"
+	LEURL                = "/rest/logical-enclosures"
+	SPURL                = "/rest/server-profiles"
+	SPTemplateURL        = "/rest/server-profile-templates"
+	ServerHWURL          = "/rest/server-hardware"
+	ServerHWTypeURL      = "/rest/server-hardware-types"
+	VersionURL           = "/rest/version"
+	DeploymentServerURL  = "/rest/deployment-servers"
+	StreamerApplianceURL = "/rest/deployment-servers/image-streamer-appliances"
+	DeploymentPlanURL    = "/rest/os-deployment-plans/" //somehow needs to have ending /, otherwise error out from OV
+
+	ArtifactURL               = "/rest/artifact-bundles"
+	StreamerDeploymentPlanURL = "/rest/deployment-plans"
+	StreamerBuildPlanURL      = "/rest/build-plans"
+	StreamerGoldenImageURL    = "/rest/golden-images"
 
 	DefaultConfigFile = "appliance-credential.yml"
 )
@@ -178,6 +183,30 @@ var rmap = resourceMap{
 		colptr:  &StreamerApplianceCol{},
 		uri:     StreamerApplianceURL,
 		logmsg:  "get StreamerAppliance",
+	},
+	"Artifact": resource{
+		listptr: &[]Artifact{},
+		colptr:  &ArtifactCol{},
+		uri:     ArtifactURL,
+		logmsg:  "get Artifact",
+	},
+	"StreamerDeploymentPlan": resource{
+		listptr: &[]StreamerDeploymentPlan{},
+		colptr:  &StreamerDeploymentPlanCol{},
+		uri:     StreamerDeploymentPlanURL,
+		logmsg:  "get StreamerDeploymentPlan",
+	},
+	"StreamerBuildPlan": resource{
+		listptr: &[]StreamerBuildPlan{},
+		colptr:  &StreamerBuildPlanCol{},
+		uri:     StreamerBuildPlanURL,
+		logmsg:  "get StreamerBuildPlan",
+	},
+	"StreamerGoldenImage": resource{
+		listptr: &[]StreamerGoldenImage{},
+		colptr:  &StreamerGoldenImageCol{},
+		uri:     StreamerGoldenImageURL,
+		logmsg:  "get StreamerGoldenImage",
 	},
 }
 
