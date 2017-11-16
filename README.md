@@ -10,6 +10,12 @@ OVCLI tool communicates with Synergy OneView Restful API interface. It complemen
 ## [**Windows .EXE Download (Release 0.6)**](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
 For IT admins just want a simple small CLI tool, they can directly download the above .exe file. The image was compiled on windows2016 64-bit OS and tested also on windows2012R2 OS.
 
+## Docker Image
+You can also use the tool in docker format. [Docker hub link](https://hub.docker.com/r/hjma29/ovcli/)
+
+## User Tutorial Youtube Videos
+1. [How to use ovcli tool](https://youtu.be/BveIKt9--4Y)
+2. [How to use ovcli docker image](https://youtu.be/dP6sHnvYaVI)
 
 ## Developer Source Code Access
 
@@ -98,6 +104,26 @@ ID   Name             Network          VLAN         MAC                 Port    
 5    Mgmt 1           TE-Testing-300   300          F2:BA:A8:F0:01:BC   Mezz 3:1-b   Top - Frame1 - CN7515010J, interconnect 3      NotBootable
 6    Mgmt 2           TE-Testing-300   300          F2:BA:A8:F0:01:BD   Mezz 3:2-b   Middle - Frame 2 -CN75150484, interconnect 6   NotBootable
 ```
+
+**Show MAC address table for a vlan or a MAC**
+
+```
+ovcli show mac --vlan 140
+Name                Module                            Port              VLAN
+EC:B1:D7:7E:35:4D   Frame 01 Bottom, interconnect 3   Q5:1              140
+00:2A:6A:AD:16:3C   Frame 01 Bottom, interconnect 3   Q5:1              140
+00:00:0C:07:AC:8C   Frame 01 Bottom, interconnect 3   Q5:1              140
+EC:B1:D7:7E:35:49   Frame 01 Bottom, interconnect 3   Q5:1              140
+EC:B1:D7:7E:35:48   Frame 01 Bottom, interconnect 3   Q5:1              140
+FE:E1:D0:10:00:48   Frame 01 Bottom, interconnect 3   downlink 3:3-4    140
+3C:D9:2B:F7:71:60   Frame 01 Bottom, interconnect 3   Q5:1              140
+00:2A:6A:AD:16:7C   Frame 01 Bottom, interconnect 3   Q5:1              140
+00:50:56:6A:72:C4   Frame 01 Bottom, interconnect 3   downlink 30:3-4   140
+7A:2A:1D:30:00:06   Frame 01 Bottom, interconnect 3   Q5:1              140
+5C:B9:01:78:16:38   Frame 01 Bottom, interconnect 3   Q5:1              140
+00:2A:6A:AD:16:F6   Frame 01 Bottom, interconnect 3   Q5:1              140
+```
+
 **Show logical uplink details for all LIs**
 
 ```
