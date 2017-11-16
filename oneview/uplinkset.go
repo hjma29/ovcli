@@ -94,7 +94,7 @@ func (c *CLIOVClient) GetUplinkSet() UplinkSetList {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -132,7 +132,7 @@ func (c *CLIOVClient) GetUplinkSetVerbose(name string) UplinkSetList {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 

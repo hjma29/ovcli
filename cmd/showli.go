@@ -64,6 +64,13 @@ const (
 		// "{{.Enclosure}}\t{{.Bay}}\t{{.ModelName}}\t{{.ModelNumber}}\n" +
 		// "{{end}}\n" + //done with LIG IOBay List
 		"{{end}}" //done with LIGs
+
+	macShowFormat = "" +
+		"Name\tModule\tPort\tVLAN\n" +
+		//"----\t-----\n" +
+		"{{range .}}" +
+		"{{.MacAddress}}\t{{.InterconnectName}}\t{{.NetworkInterface}}\t{{.ExternalVlan}}\n" +
+		"{{end}}"
 )
 
 func NewShowLICmd(c *oneview.CLIOVClient) *cobra.Command {
@@ -98,6 +105,40 @@ func NewShowLICmd(c *oneview.CLIOVClient) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&liName, "name", "n", "", "Logical Interconnect Name: all, <name>")
+
+	return cmd
+
+}
+
+func NewShowMACCmd(c *oneview.CLIOVClient) *cobra.Command {
+
+	var address string
+	var vlan int
+
+	var cmd = &cobra.Command{
+		Use:   "mac",
+		Short: "show mac address table",
+		Long:  `show mac address table`,
+		Run: func(cmd *cobra.Command, args []string) {
+
+			c := verifyClient(c)
+
+			var list []oneview.MAC
+			var showFormat string
+
+			list = c.GetMAC(address, vlan)
+			showFormat = macShowFormat
+
+			tw := tabwriter.NewWriter(c.Out, 5, 1, 3, ' ', 0)
+			defer tw.Flush()
+
+			t := template.Must(template.New("").Parse(showFormat))
+			t.Execute(tw, list)
+		},
+	}
+
+	cmd.Flags().StringVarP(&address, "address", "a", "", "mac address in format like: 00:9C:02:73:33:6D")
+	cmd.Flags().IntVarP(&vlan, "vlan", "v", 0, "vlan number in format like: 1234")
 
 	return cmd
 

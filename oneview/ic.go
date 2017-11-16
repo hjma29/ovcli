@@ -224,7 +224,7 @@ func (c *CLIOVClient) GetIC() []IC {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -261,7 +261,7 @@ func GetICPort() []IC {
 		go func() {
 			defer wg.Done()
 			c := NewCLIOVClient()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -285,7 +285,7 @@ func GetSFP() []IC {
 		go func() {
 			defer wg.Done()
 			c := NewCLIOVClient()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -325,7 +325,7 @@ func SFPGetURI(ic *IC) {
 		sfpuri = ICURL + SFPURL + "/" + icID //  /rest/interconnects/pluggableModuleInformation/{ID}
 	}
 
-	data, err := c.SendHTTPRequest("Get", sfpuri, "", "", nil)
+	data, err := c.SendHTTPRequest("Get", sfpuri, nil)
 
 	if err != nil {
 		fmt.Println("getSFP URL err: ", err)

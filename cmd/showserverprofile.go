@@ -44,7 +44,16 @@ const (
 		"\nConnections\n" +
 		"ID\tName\tNetwork\tVLAN\tMAC\tPort\tInterconnect\tBoot\n" +
 		"{{range .Connections}}" +
-		"{{.ID}}\t{{.Name}}\t{{.NetworkName}}\t{{.NetworkVlan}}\t{{.Mac}}\t{{.PortID}}\t{{.ICName}}\t{{.Boot.Priority}}\n" +
+		"  {{.ID}}\t{{.Name}}\t{{.NetworkName}}\t{{.NetworkVlan}}\t{{.Mac}}\t{{.PortID}}\t{{.ICName}}\t{{.Boot.Priority}}\n" +
+		"{{end}}" +
+		// "{{if .OsDeploymentSettings}}" +
+		// "OS Deployment Setting\n" +
+		// "{{end}}" +
+		"{{with .OsDeploymentSettings}}" +
+		"\nOS Deployment Setting\n" +
+		"{{ range .OsCustomAttributes}}" +
+		"  {{.Name}}\t{{.Value}}\n" +
+		"{{end}}" +
 		"{{end}}" +
 		"{{end}}"
 

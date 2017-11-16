@@ -197,7 +197,7 @@ func (c *CLIOVClient) GetLI() []LI {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -235,7 +235,7 @@ func (c *CLIOVClient) GetLIVerbose(name string) LIList {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -280,42 +280,6 @@ func (c *CLIOVClient) GetLIVerbose(name string) LIList {
 	return l
 }
 
-//LIGetURI is the function to get raw structs from all json next pages
-func LIGetURI(x chan LIList) {
-
-	// log.Println("Rest Get LI")
-
-	// defer timeTrack(time.Now(), "Rest Get LI")
-
-	// c := NewCLIOVClient()
-
-	// var list LIList
-
-	// for i, uri := 0, LIURL; uri != ""; i++ {
-
-	// 	data, err := c.GetURI("", "", uri)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	var page LICol
-
-	// 	if err := json.Unmarshal(data, &page); err != nil {
-	// 		fmt.Println(err)
-	// 		os.Exit(1)
-	// 	}
-
-	// 	list = append(list, page.Members...)
-
-	// 	uri = page.NextPageURI
-	// }
-
-	// sort.Slice(list, func(i, j int) bool { return list[i].Name < list[j].Name })
-
-	// x <- list
-
-}
 
 func (li *LI) getIOBay(ictypeList []ICType, encList EncList) {
 

@@ -64,7 +64,7 @@ func (c *CLIOVClient) GetEG() []EG {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -144,7 +144,7 @@ func CreateEG(filename string) {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -220,7 +220,7 @@ func CreateEG(filename string) {
 		}
 		//fmt.Printf("%#v\n", eg.InterconnectBayMappings)
 		fmt.Printf("Creating EG %q\n", v.Name)
-		if _, err := c.SendHTTPRequest("POST", EGURL, "", "", eg); err != nil {
+		if _, err := c.SendHTTPRequest("POST", EGURL, eg); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}

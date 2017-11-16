@@ -31,19 +31,19 @@ type SPTemplateCol struct {
 }
 
 type SPTemplate struct {
-	Type                     string `json:"type,omitempty"`
-	URI                      string `json:"uri,omitempty"`
-	Name                     string `json:"name,omitempty"`
-	Description              string `json:"description,omitempty"`
-	ServerProfileDescription string `json:"serverProfileDescription,omitempty"`
-	ServerHardwareTypeURI    string `json:"serverHardwareTypeUri,omitempty"`
-	EnclosureGroupURI        string `json:"enclosureGroupUri,omitempty"`
-	Affinity                 string `json:"affinity,omitempty"`
-	HideUnusedFlexNics       bool   `json:"hideUnusedFlexNics,omitempty"`
-	MacType                  string `json:"macType,omitempty"`
-	WwnType                  string `json:"wwnType,omitempty"`
-	SerialNumberType         string `json:"serialNumberType,omitempty"`
-	IscsiInitiatorNameType   string `json:"iscsiInitiatorNameType,omitempty"`
+	Type                     string               `json:"type,omitempty"`
+	URI                      string               `json:"uri,omitempty"`
+	Name                     string               `json:"name,omitempty"`
+	Description              string               `json:"description,omitempty"`
+	ServerProfileDescription string               `json:"serverProfileDescription,omitempty"`
+	ServerHardwareTypeURI    string               `json:"serverHardwareTypeUri,omitempty"`
+	EnclosureGroupURI        string               `json:"enclosureGroupUri,omitempty"`
+	Affinity                 string               `json:"affinity,omitempty"`
+	HideUnusedFlexNics       bool                 `json:"hideUnusedFlexNics,omitempty"`
+	MacType                  string               `json:"macType,omitempty"`
+	WwnType                  string               `json:"wwnType,omitempty"`
+	SerialNumberType         string               `json:"serialNumberType,omitempty"`
+	IscsiInitiatorNameType   string               `json:"iscsiInitiatorNameType,omitempty"`
 	OsDeploymentSettings     OSDeploymentSettings `json:"osDeploymentSettings,omitempty"`
 	Firmware                 struct {
 		ManageFirmware         bool   `json:"manageFirmware,omitempty"`
@@ -143,7 +143,6 @@ type OSDeploymentSettings struct {
 	} `json:"osCustomAttributes"`
 }
 
-
 func (c *CLIOVClient) GetSPTemplate() []SPTemplate {
 
 	var wg sync.WaitGroup
@@ -156,7 +155,7 @@ func (c *CLIOVClient) GetSPTemplate() []SPTemplate {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -207,7 +206,7 @@ func (c *CLIOVClient) GetSPTemplateVerbose(name string) []SPTemplate {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -318,7 +317,7 @@ networks:
 			spt.Type = "ServerProfileTemplateV3"
 		}
 
-		c.GetResourceLists("ENetwork", "")
+		c.GetResourceLists("ENetwork")
 		netList := *(rmap["ENetwork"].listptr.(*[]ENetwork))
 
 		netMap := make(map[string]ENetwork)
@@ -360,7 +359,7 @@ networks:
 		}
 
 		fmt.Printf("Creating server profile template: %q\n", v.Name)
-		_, err := c.SendHTTPRequest("POST", SPTemplateURL, "", "", spt)
+		_, err := c.SendHTTPRequest("POST", SPTemplateURL, spt)
 		if err != nil {
 			fmt.Printf("OVCLI Create profile template failed: %v\n", err)
 		}
@@ -376,6 +375,7 @@ func DeleteSPTemplate(name string) error {
 
 	c := NewCLIOVClient()
 
+	name = fmt.Sprintf("name regex '%s'", name)
 	c.GetResourceLists("SPTemplate", name)
 
 	list := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
@@ -387,7 +387,7 @@ func DeleteSPTemplate(name string) error {
 
 	for _, v := range list {
 		fmt.Printf("Deleting profile template: %q\n", v.Name)
-		_, err := c.SendHTTPRequest("DELETE", v.URI, "", "", nil)
+		_, err := c.SendHTTPRequest("DELETE", v.URI, nil)
 		if err != nil {
 			fmt.Printf("Error submitting delete server profile template request: %v", err)
 		}

@@ -127,7 +127,7 @@ func (c *CLIOVClient) GetLIG() []LIG {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -153,7 +153,7 @@ func (c *CLIOVClient) GetLIGVerbose(name string) []LIG {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -342,7 +342,7 @@ func CreateLIGConfigParse(fileName string) {
 	y := parseYAML(fileName)
 
 	c := NewCLIOVClient()
-	c.GetResourceLists("ICType", "")
+	c.GetResourceLists("ICType")
 	ictypeList := *(rmap["ICType"].listptr.(*[]ICType))
 
 	ictypeMap := make(map[string]ICType)
@@ -400,7 +400,7 @@ func CreateLIGConfigParse(fileName string) {
 
 		fmt.Printf("Creating Logical Interconnect Group: %q\n", v.Name)
 
-		if _, err := c.SendHTTPRequest("POST", LIGURL, "", "", lig); err != nil {
+		if _, err := c.SendHTTPRequest("POST", LIGURL, lig); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
@@ -426,7 +426,7 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -562,7 +562,7 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 
 		fmt.Printf("Creating UplinkSet %q for the LIG: %q\n", v.Name, ylig.Name)
 
-		if _, err := c.SendHTTPRequest("PUT", lig.URI, "", "", lig); err != nil {
+		if _, err := c.SendHTTPRequest("PUT", lig.URI, lig); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
@@ -578,6 +578,7 @@ func DeleteLIG(name string) error {
 
 	c := NewCLIOVClient()
 
+	name = fmt.Sprintf("name regex '%s'", name)
 	c.GetResourceLists("LIG", name)
 
 	list := *(rmap["LIG"].listptr.(*[]LIG))
@@ -589,7 +590,7 @@ func DeleteLIG(name string) error {
 
 	for _, v := range list {
 		fmt.Printf("Deleting LIG: %q\n", v.Name)
-		_, err := c.SendHTTPRequest("DELETE", v.URI, "", "", nil)
+		_, err := c.SendHTTPRequest("DELETE", v.URI, nil)
 		if err != nil {
 			fmt.Printf("Error submitting delete server LIG request: %v", err)
 		}

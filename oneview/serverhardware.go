@@ -152,7 +152,7 @@ func (c *CLIOVClient) GetServerHW() []ServerHW {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -205,12 +205,12 @@ func (c *CLIOVClient) SetServerPower(server, state string) {
 		os.Exit(1)
 	}
 
-	filter := ""
+	name := ""
 	if server != "all" {
-		filter = server
+		name = fmt.Sprintf("name regex '%s'", server)
 	}
 
-	c.GetResourceLists("ServerHW", filter)
+	c.GetResourceLists("ServerHW", name)
 
 	l := *(rmap["ServerHW"].listptr.(*[]ServerHW))
 
@@ -229,7 +229,7 @@ func (c *CLIOVClient) SetServerPower(server, state string) {
 		go func() {
 			defer wg.Done()
 			fmt.Printf("Starting Power %v the server: %v\n", state, localv.Name)
-			if _, err := c.SendHTTPRequest("PUT", localv.URI+"/powerState", "", "", ps); err != nil {
+			if _, err := c.SendHTTPRequest("PUT", localv.URI+"/powerState", ps); err != nil {
 				fmt.Printf("can't set power state for server: %s, error is:\n %v\n", localv.Name, err)
 
 			}

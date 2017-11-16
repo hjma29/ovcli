@@ -216,7 +216,7 @@ func (c *CLIOVClient) GetEnc() []Enclosure {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -239,7 +239,8 @@ func (c *CLIOVClient) SetEncName(from, to string) {
 		os.Exit(1)
 	}
 
-	c.GetResourceLists("Enclosure", from)
+	name := fmt.Sprintf("name regex '%s'", from)
+	c.GetResourceLists("Enclosure", name)
 
 	list := *(rmap["Enclosure"].listptr.(*[]Enclosure))
 
@@ -267,7 +268,7 @@ func (c *CLIOVClient) SetEncName(from, to string) {
 	}}
 
 	fmt.Printf("Setting enclosure %q to new name %q\n", from, to)
-	_, err := c.SendHTTPRequest("PATCH", enc.URI, "", "", encRenameBody)
+	_, err := c.SendHTTPRequest("PATCH", enc.URI, encRenameBody)
 	if err != nil {
 		fmt.Printf("Error renaming enclosure: %v\n", err)
 	}

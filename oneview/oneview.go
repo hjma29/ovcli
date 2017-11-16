@@ -91,7 +91,7 @@ func NewCLIOVClient() *CLIOVClient {
 }
 
 //GetResourceLists is method to get list of resource list, it updates global rmap resource table to store resource data
-func (c *CLIOVClient) GetResourceLists(resourceName, filterName string) {
+func (c *CLIOVClient) GetResourceLists(resourceName string, filters ...string) {
 
 	listptr := rmap[resourceName].listptr
 	uri := rmap[resourceName].uri
@@ -108,7 +108,7 @@ func (c *CLIOVClient) GetResourceLists(resourceName, filterName string) {
 
 	for uri != "" {
 
-		data, err := c.SendHTTPRequest("GET", uri, filterName, "", nil)
+		data, err := c.SendHTTPRequest("GET", uri, nil, filters...)
 		if err != nil {
 			fmt.Printf("OVCLI: error sending HTTP GET request: %v, err: %v", uri, err)
 			os.Exit(1)
@@ -133,7 +133,7 @@ func (c *CLIOVClient) GetResourceLists(resourceName, filterName string) {
 }
 
 //SendHTTPRequest is low level method to create http client, send request, check return task status and return data
-func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body interface{}) ([]byte, error) {
+func (c *CLIOVClient) SendHTTPRequest(method, uri string, body interface{}, filters ...string) ([]byte, error) {
 
 	if err := c.setAuthKey(); err != nil {
 		return nil, err
@@ -162,23 +162,27 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	}
 
 	q := req.URL.Query()
-	if filter != "" {
-		q.Add("filter", fmt.Sprintf("name regex '%s'", filter))
-		defer q.Del("filter") //remove filter after function to make sure no past info existing for new request using the same client
-	}
-	if sort != "" {
-		q.Add("sort", sort)
-		defer q.Del("sort")
+	for _, v := range filters {
+		q.Add("filter", v)
 	}
 	req.URL.RawQuery = q.Encode()
+
+	// q.Add("filter", fmt.Sprintf("name regex '%s'", filters))
+	// defer q.Del("filter") //remove filter after function to make sure no past info existing for new request using the same client
+	// }
+	// if sort != "" {
+	// 	q.Add("sort", sort)
+	// 	defer q.Del("sort")
+	// }
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
-	client := &http.Client{Transport: tr, Timeout: time.Second * 20}
+	//client := &http.Client{Transport: tr, Timeout: time.Second * 20}
+	client := &http.Client{Transport: tr}
 
-	log.Printf("[DEBUG] OVCLI *Send Request: %v=>%v\n", method, req.URL.String())
+	log.Printf("[DEBUG] OVCLI *Send Request: %v=>%s\n", method, req.URL.String())
 	log.Printf("[DEBUG] OVCLI X-Api-Version: %v,   Token: %v\n", req.Header.Get("X-Api-Version"), req.Header.Get("Auth"))
 	//log.Printf("[DEBUG] OVCLI Request body: %s\n", body)
 	log.Printf("[DEBUG] OVCLI Request body: %s\n", out.Bytes())
@@ -186,7 +190,7 @@ func (c *CLIOVClient) SendHTTPRequest(method, uri, filter, sort string, body int
 	if err != nil {
 		return nil, fmt.Errorf("OVCLI HTTP request sent error: %v", err)
 	}
-	log.Printf("[DEBUG] OVCLI response Code: %v for request %v\n", resp.StatusCode, method+"=>"+req.URL.String())
+	log.Printf("[DEBUG] OVCLI response Code: %v for request %s\n", resp.StatusCode, method+"=>"+req.URL.String())
 
 	data, err := ioutil.ReadAll(resp.Body)
 
@@ -445,7 +449,7 @@ func ImportRemoteEnc(ipv6 string) error {
 		Hostname string `json:"hostname"`
 	}{Hostname: ipv6}
 
-	if _, err := c.SendHTTPRequest("POST", EnclosureURL, "", "", remoteEnc); err != nil {
+	if _, err := c.SendHTTPRequest("POST", EnclosureURL, remoteEnc); err != nil {
 		fmt.Printf("OVCLI Add Remote Enclosure failed: %v", err)
 		os.Exit(1)
 	}
@@ -463,10 +467,6 @@ func validateName(listPtr interface{}, name string) error {
 	lvptr := reflect.ValueOf(listPtr)
 	lv := lvptr.Elem()
 
-	//fmt.Println(lv.CanSet())
-
-	//localslice := listPtr.Elem()
-
 	for i := 0; i < lv.Len(); i++ {
 		if lv.Index(i).FieldByName("Name").String() == name {
 			//fmt.Println("i=", i, "name =", lv.Index(i).FieldByName("Name").String())
@@ -476,24 +476,6 @@ func validateName(listPtr interface{}, name string) error {
 
 	}
 
-	// for i, v := range localslice {
-	// 	if name == v.Name {
-	// 		localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
-	// 		*list = localslice               //update list pointer to point to new shortened slice
-	// 		return nil
-	// 	}
-	// }
-
-	// localslice := *list //define a localslice to avoid too many *list in the following
-
-	// for i, v := range localslice {
-	// 	if name == v.Name {
-	// 		localslice = localslice[i : i+1] //if name is valid, only display one LIG instead of whole list
-	// 		*list = localslice               //update list pointer to point to new shortened slice
-	// 		return nil
-	// 	}
-	// }
-
-	return fmt.Errorf("no profile matching name: \"%v\" was found, please check spelling and syntax, valid syntax example: \"show serverprofile --name profile1\" ", name)
+	return fmt.Errorf("no matching name: \"%v\" was found, please check spelling and syntax", name)
 
 }

@@ -175,7 +175,7 @@ func (t *Task) GetCurrentTaskStatus() error {
 	)
 	if uri != "" {
 		log.Print("[DEBUG]", uri)
-		data, err := t.Client.SendHTTPRequest("GET", uri, "", "", nil)
+		data, err := t.Client.SendHTTPRequest("GET", uri, nil)
 		if err != nil {
 			return err
 		}
@@ -236,7 +236,7 @@ func (t *Task) Wait() error {
 }
 
 func (t *Task) checkStatus() error {
-	data, err := t.Client.SendHTTPRequest("GET", t.URI, "", "", nil)
+	data, err := t.Client.SendHTTPRequest("GET", t.URI, nil)
 	if err != nil {
 		fmt.Printf("OVCLI task wait failure to get task data from task URI: %v", err)
 		os.Exit(1)

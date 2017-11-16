@@ -105,7 +105,7 @@ func (c *CLIOVClient) GetLE() []LE {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -177,7 +177,7 @@ func CreateLE(filename string) {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -220,7 +220,7 @@ func CreateLE(filename string) {
 		//checkStructJson(le)
 
 		fmt.Printf("Creating LE %q, this can take up to 30 mins.\n", v.Name)
-		if _, err := c.SendHTTPRequest("POST", LEURL, "", "", le); err != nil {
+		if _, err := c.SendHTTPRequest("POST", LEURL, le); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}

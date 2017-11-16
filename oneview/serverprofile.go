@@ -194,7 +194,7 @@ func (c *CLIOVClient) GetSP() SPList {
 		go func() {
 			defer wg.Done()
 			c := NewCLIOVClient()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -249,7 +249,7 @@ func (c *CLIOVClient) GetSPVerbose(name string) SPList {
 		go func() {
 			defer wg.Done()
 			c := NewCLIOVClient()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -352,7 +352,7 @@ func CreateSP(filename string) {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -419,7 +419,7 @@ func CreateSP(filename string) {
 		// }
 
 		fmt.Printf("Creating server profile: %q\n", sp.Name)
-		_, err := c.SendHTTPRequest("POST", SPURL, "", "", sp)
+		_, err := c.SendHTTPRequest("POST", SPURL, sp)
 		if err != nil {
 			fmt.Printf("OVCLI Create profile template failed: %v\n", err)
 		}

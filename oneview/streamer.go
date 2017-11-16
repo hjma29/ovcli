@@ -127,7 +127,7 @@ func (c *CLIOVClient) StreamerGetArtifact() []Artifact {
 
 	//get streamer IP and put into client endpoint field
 
-	c.GetResourceLists("DeploymentServer", "")
+	c.GetResourceLists("DeploymentServer")
 	sl := *(rmap["DeploymentServer"].listptr.(*[]DeploymentServer))
 	c.Endpoint = "https://" + sl[0].PrimaryIPV4
 
@@ -141,7 +141,7 @@ func (c *CLIOVClient) StreamerGetArtifact() []Artifact {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -184,7 +184,7 @@ func (c *CLIOVClient) StreamerGetDeploymentPlan() []StreamerDeploymentPlan {
 
 	//get streamer IP and put into client endpoint field
 
-	c.GetResourceLists("DeploymentServer", "")
+	c.GetResourceLists("DeploymentServer")
 	sl := *(rmap["DeploymentServer"].listptr.(*[]DeploymentServer))
 	c.Endpoint = "https://" + sl[0].PrimaryIPV4
 
@@ -198,7 +198,7 @@ func (c *CLIOVClient) StreamerGetDeploymentPlan() []StreamerDeploymentPlan {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 

@@ -194,7 +194,7 @@ func (c *CLIOVClient) GetDeploymentServer() []DeploymentServer {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
@@ -245,7 +245,7 @@ func (c *CLIOVClient) GetStreamer() ApplianceComparison {
 
 		go func() {
 			defer wg.Done()
-			c.GetResourceLists(localv, "")
+			c.GetResourceLists(localv)
 		}()
 	}
 
