@@ -1,0 +1,4 @@
+FROM busybox 
+COPY ovcli /usr/local/bin/ovcli 
+WORKDIR /home
+ENTRYPOINT ["ovcli"]

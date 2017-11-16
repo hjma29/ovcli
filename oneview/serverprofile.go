@@ -7,8 +7,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-
-	"github.com/HewlettPackard/oneview-golang/ov"
 )
 
 type SPCol struct {
@@ -137,7 +135,7 @@ type Ipv4 struct {
 }
 
 type serverprofileDetailPrint struct {
-	ov.ServerProfile
+	SP
 	ServerProfileTemplate string
 	ServerHardware        string
 	ServerPower           string
