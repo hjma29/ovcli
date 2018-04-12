@@ -21,5 +21,5 @@ var (
 
 const (
 	DefaultConfigFile = "appliance-credential.yml"
-	version           = "0.6"
+	version           = "0.7, released on 11/20/2017"
 )

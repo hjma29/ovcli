@@ -572,7 +572,7 @@ func CreateLIGUplinkSet(c *CLIOVClient, ylig YAMLLIG) {
 func DeleteLIG(name string) error {
 
 	if name == "" {
-		fmt.Println("Neet to specify LIG name using \"-n\" flag")
+		fmt.Println("Need to specify LIG name using \"-n\" flag")
 		os.Exit(1)
 	}
 

@@ -85,9 +85,9 @@ type SP struct {
 		Controllers     []Controller     `json:"controllers,omitempty"`
 	} `json:"localStorage,omitempty"`
 	SanStorage struct {
-		VolumeAttachments    []string `json:"volumeAttachments,omitempty"`
-		SanSystemCredentials []string `json:"sanSystemCredentials,omitempty"`
-		ManageSanStorage     bool     `json:"manageSanStorage,omitempty"`
+		VolumeAttachments    []VolumeAttachment `json:"volumeAttachments,omitempty"`
+		SanSystemCredentials []string           `json:"sanSystemCredentials,omitempty"`
+		ManageSanStorage     bool               `json:"manageSanStorage,omitempty"`
 	} `json:"sanStorage,omitempty"`
 	OsDeploymentSettings OSDeploymentSettings `json:"osDeploymentSettings,omitempty"`
 	RefreshState         string               `json:"refreshState,omitempty"`

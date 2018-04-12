@@ -26,26 +26,16 @@ import (
 
 var showICPortCmd = &cobra.Command{
 	Use:   "port",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showICPort,
+	Short: "show interconnect ports",
+	Long:  `show interconnect ports`,
+	Run:   showICPort,
 }
 
 var showSFPCmd = &cobra.Command{
 	Use:   "sfp",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: showSFP,
+	Short: "show interconnect ports transceivers",
+	Long:  `show interconnect ports transceivers`,
+	Run:   showSFP,
 }
 
 const (

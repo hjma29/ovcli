@@ -47,6 +47,8 @@ to explore what are next available options`,
 	RootCmd.AddCommand(NewLoginCmd())
 	RootCmd.AddCommand(importCmd)
 	RootCmd.AddCommand(NewEditCmd())
+	RootCmd.AddCommand(NewResetCmd())
+	
 
 	RootCmd.PersistentFlags().BoolVarP(&Debugmode, "debug", "d", false, "Debug:true,false")
 	if err := RootCmd.PersistentFlags().MarkHidden("debug"); err != nil {

@@ -25,18 +25,18 @@ type ServerHWCol struct {
 }
 
 type ServerHW struct {
-	Type                           string `json:"type"`
-	Name                           string `json:"name"`
-	ServerName                     string `json:"serverName"`
-	State                          string `json:"state"`
-	StateReason                    string `json:"stateReason"`
-	AssetTag                       string `json:"assetTag"`
-	Category                       string `json:"category"`
-	Created                        string `json:"created"`
-	Description                    string `json:"description"`
-	ETag                           string `json:"eTag"`
-	FormFactor                     string `json:"formFactor"`
-	HostOsType                     string `json:"hostOsType"`
+	Type        string `json:"type"`
+	Name        string `json:"name"`
+	ServerName  string `json:"serverName"`
+	State       string `json:"state"`
+	StateReason string `json:"stateReason"`
+	AssetTag    string `json:"assetTag"`
+	Category    string `json:"category"`
+	Created     string `json:"created"`
+	Description string `json:"description"`
+	ETag        string `json:"eTag"`
+	FormFactor  string `json:"formFactor"`
+	//HostOsType                     string `json:"hostOsType"`
 	IntelligentProvisioningVersion string `json:"intelligentProvisioningVersion"`
 	LicensingIntent                string `json:"licensingIntent"`
 	LocationURI                    string `json:"locationUri"`

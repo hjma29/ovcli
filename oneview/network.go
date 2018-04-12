@@ -216,7 +216,7 @@ func (c *CLIOVClient) GetEthernetNetworkByName(name string) []ENetwork {
 func DeleteNetwork(name string) error {
 
 	if name == "" {
-		fmt.Println("Neet to specify network name using \"-n\" flag")
+		fmt.Println("Need to specify network name using \"-n\" flag")
 		os.Exit(1)
 	}
 

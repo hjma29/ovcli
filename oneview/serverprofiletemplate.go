@@ -76,7 +76,7 @@ type SPTemplate struct {
 	} `json:"localStorage,omitempty"`
 	SanStorage struct {
 		ManageSanStorage  bool     `json:"manageSanStorage,omitempty"`
-		VolumeAttachments []string `json:"volumeAttachments,omitempty"`
+		VolumeAttachments []VolumeAttachment `json:"volumeAttachments,omitempty"`
 	} `json:"-"`
 	Category     string `json:"category,omitempty"`
 	Created      string `json:"created,omitempty"`
@@ -142,6 +142,24 @@ type OSDeploymentSettings struct {
 		Value string `json:"value"`
 	} `json:"osCustomAttributes"`
 }
+
+type	VolumeAttachment struct {
+		ID                             int    `json:"id"`
+		IsBootVolume                   bool   `json:"isBootVolume"`
+		AssociatedTemplateAttachmentID string `json:"associatedTemplateAttachmentId"`
+		Lun                            string `json:"lun"`
+		LunType                        string `json:"lunType"`
+		StoragePaths                   []struct {
+			ConnectionID   int           `json:"connectionId"`
+			IsEnabled      bool          `json:"isEnabled"`
+			TargetSelector string        `json:"targetSelector"`
+			Targets        []interface{} `json:"targets"`
+		} `json:"storagePaths"`
+		VolumeURI              string `json:"volumeUri"`
+		VolumeStoragePoolURI   string `json:"volumeStoragePoolUri"`
+		VolumeStorageSystemURI string `json:"volumeStorageSystemUri"`
+	} 
+
 
 func (c *CLIOVClient) GetSPTemplate() []SPTemplate {
 
@@ -369,7 +387,7 @@ networks:
 func DeleteSPTemplate(name string) error {
 
 	if name == "" {
-		fmt.Println("Neet to specify Server Template name using \"n\" flag")
+		fmt.Println("Need to specify Server Template name using \"n\" flag")
 		os.Exit(1)
 	}
 
