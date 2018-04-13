@@ -7,7 +7,7 @@ OVCLI tool communicates with Synergy OneView Restful API interface. It complemen
 ![image](https://user-images.githubusercontent.com/14317124/31856927-38e2c82a-b684-11e7-9924-cc12d617914a.png)
 
 
-## [**Windows .EXE Download (Release 0.8 04/13/2018)**](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
+## [**Windows .EXE Download (Release 0.8, 04/13/2018)**](https://github.com/hjma29/ovcliexe/blob/master/ovcli.exe?raw=true)
 For IT admins just want a simple small CLI tool, they can directly download the above .exe file. The image was compiled on windows2016 64-bit OS and tested also on windows2012R2 OS.
 
 ## Docker Image
