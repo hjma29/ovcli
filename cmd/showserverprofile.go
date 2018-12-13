@@ -43,7 +43,7 @@ const (
 		// "EnclosureGroup:\t{{ .EnclosureGroup}}\n" +
 		"\nConnections\n" +
 		"ID\tName\tNetwork\tVLAN\tMAC\tPort\tInterconnect\tBoot\n" +
-		"{{range .Connections}}" +
+		"{{range .ConnectionSettings.Connections}}" +
 		"  {{.ID}}\t{{.Name}}\t{{.NetworkName}}\t{{.NetworkVlan}}\t{{.Mac}}\t{{.PortID}}\t{{.ICName}}\t{{.Boot.Priority}}\n" +
 		"{{end}}" +
 		// "{{if .OsDeploymentSettings}}" +
@@ -94,6 +94,7 @@ func NewShowSPCmd(c *oneview.CLIOVClient) *cobra.Command {
 
 			if flagName != "" {
 				spList = c.GetSPVerbose(flagName)
+				// fmt.Printf("%#v", spList)
 				showFormat = spShowFormatVerbose
 
 			} else {

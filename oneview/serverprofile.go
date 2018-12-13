@@ -53,18 +53,21 @@ type SP struct {
 		ManageFirmware           bool   `json:"manageFirmware,omitempty"`
 		FirmwareBaselineURI      string `json:"firmwareBaselineUri,omitempty"`
 	} `json:"firmware,omitempty"`
-	MacType          string       `json:"macType,omitempty"`
-	WwnType          string       `json:"wwnType,omitempty"`
-	SerialNumberType string       `json:"serialNumberType,omitempty"`
-	Category         string       `json:"category,omitempty"`
-	Created          string       `json:"created,omitempty"`
-	Modified         string       `json:"modified,omitempty"`
-	Status           string       `json:"status,omitempty"`
-	State            string       `json:"state,omitempty"`
-	InProgress       bool         `json:"inProgress,omitempty"`
-	TaskURI          string       `json:"taskUri,omitempty"`
-	Connections      []Connection `json:"connections,omitempty"`
-	BootMode         struct {
+	MacType            string `json:"macType,omitempty"`
+	WwnType            string `json:"wwnType,omitempty"`
+	SerialNumberType   string `json:"serialNumberType,omitempty"`
+	Category           string `json:"category,omitempty"`
+	Created            string `json:"created,omitempty"`
+	Modified           string `json:"modified,omitempty"`
+	Status             string `json:"status,omitempty"`
+	State              string `json:"state,omitempty"`
+	InProgress         bool   `json:"inProgress,omitempty"`
+	TaskURI            string `json:"taskUri,omitempty"`
+	ConnectionSettings struct {
+		Connections []Connection `json:"connections,omitempty"`
+	} `json:"connectionSettings,omitempty"`
+	//Connections      []Connection `json:"connections,omitempty"`  #remove because APIv800 use connectionsetting now
+	BootMode struct {
 		ManageMode    bool   `json:"manageMode,omitempty"`
 		PxeBootPolicy string `json:"pxeBootPolicy,omitempty"`
 		Mode          string `json:"mode,omitempty"`
@@ -254,6 +257,7 @@ func (c *CLIOVClient) GetSPVerbose(name string) SPList {
 	wg.Wait()
 
 	spList := *(rmap["SP"].listptr.(*SPList))
+	//fmt.Printf("%#v", spList)
 	sptList := *(rmap["SPTemplate"].listptr.(*[]SPTemplate))
 	hwList := *(rmap["ServerHW"].listptr.(*[]ServerHW))
 	hwtList := *(rmap["ServerHWType"].listptr.(*[]ServerHWType))
@@ -316,20 +320,28 @@ func (sp *SP) conns(icList []IC, netList []ENetwork, netsetList []NetSet) {
 		netsetMap[v.URI] = v
 	}
 
-	for i, v := range sp.Connections {
+	//fmt.Println("hello")
+	//fmt.Printf("%#v", sp)
+
+	for i, v := range sp.ConnectionSettings.Connections {
 
 		if strings.Contains(v.NetworkURI, "ethernet-networks") {
 
-			sp.Connections[i].NetworkName = netMap[v.NetworkURI].Name
-			sp.Connections[i].NetworkVlan = strconv.Itoa(netMap[v.NetworkURI].VlanId)
+			sp.ConnectionSettings.Connections[i].NetworkName = netMap[v.NetworkURI].Name
+			//fmt.Printf("%#v", sp.ConnectionSettings.Connections[i].NetworkName)
+			//fmt.Println("hello")
+
+			sp.ConnectionSettings.Connections[i].NetworkVlan = strconv.Itoa(netMap[v.NetworkURI].VlanId)
 		} else {
-			sp.Connections[i].NetworkName = netsetMap[v.NetworkURI].Name
-			sp.Connections[i].NetworkVlan = "NetworkSet"
+			sp.ConnectionSettings.Connections[i].NetworkName = netsetMap[v.NetworkURI].Name
+			sp.ConnectionSettings.Connections[i].NetworkVlan = "NetworkSet"
 		}
 
-		sp.Connections[i].ICName = icMap[v.InterconnectURI].Name
+		sp.ConnectionSettings.Connections[i].ICName = icMap[v.InterconnectURI].Name
 
 	}
+
+	//fmt.Println("hello2")
 
 }
 
@@ -396,10 +408,10 @@ func CreateSP(filename string) {
 		sp.BootMode.Mode = spt.BootMode.Mode
 		sp.BootMode.ManageMode = spt.BootMode.ManageMode
 
-		sp.Connections = make([]Connection, 0)
+		sp.ConnectionSettings.Connections = make([]Connection, 0)
 		for _, v := range spt.ConnectionSettings.Connections {
 			c := Connection{ID: v.ID, Name: v.Name, NetworkURI: v.NetworkURI}
-			sp.Connections = append(sp.Connections, c)
+			sp.ConnectionSettings.Connections = append(sp.ConnectionSettings.Connections, c)
 		}
 
 		sp.LocalStorage.Controllers = spt.LocalStorage.Controllers
