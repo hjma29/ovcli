@@ -1,5 +1,14 @@
 # OVCLI: A HPE Synergy OneView Command Line Tool
 
+> **Note: OVCLI is no longer actively maintained.** It dates back to 2018 and
+> remains available for reference, but it no longer receives updates.
+>
+> For a modern, actively maintained successor, please check out
+> **[proliant-cli](https://hjma29.github.io/proliant-cli/)** — a unified HPE
+> ProLiant CLI that includes OneView management (`proliant oneview`) alongside
+> iLO Redfish and Compute Ops Management. Repo:
+> [github.com/hjma29/proliant-cli](https://github.com/hjma29/proliant-cli).
+
 OVCLI is a OneView CLI tool to manage Hewlett Packard Enterprise Synergy resources. It provides IT admins with a cross-platform HPE Synergy CLI utility that can directly run on Linux, Windows, and MAC operating systems without worrying about installing/troubleshooting any programming language library dependencies.
 
 OVCLI tool communicates with Synergy OneView Restful API interface. It complements HPE OneView GUI interface to provide quicker Synergy access in many use cases.
